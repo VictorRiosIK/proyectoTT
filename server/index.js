@@ -31,7 +31,7 @@ app.post('/register', (req, res) => {
             .catch(err => res.json(err))
         }
     }).catch(err => res.json(err))*/
-    console.log("Solicitud");
+    res.json("Inicio");
 })
 
 
