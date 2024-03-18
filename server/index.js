@@ -20,8 +20,8 @@ app.get("/", (req, res) => {
     res.json("Hello");
 })
 app.post('/register', (req, res) => {
-    const {name, email, password} = req.body;
-    RegisterModel.findOne({email: email})
+   // const {name, email, password} = req.body;
+    /*RegisterModel.findOne({email: email})
     .then(user => {
         if(user) {
             res.json("Already have an account")
@@ -30,7 +30,8 @@ app.post('/register', (req, res) => {
             .then(result => res.json(result))
             .catch(err => res.json(err))
         }
-    }).catch(err => res.json(err))
+    }).catch(err => res.json(err))*/
+    console.log("Solicitud"):
 })
 
 
