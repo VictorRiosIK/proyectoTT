@@ -13,15 +13,15 @@ app.use(cors(
 ));
 app.use(express.json())
 
-//mongoose.connect('mongodb+srv://yousaf:test123@cluster0.g4i5dey.mongodb.net/test?retryWrites=true&w=majority');
+mongoose.connect('mongodb+srv://vrios718:s1FPobKWDOAjPH6c@cluster0.696magv.mongodb.net/test?retryWrites=true&w=majority');
 
 
 app.get("/", (req, res) => {
     res.json("Hello");
 })
 app.post('/register', (req, res) => {
-   // const {name, email, password} = req.body;
-    /*RegisterModel.findOne({email: email})
+   const {name, email, password} = req.body;
+    RegisterModel.findOne({email: email})
     .then(user => {
         if(user) {
             res.json("Already have an account")
@@ -30,8 +30,8 @@ app.post('/register', (req, res) => {
             .then(result => res.json(result))
             .catch(err => res.json(err))
         }
-    }).catch(err => res.json(err))*/
-    res.json("Inicio");
+    }).catch(err => res.json(err))
+   
 })
 
 
