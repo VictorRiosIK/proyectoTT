@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios'
 
 function App() {
-  const [name, setName] = useState()
+  const [name, setName] = useState();
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
 axios.defaults.withCredentials = true;
