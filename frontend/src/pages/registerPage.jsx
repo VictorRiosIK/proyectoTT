@@ -10,15 +10,19 @@ function RegisterPage(){
     const {signup, isAuthenticated, errors: registerErrors} = useAuth();
     const navigate = useNavigate();
     
+    
     useEffect(()=>{
         if(isAuthenticated){
             navigate("/tasks");
         }
     },[isAuthenticated])
 
+    //EVENTO SUBMIT
     const onSubmit =  handleSubmit(async (values)=>{
         signup(values);
-    })
+    });
+
+    //PAGINA HTML
     return (
         <div className='grid grid-cols-6 container-md mt-[25vh]  '>
             <div className='col-start-2 col-span-4 bg-zinc-800 p-10 rounded-md gap-4'>

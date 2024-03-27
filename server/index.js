@@ -3,5 +3,5 @@ import {connectDB} from './db.js'
 
 connectDB();
 app.listen(3001, () => {
-    console.log("Server is Running");
+    console.log("Server is Running port 3001");
 })
