@@ -1,15 +1,19 @@
 import User from '../models/user.model.js'
 import bcrypt from 'bcryptjs'
 import {createAccesToken} from '../libs/jwt.js'
+import jwt from 'jsonwebtoken'
+import {TOKEN_SECRET} from '../config.js'
 
 export const register = async (req,res) =>{
     //Recibe parametros
     const {email,password,username} = req.body;
 
     try{
-
+        //Buscar a un usuario
         const userFound = await User.findOne({email})
-        if(userFound) return res.status(400).json(["Email already exists"])
+        //Si el usuario existe envia el error
+        if(userFound)
+         return res.status(400).json(["Email ya fue registrado"]);
         //Encripta contraseña
         const passwordHash = await bcrypt.hash(password,10);
         //Crea el modelo del usuario
@@ -44,23 +48,28 @@ export const login = async(req,res) =>{
         //Busca si el usuario con ese correo existe
         const userFound = await User.findOne({email});
         if(!userFound){
-            return res.status(400).json({message: "User not found"});
+            return res.status(400).json({message: "Usuario no encontrado"});
         }
 
         //Compara las contraseñas ingresadas con la de la base de datos
         const isMatch = await bcrypt.compare(password,userFound.password);
         if(!isMatch){
-            return res.status(400).json({message: "Incorrect password"});
+            return res.status(400).json({message: "Contraseña incorrecta"});
         }
         const token = await createAccesToken({id: userFound._id})
 
-        res.cookie('token',token);
+        // res.cookie('token',token,{
+        //     sameSite: 'none',
+        //     secure: true,
+        //     httpOnly: true,
+        // });
         res.json({
             id: userFound._id,
             username: userFound.username,
             email: userFound.email,
             createdAt: userFound.createdAt,
-            updatedAt: userFound.updatedAt
+            updatedAt: userFound.updatedAt,
+            cookie:token
         });
     }catch (error){
         res.status(500).json({message: error.message})
@@ -78,7 +87,7 @@ export const profile = async(req,res)=>{
     const userFound = await User.findById(req.user.id);
     if(!userFound){
         return res.status(400).json({
-            message: "User not found"
+            message: "Usuario no encontrado"
         })
     }
     return res.json({
@@ -87,5 +96,27 @@ export const profile = async(req,res)=>{
         email: userFound.email,
         createdAt: userFound.createdAt,
         updatedAt: userFound.updatedAt
+    });
+}
+
+export const verifyToken = async (req, res)=>{
+    const {token} = req.cookies;
+
+    if (!token)
+        return res.status(401).json({message:"No autorizado"});
+
+    jwt.verify(token,TOKEN_SECRET, async(err,user) =>{
+        if(err){
+            return res.status(401).json({message: "No autorizado"});
+        }
+        const userFound = await User.findById(user.id);
+        if (!userFound){
+            return res.status(401).json({message: "No autorizado"});
+        }
+        return res.json({
+            id: userFound._id,
+            username: userFound.username,
+            email: userFound.email
+        });
     });
 }

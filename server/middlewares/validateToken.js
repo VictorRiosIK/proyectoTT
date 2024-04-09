@@ -13,7 +13,7 @@ export const authRequired = (req,res,next) =>{
     jwt.verify(token, TOKEN_SECRET,(err,user ) =>{
         if(err){
             return res.status(401).json({
-                message: "invalid token"
+                message: "Token invalido"
             });
         }
         //Se guarda en la peticion que llega, para que las otras rutas puedan acceder a este
