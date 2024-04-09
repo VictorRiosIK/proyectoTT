@@ -60,6 +60,12 @@ export const AuthProvider = ({children}) =>{
         
     }
 
+    const logout = ()=>{
+        Cookies.remove("token");
+        setIsAuthenticated(false);
+        setUser(null);
+    }
+
     //funcion para eliminar los mensajes pasados un tiempo
     useEffect(() =>{
         if(errors.length > 0){
@@ -107,6 +113,7 @@ export const AuthProvider = ({children}) =>{
         <AuthContext.Provider value={{
             signup,
             signin,
+            logout,
             loading,
             user,
             isAuthenticated,
