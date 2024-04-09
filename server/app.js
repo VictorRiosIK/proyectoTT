@@ -5,12 +5,15 @@ import tasksRoutes from './routes/tasks.routes.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 
+const urlTT="https://proyecto-tt-front.vercel.app";
+const urlLocal = "http://127.0.0.1:5173"
+const urlLocal2 = "http://localhost:5173"
 const app = express()
 app.use(cors(
     {
-        // origin: ["https://proyecto-tt-front.vercel.app"],
+         origin: [urlLocal,urlLocal2],
         // methods: ["POST", "GET"],
-        // credentials: true
+         credentials: true
     }
 ));
 app.use(morgan('dev'));

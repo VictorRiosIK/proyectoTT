@@ -6,15 +6,18 @@ export const getTasks = async (req,res)=>{
     }).populate('user');//Concatena la informacion de la task con la del ususario para mostrarla en al respuesta
     res.json(tasks);
 }
-
+//Crea nota
 export const createTask = async (req,res)=>{
+    //Obtiene los datos de la peticion
     const {title, description, date} = req.body;
+    //Crea la nueva nota
     const newTask = new Task({
         title,
         description,
         date,
         user: req.user.id
     });
+    //Envia la peticion a la BD
     const savedTask = await newTask.save();
     res.json(savedTask);
 }
