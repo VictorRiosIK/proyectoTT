@@ -8,13 +8,15 @@ import ProfilePage from './pages/profilePage.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import ProtectedRoute from './ProtectedRoute'
 import { TaskProvider } from './context/TasksContext.jsx'
+import Navbar from './components/Navbar.jsx'
 
 function App() {
   return (
-    <div className='flex w-full'>
+    <div className=' w-full'>
       <AuthProvider>
         <TaskProvider>
         <BrowserRouter>
+        <Navbar></Navbar>
             <Routes>
               {/* Rutas publicas */}
             <Route path='/' element={<HomePage/>}></Route>
