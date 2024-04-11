@@ -12,11 +12,12 @@ import Navbar from './components/Navbar.jsx'
 
 function App() {
   return (
-    <div className=' w-full'>
+    <div >
       <AuthProvider>
         <TaskProvider>
         <BrowserRouter>
         <Navbar></Navbar>
+            <div className='px-6'>
             <Routes>
               {/* Rutas publicas */}
             <Route path='/' element={<HomePage/>}></Route>
@@ -32,6 +33,7 @@ function App() {
             </Route>
             
             </Routes>
+            </div>
         </BrowserRouter>
         </TaskProvider>
       </AuthProvider>
