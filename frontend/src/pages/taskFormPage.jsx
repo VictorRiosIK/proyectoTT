@@ -1,15 +1,39 @@
 import {useForm} from 'react-hook-form'
 import { useTasks } from '../context/TasksContext';
+import {useNavigate, useParams} from 'react-router-dom'
+import { useEffect } from 'react';
+
 
 function taskFormPage() {
-    const {register, handleSubmit} = useForm();//react-hook-form doc
+    const {register, handleSubmit, setValue} = useForm();//react-hook-form doc
 
-    const {createTask,tasks} = useTasks()
+    const {createTask,tasks, getTask, updateTask} = useTasks()
+    const navigate = useNavigate();
+    const params = useParams();
     // console.log(tasks,"Tareas");
     // console.log(createTask(1));
 
+  useEffect(()=>{
+    //console.log(params);
+    async function loadTask() {
+      if(params.id){
+        const task = await getTask(params.id);
+        //console.log(task)
+        setValue('title',task.title);
+        setValue('description',task.description);
+      }
+    }
+    loadTask();
+  },[])
+
+
     const onSubmit = handleSubmit((data) =>{
-        createTask(data);
+        if(params.id){
+          updateTask(params.id, data)
+        }else{
+          createTask(data);
+        }
+        navigate('/tasks');
     })
   return (
     <div className='grid grid-cols-7 w-full container-md mt-[25vh]  '>
