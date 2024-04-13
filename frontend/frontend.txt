@@ -1,0 +1,54 @@
+npm create vite
+react
+javascript
+
+cd client
+npm i
+
+
+Iniciar proyecto
+npm run dev
+
+
+Instalar tailwind con Vite  tailwind.com
+: npm install -D tailwindcss postcss autoprefixer
+: npx tailwindcss init -p
+
+Actualizar tailwind.config
+
+ content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+
+Actualizar index.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+Instalar react router dom para crear rutas en front
+npm install react-router-dom 
+
+
+react hook form   -nos permite el cambio de estado y validacion
+npm i react-hook-form
+
+instalar biblioteca que engloba fetch
+npm i axios
+
+alt + 96  acento grave
+`
+
+Libreria para leer las cookies
+: npm i js-cookie
+
+Instalar libreria de iconos para react
+npm i --save @fortawesome/fontawesome-svg-core
+
+Free package of icons
+npm i --save @fortawesome/free-solid-svg-icons
+npm i --save @fortawesome/free-regular-svg-icons
+npm i --save @fortawesome/free-brands-svg-icons
+
+Componente de react 
+npm i --save @fortawesome/react-fontawesome@latest
