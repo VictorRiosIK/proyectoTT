@@ -5,34 +5,37 @@ import { useAuth } from '../context/AuthContext'
 function Navbar() {
     const {isAuthenticated, logout,user} = useAuth();
   return (
-    <nav className="bg-zinc-700 my-3 flex justify-between py-5 px-10">
+    <nav className="bg-[--GUINDA-PRIMARIO] my-3 flex justify-between py-5 px-10">
         <Link to={'/'}>
-            <h1 className="text-2xl font-bold">Task Manager</h1>
+            <h1 className="text-2xl font-bold hover:bg-[--GUINDA-SECUNDARIO] rounded-md p-1">Servicios Estudiantiles</h1>
         </Link>
         <ul className="flex gap-x-2">
             {
                 isAuthenticated ? //SI ESTA AUTENTICADO MUESTRA LOS ELEMENTOS EN EL NAVBAR
                 ( <>
-                    <li>
-                        Bienvenido {user.username}
-                    </li>
-                    <li>
+                    <li className='hover:bg-[--GUINDA-SECUNDARIO] rounded-md p-2'>
                         <Link to={'/tasks'}>Ver tareas</Link>
                     </li>
-                    <li>
+                    <li className='hover:bg-[--GUINDA-SECUNDARIO] rounded-md p-2'>
                         <Link to={'/tasks/new'}>Nueva tarea</Link>
                     </li>
-                    <li>
-                        <Link to={'/'} onClick={()=> {logout();}}>Cerrar sesión</Link>
+                    <li className='p-2' >
+                        Bienvenido {user.username}
+                    </li>
+                    <li  className='hover:bg-[--GUINDA-SECUNDARIO] rounded-md p-2'>
+                        <Link to={'/login'} onClick={()=> {
+                            logout();
+                            
+                            }}>Cerrar sesión</Link>
                     </li>
                    </>)
                 :
                 (
                <>
-                <li>
+                <li  className='hover:bg-[--GUINDA-SECUNDARIO] rounded-md p-2'>
                     <Link to={'/login'}>Ingresar</Link>
                 </li>
-                <li>
+                <li className='hover:bg-[--GUINDA-SECUNDARIO] rounded-md p-2'>
                     <Link to={'/register'}>Registrar</Link>
                 </li>
                </>

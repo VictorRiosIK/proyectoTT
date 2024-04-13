@@ -1,0 +1,34 @@
+Iniciar proyecto
+npm init -y
+npm i express    ***
+
+node src/index.js
+
+nodemon para que actualice autoimaticamente el servidor 
+npm i nodemon -D   ***
+
+Iniciar app backend
+npm run dev
+
+Para ver mensajes en la consola al momento de recibir peticiones
+npm i morgan  ***
+
+Para tener el control en la base de datos de mongo
+npm i mongoose   ***
+
+Para encriptar la contraseña
+npm i bcryptjs  ***
+
+Para generar un token   https://jwt.io  para ver el id
+npm i jsonwebtoken ***
+
+Para leer las cookies de manera mas sencilla json
+npm i cookie-parser ***
+
+
+Para validar los datos que llgan a la bd
+ZOD  zod.dev
+npm i zod ***
+
+instalar cors
+npm i cors  ***

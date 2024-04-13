@@ -8,7 +8,7 @@ function TaskCard({task}) {
 
 
   return (
-    <div className="col-span-1 bg-zinc-800  w-full p-10 rounded-md">
+    <div className="col-span-1 bg-[--GUINDA-PRIMARIO]  w-full p-10 rounded-md">
         <header className="flex justify-between">
             <h1 className="text-2xl font-bold">{task.title}</h1>
             <div className="flex gap-x-2 items-center">

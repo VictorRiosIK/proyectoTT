@@ -9,6 +9,9 @@ import { AuthProvider } from './context/AuthContext.jsx'
 import ProtectedRoute from './ProtectedRoute'
 import { TaskProvider } from './context/TasksContext.jsx'
 import Navbar from './components/Navbar.jsx'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import Footer from './components/footer.jsx'
 
 function App() {
   return (
@@ -17,7 +20,7 @@ function App() {
         <TaskProvider>
         <BrowserRouter>
         <Navbar></Navbar>
-            <div className='px-6'>
+            <div className='px-10'>
             <Routes>
               {/* Rutas publicas */}
             <Route path='/' element={<HomePage/>}></Route>
@@ -34,6 +37,7 @@ function App() {
             
             </Routes>
             </div>
+          <Footer></Footer>
         </BrowserRouter>
         </TaskProvider>
       </AuthProvider>
