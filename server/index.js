@@ -19,7 +19,8 @@ app.post('/register', (req, res) => {
     RegisterModel.findOne({email: email})
     .then(user => {
         if(user) {
-            res.json("Already have an account")
+            const token = jwt.sign({ email: email }, 'tu_secreto');
+                        res.json({ user: result, token: token });
         } else {
             RegisterModel.create({name: name, email: email, password: password})
             .then(result => {
