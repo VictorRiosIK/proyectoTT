@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const RegisterModel = require('./models/Register')
+const jwt = require('jsonwebtoken');
 
 const app = express()
 app.use(cors());
@@ -21,7 +22,11 @@ app.post('/register', (req, res) => {
             res.json("Already have an account")
         } else {
             RegisterModel.create({name: name, email: email, password: password})
-            .then(result => res.json(result))
+            .then(result => {
+                // Generar un token JWT
+                        const token = jwt.sign({ email: email }, 'tu_secreto');
+                        res.json({ user: result, token: token });
+            })
             .catch(err => res.json(err))
         }
     }).catch(err => res.json(err))
