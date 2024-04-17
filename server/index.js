@@ -20,7 +20,7 @@ app.post('/register', (req, res) => {
     .then(user => {
         if(user) {
             const token = jwt.sign({ email: email }, 'tu_secreto');
-                        res.json({ user: result, token: token });
+                        res.json({ user: "Ya existe una cuenta", token: token });
         } else {
             RegisterModel.create({name: name, email: email, password: password})
             .then(result => {
