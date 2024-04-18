@@ -44,18 +44,7 @@ app.post('/login', (req, res) => {
                 if (user.password === password) {
                     // Si la contraseña es correcta, generar un token JWT
                     const token = jwt.sign({ email: email }, 'tu_secreto');
-                     // Crear un nuevo objeto de respuesta excluyendo DynamicLayout$ChangeWatcher
-                   const user = {
-        message: "Inicio de sesión exitoso",
-        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZyaW9zNzEyMjhAZ21haWwuY29tIiwiaWF0IjoxNzEzNDExMjAxfQ.9t3QimyJkkaqgczdA3v7y0ZYaUPkCxE-Q6G-6nhp-XE",
-        changeWatcher: new DynamicLayout.ChangeWatcher() // Objeto DynamicLayout$ChangeWatcher que quieres excluir
-    };
-
-    // Antes de enviar la respuesta, excluye la propiedad `changeWatcher`
-    delete user.changeWatcher;
-
-    // Envía la respuesta al cliente
-    res.json(user);
+                    res.json({ message: "Inicio de sesión exitoso", token: token });
                 } else {
                     // Contraseña incorrecta
                     res.status(401).json({ message: "Credenciales inválidas" });
@@ -67,7 +56,7 @@ app.post('/login', (req, res) => {
         })
         .catch(err => res.status(500).json({ message: "Error interno del servidor" }));
    
-});
+}); 
 
 app.listen(3001, () => {
     console.log("Server is Running")
