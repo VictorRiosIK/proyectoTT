@@ -38,11 +38,7 @@ app.post('/register', (req, res) => {
 // Endpoint para inicio de sesión
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
-    RegisterModel.findOne({ email: email })
-        .then(user => {
-            res.json({ email: email, password: password });
-        })
-        .catch(err => res.status(500).json({ message: "Error interno del servidor" }));
+    res.json({ email: email, password: password });
    
 }); 
 
