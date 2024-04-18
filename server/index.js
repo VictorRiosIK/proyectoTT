@@ -34,7 +34,34 @@ app.post('/register', (req, res) => {
     
    
 })
+// Endpoint para inicio de sesión
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
 
+    // Buscar el usuario por su correo electrónico
+    UserModel.findOne({ email: email })
+        .then(user => {
+            if (user) {
+                // Si el usuario existe, comprobar la contraseña
+                bcrypt.compare(password, user.password)
+                    .then(match => {
+                        if (match) {
+                            // Si la contraseña es correcta, generar un token JWT
+                            const token = jwt.sign({ email: email }, 'tu_secreto');
+                            res.json({ message: "Inicio de sesión exitoso", token: token });
+                        } else {
+                            // Contraseña incorrecta
+                            res.status(401).json({ message: "Credenciales inválidas" });
+                        }
+                    })
+                    .catch(err => res.status(500).json({ message: "Error interno del servidor" }));
+            } else {
+                // Usuario no encontrado
+                res.status(404).json({ message: "Usuario no encontrado" });
+            }
+        })
+        .catch(err => res.status(500).json({ message: "Error interno del servidor" }));
+});
 
 app.listen(3001, () => {
     console.log("Server is Running")
