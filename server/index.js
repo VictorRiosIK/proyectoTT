@@ -3,10 +3,11 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const RegisterModel = require('./models/Register')
 const jwt = require('jsonwebtoken');
-
+const bodyParser=require('body-parser');
 const app = express()
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
+app.use(bodyParser.json());
 
 mongoose.connect('mongodb+srv://vrios718:s1FPobKWDOAjPH6c@cluster0.696magv.mongodb.net/test?retryWrites=true&w=majority');
 
