@@ -38,7 +38,7 @@ app.post('/register', (req, res) => {
 // Endpoint para inicio de sesión
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
-    res.json({ email: "prueba", password:"123" });
+    res.json({ email: email, password: password });
    
 }); 
 
