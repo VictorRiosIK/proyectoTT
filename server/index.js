@@ -44,7 +44,14 @@ app.post('/login', (req, res) => {
                 if (user.password === password) {
                     // Si la contraseña es correcta, generar un token JWT
                     const token = jwt.sign({ email: email }, 'tu_secreto');
-                    res.json({ message: "Inicio de sesión exitoso", token: token });
+                     // Crear un nuevo objeto de respuesta excluyendo DynamicLayout$ChangeWatcher
+                    const response = {
+                        message: "Inicio de sesión exitoso",
+                        token: token
+                    };
+
+                    // Enviar la respuesta al cliente
+                    res.json(response);
                 } else {
                     // Contraseña incorrecta
                     res.status(401).json({ message: "Credenciales inválidas" });
