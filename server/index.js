@@ -39,7 +39,7 @@ app.post('/login', (req, res) => {
     const { email, password } = req.body;
 
     // Buscar el usuario por su correo electrónico
-    UserModel.findOne({ email: email })
+    RegisterModel.findOne({ email: email })
         .then(user => {
             if (user) {
                 // Si el usuario existe, comprobar la contraseña
