@@ -20,7 +20,7 @@ app.post('/register', (req, res) => {
     RegisterModel.findOne({email: email})
     .then(user => {
         if(user) {
-            const token = jwt.sign({ email: email }, 'secreto');
+            const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
                         res.json({ user: "Ya existe una cuenta", token: token });
         } else {
             RegisterModel.create({name: name, email: email, password: password})
@@ -44,7 +44,7 @@ app.post('/login', (req, res) => {
                 // Si el usuario existe, comparar la contraseña almacenada con la proporcionada
                 if (user.password === password) {
                     // Si la contraseña es correcta, generar un token JWT
-                    const token = jwt.sign({ email: email }, 'secreto');
+                    const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
                     res.json({ message: "Inicio de sesión exitoso", token: token });
                 } else {
                     // Contraseña incorrecta
