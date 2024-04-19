@@ -59,7 +59,7 @@ app.post('/registerStudent', (req, res) => {
                 }
             })
             .catch(err => res.status(500).json({ error: 'Error al buscar el usuario' }));
-    });
+   
 });
 // Endpoint para inicio de sesión
 app.post('/login', (req, res) => {
