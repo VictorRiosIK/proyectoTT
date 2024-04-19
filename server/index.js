@@ -39,7 +39,7 @@ app.post('/register', (req, res) => {
    
 });
 app.post('/registerProfessional', (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password,rol } = req.body;
 
     // Verificar si el correo electrónico ya existe en RegisterModel
     RegisterModel.findOne({ email: email })
@@ -59,7 +59,7 @@ app.post('/registerProfessional', (req, res) => {
                             return res.status(400).json({ error: 'Ya existe una cuenta de profesional' });
                         } else {
                             // Si el correo electrónico no existe en RegisterProfessionalModel, crear un nuevo usuario profesional
-                            RegisterProfessionalModel.create({ name: name, email: email, password: hashedPassword })
+                            RegisterProfessionalModel.create({ name: name, email: email, password: hashedPassword,rol:rol })
                                 .then(result => {
                                     // Generar un token JWT
                                     const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
