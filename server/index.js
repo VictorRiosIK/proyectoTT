@@ -63,7 +63,7 @@ app.post('/registerProfessional', (req, res) => {
                                 .then(result => {
                                     // Generar un token JWT
                                     const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
-                                    res.json({ user: result, token: token });
+                                    res.json({ professional: result, token: token });
                                 })
                                 .catch(err => res.status(500).json({ error: 'Error al crear el usuario profesional' }));
                         }
