@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const RegisterModel = require('./models/Register')
 const RegisterStudentModel=require('./models/RegisterStudentModel');
+const RegisterProfessionalModel=require('./models/professional');
 const jwt = require('jsonwebtoken');
 const bodyParser=require('body-parser');
 const bcrypt = require('bcryptjs');
