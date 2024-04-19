@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const RegisterModel = require('./models/Register')
+const RegisterStudentModel=require(./models/RegisterStudentModel);
 const jwt = require('jsonwebtoken');
 const bodyParser=require('body-parser');
 const app = express()
@@ -27,6 +28,25 @@ app.post('/register', (req, res) => {
             .then(result => {
                 // Generar un token JWT
                         const token = jwt.sign({ email: email }, 'tu_secreto');
+                        res.json({ user: result, token: token });
+            })
+            .catch(err => res.json(err))
+        }
+    }).catch(err => res.json(err))
+    
+   
+});
+app.post('/registerStudent', (req, res) => {
+   const {name, email, password,boleta,rol} = req.body;
+    RegisterStudentModel.findOne({email: email})
+    .then(user => {
+        if(user) {
+            res.json({ user: "Ya existe una cuenta", token: token });
+        } else {
+            RegisterStudentModel.create({name: name, email: email, password: password,boleta:boleta, rol:rol})
+            .then(result => {
+                // Generar un token JWT
+                        const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
                         res.json({ user: result, token: token });
             })
             .catch(err => res.json(err))
