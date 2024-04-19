@@ -5,7 +5,7 @@ const RegisterModel = require('./models/Register')
 const RegisterStudentModel=require('./models/RegisterStudentModel');
 const jwt = require('jsonwebtoken');
 const bodyParser=require('body-parser');
-import bcrypt from 'bcryptjs'
+const bcrypt = require('bcryptjs');
 const app = express()
 app.use(cors());
 app.use(express.json());
