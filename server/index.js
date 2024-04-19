@@ -41,26 +41,37 @@ app.post('/register', (req, res) => {
 app.post('/registerProfessional', (req, res) => {
     const { name, email, password } = req.body;
 
-    // Hash de la contraseña
-     const hashedPassword = bcrypt.hashSync(password, 10);
+    // Verificar si el correo electrónico ya existe en RegisterModel
+    RegisterModel.findOne({ email: email })
+        .then(existingUser => {
+            if (existingUser) {
+                // Si el correo electrónico ya existe, devolver un mensaje de error
+                return res.status(400).json({ error: 'El correo electrónico ya está registrado' });
+            } else {
+                // Si el correo electrónico no existe, cifrar la contraseña
+                const hashedPassword = bcrypt.hashSync(password, 10);
 
-        RegisterProfessionalModel.findOne({ email: email })
-            .then(user => {
-                if (user) {
-                    return res.json({ user: "Ya existe una cuenta de profesional", token: token });
-                } else {
-                    // Crear un nuevo usuario con la contraseña cifrada
-                    RegisterProfessionalModel.create({ name: name, email: email, password: hashedPassword })
-                        .then(result => {
-                            // Generar un token JWT
-                            const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
-                            res.json({ user: result, token: token });
-                        })
-                        .catch(err => res.status(500).json({ error: 'Error al crear el usuario' }));
-                }
-            })
-            .catch(err => res.status(500).json({ error: 'Error al buscar el usuario' }));
-   
+                // Buscar si el correo electrónico ya existe en RegisterProfessionalModel
+                RegisterProfessionalModel.findOne({ email: email })
+                    .then(professional => {
+                        if (professional) {
+                            // Si el correo electrónico ya existe en RegisterProfessionalModel, devolver un mensaje de error
+                            return res.status(400).json({ error: 'Ya existe una cuenta de profesional' });
+                        } else {
+                            // Si el correo electrónico no existe en RegisterProfessionalModel, crear un nuevo usuario profesional
+                            RegisterProfessionalModel.create({ name: name, email: email, password: hashedPassword })
+                                .then(result => {
+                                    // Generar un token JWT
+                                    const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
+                                    res.json({ user: result, token: token });
+                                })
+                                .catch(err => res.status(500).json({ error: 'Error al crear el usuario profesional' }));
+                        }
+                    })
+                    .catch(err => res.status(500).json({ error: 'Error al buscar el usuario profesional' }));
+            }
+        })
+        .catch(err => res.status(500).json({ error: 'Error al buscar el usuario' }));
 });
 app.post('/registerStudent', (req, res) => {
     const { name, email, password, boleta, rol } = req.body;
