@@ -7,7 +7,7 @@ const RegisterProfessionalModel=require('./models/professional');
 const jwt = require('jsonwebtoken');
 const bodyParser=require('body-parser');
 const bcrypt = require('bcryptjs');
-const config = require('./config.json');
+const config = require('./Config.json');
 
 const jwtSecret = config.jwtSecret;
 const mongoURI = config.mongoURI;
