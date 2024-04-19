@@ -68,7 +68,7 @@ app.post('/registerStudent', (req, res) => {
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
 
-    RegisterModel.findOne({ email: email })
+    RegisterStudentModel.findOne({ email: email })
         .then(user => {
             if (user) {
                 // Si el usuario existe, comparar la contraseña almacenada con la proporcionada
