@@ -7,12 +7,17 @@ const RegisterProfessionalModel=require('./models/professional');
 const jwt = require('jsonwebtoken');
 const bodyParser=require('body-parser');
 const bcrypt = require('bcryptjs');
+const config = require('./config.json');
+
+const jwtSecret = config.jwtSecret;
+const mongoURI = config.mongoURI;
+
+mongoose.connect(mongoURI);
 const app = express()
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb+srv://vrios718:s1FPobKWDOAjPH6c@cluster0.696magv.mongodb.net/test?retryWrites=true&w=majority');
 
 
 app.get("/", (req, res) => {
@@ -27,7 +32,7 @@ app.post('/register', (req, res) => {
             } else {
                 RegisterModel.create({ name: name, email: email, password: password })
                     .then(result => {
-                        const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
+                        const token = jwt.sign({ email: email },jwtSecret );
                         res.json({ user: result, token: token });
                     })
                     .catch(err => res.status(500).json({ error: 'Error al crear la cuenta.' }));
@@ -51,7 +56,7 @@ app.post('/registerProfessional', (req, res) => {
                         } else {
                             RegisterProfessionalModel.create({ name: name, email: email, password: hashedPassword, rol: rol })
                                 .then(result => {
-                                    const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
+                                    const token = jwt.sign({ email: email },jwtSecret);
                                     res.json({ professional: result, token: token });
                                 })
                                 .catch(err => res.status(500).json({ error: 'Error al crear la cuenta profesional.' }));
@@ -73,7 +78,7 @@ app.post('/registerStudent', (req, res) => {
             } else {
                 RegisterStudentModel.create({ name: name, email: email, password: hashedPassword, boleta: boleta, rol: rol })
                     .then(result => {
-                        const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
+                        const token = jwt.sign({ email: email }, jwtSecret);
                         res.json({ user: result, token: token });
                     })
                     .catch(err => res.status(500).json({ error: 'Error al crear la cuenta de estudiante.' }));
@@ -89,7 +94,7 @@ app.post('/login', (req, res) => {
             if (user) {
                 bcrypt.compare(password, user.password, function (err, result) {
                     if (result) {
-                        const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
+                        const token = jwt.sign({ email: email },jwtSecret);
                         res.json({ message: "Inicio de sesión exitoso", token: token });
                     } else {
                         res.status(401).json({ error: "Credenciales inválidas" });
