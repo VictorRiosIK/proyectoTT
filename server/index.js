@@ -41,10 +41,7 @@ app.post('/registerStudent', (req, res) => {
     const { name, email, password, boleta, rol } = req.body;
 
     // Hash de la contraseña
-    bcrypt.hash(password, 10, function(err, hashedPassword) {
-        if (err) {
-            return res.status(500).json({ error: 'Error al cifrar la contraseña' });
-        }
+     const hashedPassword = bcrypt.hashSync(password, 10);
 
         RegisterStudentModel.findOne({ email: email })
             .then(user => {
