@@ -38,6 +38,30 @@ app.post('/register', (req, res) => {
     
    
 });
+app.post('/registerProfessional', (req, res) => {
+    const { name, email, password } = req.body;
+
+    // Hash de la contraseña
+     const hashedPassword = bcrypt.hashSync(password, 10);
+
+        RegisterProfessionalModel.findOne({ email: email })
+            .then(user => {
+                if (user) {
+                    return res.json({ user: "Ya existe una cuenta de profesional", token: token });
+                } else {
+                    // Crear un nuevo usuario con la contraseña cifrada
+                    RegisterProfessionalModel.create({ name: name, email: email, password: hashedPassword })
+                        .then(result => {
+                            // Generar un token JWT
+                            const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
+                            res.json({ user: result, token: token });
+                        })
+                        .catch(err => res.status(500).json({ error: 'Error al crear el usuario' }));
+                }
+            })
+            .catch(err => res.status(500).json({ error: 'Error al buscar el usuario' }));
+   
+});
 app.post('/registerStudent', (req, res) => {
     const { name, email, password, boleta, rol } = req.body;
 
