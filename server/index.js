@@ -68,26 +68,28 @@ app.post('/registerStudent', (req, res) => {
 // Endpoint para inicio de sesión
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
+
     RegisterModel.findOne({ email: email })
         .then(user => {
             if (user) {
                 // Si el usuario existe, comparar la contraseña almacenada con la proporcionada
-                if (user.password === password) {
-                    // Si la contraseña es correcta, generar un token JWT
-                    const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
-                    res.json({ message: "Inicio de sesión exitoso", token: token });
-                } else {
-                    // Contraseña incorrecta
-                    res.status(401).json({ message: "Credenciales inválidas" });
-                }
+                bcrypt.compare(password, user.password, function(err, result) {
+                    if (result) {
+                        // Si la contraseña es correcta, generar un token JWT
+                        const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
+                        res.json({ message: "Inicio de sesión exitoso", token: token });
+                    } else {
+                        // Contraseña incorrecta
+                        res.status(401).json({ message: "Credenciales inválidas" });
+                    }
+                });
             } else {
                 // Usuario no encontrado
                 res.status(404).json({ message: "Usuario no encontrado" });
             }
         })
         .catch(err => res.status(500).json({ message: "Error interno del servidor" }));
-   
-}); 
+});
 
 app.listen(3001, () => {
     console.log("Server is Running")
