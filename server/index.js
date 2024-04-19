@@ -38,24 +38,32 @@ app.post('/register', (req, res) => {
    
 });
 app.post('/registerStudent', (req, res) => {
-   const {name, email, password,boleta,rol} = req.body;
-    RegisterStudentModel.findOne({email: email})
-    .then(user => {
-        if(user) {
-            res.json({ user: "Ya existe una cuenta", token: token });
-        } else {
-            RegisterStudentModel.create({name: name, email: email, password: password,boleta:boleta, rol:rol})
-            .then(result => {
-                // Generar un token JWT
-                        const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
-                        res.json({ user: result, token: token });
-            })
-            .catch(err => res.json(err))
+    const { name, email, password, boleta, rol } = req.body;
+
+    // Hash de la contraseña
+    bcrypt.hash(password, 10, function(err, hashedPassword) {
+        if (err) {
+            return res.status(500).json({ error: 'Error al cifrar la contraseña' });
         }
-    }).catch(err => res.json(err))
-    
-   
-})
+
+        RegisterStudentModel.findOne({ email: email })
+            .then(user => {
+                if (user) {
+                    return res.json({ user: "Ya existe una cuenta", token: token });
+                } else {
+                    // Crear un nuevo usuario con la contraseña cifrada
+                    RegisterStudentModel.create({ name: name, email: email, password: hashedPassword, boleta: boleta, rol: rol })
+                        .then(result => {
+                            // Generar un token JWT
+                            const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
+                            res.json({ user: result, token: token });
+                        })
+                        .catch(err => res.status(500).json({ error: 'Error al crear el usuario' }));
+                }
+            })
+            .catch(err => res.status(500).json({ error: 'Error al buscar el usuario' }));
+    });
+});
 // Endpoint para inicio de sesión
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
