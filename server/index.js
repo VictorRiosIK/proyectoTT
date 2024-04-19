@@ -104,19 +104,42 @@ app.post('/registerStudent', (req, res) => {
 
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
+
+    // Buscar el correo electrónico en RegisterStudentModel
     RegisterStudentModel.findOne({ email: email })
-        .then(user => {
-            if (user) {
-                bcrypt.compare(password, user.password, function (err, result) {
+        .then(student => {
+            if (student) {
+                // Si el correo electrónico existe en RegisterStudentModel, comparar la contraseña
+                bcrypt.compare(password, student.password, function (err, result) {
                     if (result) {
-                        const token = jwt.sign({ email: email },jwtSecret);
-                        res.json({ message: "Inicio de sesión exitoso", token: token });
+                        // Si la contraseña es correcta, generar un token JWT y devolver el rol
+                        const token = jwt.sign({ email: email }, jwtSecret);
+                        res.json({ message: "Inicio de sesión exitoso", token: token, rol: student.rol });
                     } else {
                         res.status(401).json({ error: "Credenciales inválidas" });
                     }
                 });
             } else {
-                res.status(404).json({ error: "Usuario no encontrado" });
+                // Si el correo electrónico no existe en RegisterStudentModel, buscar en RegisterProfessionalModel
+                RegisterProfessionalModel.findOne({ email: email })
+                    .then(professional => {
+                        if (professional) {
+                            // Si el correo electrónico existe en RegisterProfessionalModel, comparar la contraseña
+                            bcrypt.compare(password, professional.password, function (err, result) {
+                                if (result) {
+                                    // Si la contraseña es correcta, generar un token JWT y devolver el rol
+                                    const token = jwt.sign({ email: email }, jwtSecret);
+                                    res.json({ message: "Inicio de sesión exitoso", token: token, rol: professional.rol });
+                                } else {
+                                    res.status(401).json({ error: "Credenciales inválidas" });
+                                }
+                            });
+                        } else {
+                            // Si el correo electrónico no existe en RegisterStudentModel ni en RegisterProfessionalModel, devolver un error
+                            res.status(404).json({ error: "Usuario no encontrado" });
+                        }
+                    })
+                    .catch(err => res.status(500).json({ error: "Error interno del servidor" }));
             }
         })
         .catch(err => res.status(500).json({ error: "Error interno del servidor" }));
