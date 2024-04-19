@@ -5,6 +5,7 @@ const RegisterModel = require('./models/Register')
 const RegisterStudentModel=require('./models/RegisterStudentModel');
 const jwt = require('jsonwebtoken');
 const bodyParser=require('body-parser');
+import bcrypt from 'bcryptjs'
 const app = express()
 app.use(cors());
 app.use(express.json());
@@ -43,7 +44,7 @@ app.post('/registerStudent', (req, res) => {
         if(user) {
             res.json({ user: "Ya existe una cuenta", token: token });
         } else {
-            RegisterStudentModel.create({name: name, email: email, password: password,boleta:boleta, rol:rol})
+            RegisterStudentModel.create({name: name, email: email, password: bcrypt.hash(password,10),boleta:boleta, rol:rol})
             .then(result => {
                 // Generar un token JWT
                         const token = jwt.sign({ email: email }, 'q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo');
