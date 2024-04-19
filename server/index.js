@@ -23,23 +23,6 @@ app.use(bodyParser.json());
 app.get("/", (req, res) => {
     res.json("Hello");
 })
-app.post('/register', (req, res) => {
-    const { name, email, password } = req.body;
-    RegisterModel.findOne({ email: email })
-        .then(user => {
-            if (user) {
-                res.json({ error: 'Ya existe una cuenta registrada con este correo electrónico.' });
-            } else {
-                RegisterModel.create({ name: name, email: email, password: password })
-                    .then(result => {
-                        const token = jwt.sign({ email: email },jwtSecret );
-                        res.json({ user: result, token: token });
-                    })
-                    .catch(err => res.status(500).json({ error: 'Error al crear la cuenta.' }));
-            }
-        })
-        .catch(err => res.status(500).json({ error: 'Error interno del servidor.' }));
-});
 
 app.post('/registerProfessional', (req, res) => {
     const { name, email, password, rol } = req.body;
