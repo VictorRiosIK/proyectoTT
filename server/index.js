@@ -127,7 +127,32 @@ app.post('/login', (req, res) => {
         })
         .catch(err => res.status(500).json({ error: "Error interno del servidor" }));
 });
+// Endpoint para consultar los horarios disponibles para una fecha específica
+app.get('/availableSlots', (req, res) => {
+    const {dia,mes,anio}=req.body; // Fecha seleccionada desde la aplicación Android
 
+    // Lógica para obtener los horarios disponibles desde la base de datos
+    // Puedes usar Mongoose para interactuar con MongoDB y realizar consultas
+
+    // Supongamos que availableSlots es un array con los horarios disponibles para la fecha seleccionada
+    const availableSlots = [
+        { startTime: '09:00', endTime: '10:30' },
+        { startTime: '10:30', endTime: '12:00' },
+        // Otros horarios disponibles...
+    ];
+
+    res.json({ availableSlots });
+});
+
+// Endpoint para reservar un horario
+app.post('/bookSlot', (req, res) => {
+    const { date, startTime, endTime } = req.body; // Fecha y horario seleccionado desde la aplicación Android
+
+    // Lógica para marcar el horario como ocupado en la base de datos
+    // Actualiza el estado de disponibilidad del horario correspondiente
+
+    res.json({ message: 'Horario reservado exitosamente.' });
+});
 app.listen(3001, () => {
     console.log("Server is Running")
 })
