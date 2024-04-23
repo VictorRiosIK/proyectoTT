@@ -97,7 +97,7 @@ app.post('/login', (req, res) => {
                     if (result) {
                         // Si la contraseña es correcta, generar un token JWT y devolver el rol
                         const token = jwt.sign({ email: email }, jwtSecret);
-                        res.json({ message: "Inicio de sesión exitoso", token: token, rol: student.rol });
+                        res.json({ message: "Inicio de sesión exitoso", token: token, rol: student.rol,student._id });
                     } else {
                         res.status(401).json({ error: "Credenciales inválidas" });
                     }
@@ -112,7 +112,7 @@ app.post('/login', (req, res) => {
                                 if (result) {
                                     // Si la contraseña es correcta, generar un token JWT y devolver el rol
                                     const token = jwt.sign({ email: email }, jwtSecret);
-                                    res.json({ message: "Inicio de sesión exitoso", token: token, rol: professional.rol });
+                                    res.json({ message: "Inicio de sesión exitoso", token: token, rol: professional.rol,professional._id });
                                 } else {
                                     res.status(401).json({ error: "Credenciales inválidas" });
                                 }
