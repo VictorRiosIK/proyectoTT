@@ -158,5 +158,5 @@ app.post('/bookSlot', (req, res) => {
     res.json({ message: 'Horario reservado exitosamente.' });
 });
 app.listen(3001, () => {
-    console.log("Server is Running")
+    console.log("Server is Running PORT 3001")
 })

@@ -10,10 +10,7 @@ function Navbar() {
             <Link to={'/'}>
                 <h1 className=" text-black  p-1">Servicios Estudiantiles</h1>
             </Link>
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="d-flex" id="navbarNavAltMarkup">
+            <div className="d-flex" >
                 <div className="navbar-nav gap-4">
                     <Link className='text-black' to={'/login'}>Ingresar</Link>
                     <Link className='text-black' to={'/register'}>Registrar</Link>

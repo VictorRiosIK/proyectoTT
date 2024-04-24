@@ -1,14 +1,17 @@
 import axios from 'axios'
 import { useState } from "react";
+import {Link} from 'react-router-dom'
 
 
 function registerPage() {
     const [name, setName] = useState()
+    const [boleta, setBoleta] = useState()
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
+    const rol = 1;
     const handleSubmit = (e) => {
       e.preventDefault();
-      axios.post('https://proyecto-tt-api.vercel.app/register', {name, email, password})
+      axios.post('https://proyecto-tt-api.vercel.app/registerStudent', {name, boleta, email, password, rol})
       .then(result => console.log(result))
       .catch(err => console.log(err))
     }
@@ -16,19 +19,32 @@ function registerPage() {
   return (
     <div className="d-flex justify-content-center align-items-center bg-primary vh-100">
     <div className="bg-white p-3 rounded w-25">
-      <h2>Register</h2>
+      <h2>Registrate</h2>
       <form onSubmit={handleSubmit}>
-      <div className="mb-3">
-          <label htmlFor="email">
-            <strong>Name</strong>
+        <div className="mb-3">
+          <label htmlFor="name">
+            <strong>Nombre</strong>
           </label>
           <input
             type="text"
-            placeholder="Enter Name"
+            placeholder="Nombre"
             autoComplete="off"
-            name="email"
+            name="name"
             className="form-control rounded-0"
             onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="boleta">
+            <strong>Boleta</strong>
+          </label>
+          <input
+            type="text"
+            placeholder="Boleta"
+            autoComplete="off"
+            name="boleta"
+            className="form-control rounded-0"
+            onChange={(e) => setBoleta(e.target.value)}
           />
         </div>
         <div className="mb-3">
@@ -37,7 +53,7 @@ function registerPage() {
           </label>
           <input
             type="email"
-            placeholder="Enter Email"
+            placeholder="Email"
             autoComplete="off"
             name="email"
             className="form-control rounded-0"
@@ -45,23 +61,23 @@ function registerPage() {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="email">
-            <strong>Password</strong>
+          <label htmlFor="password">
+            <strong>Contraseña</strong>
           </label>
           <input
             type="password"
-            placeholder="Enter Password"
+            placeholder="Contraseña"
             name="password"
             className="form-control rounded-0"
             onChange={(e) => setPassword(e.target.value)}          
           />
         </div>
         <button type="submit" className="btn btn-success w-100 rounded-0">
-          Register
+          Registrar
         </button>
-        <p>Already Have an Account</p>
+        <p>¿Ya tienes cuenta?</p>
         <button className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">
-          Login
+        <Link className='text-black' to={'/login'}>Ingresar</Link>
         </button>
       </form>
     </div>
