@@ -129,7 +129,7 @@ app.post('/login', (req, res) => {
 });
 // Endpoint para consultar los horarios disponibles para una fecha específica
 app.get('/availableSlots', (req, res) => {
-    const {dia,mes,anio}=req.body; // Fecha seleccionada desde la aplicación Android
+    const {fecha,horario}=req.body; // Fecha seleccionada desde la aplicación Android
 
     // Lógica para obtener los horarios disponibles desde la base de datos
     // Puedes usar Mongoose para interactuar con MongoDB y realizar consultas
@@ -150,7 +150,7 @@ app.get('/availableSlots', (req, res) => {
 
 // Endpoint para reservar un horario
 app.post('/bookSlot', (req, res) => {
-    const { date, startTime, endTime } = req.body; // Fecha y horario seleccionado desde la aplicación Android
+    const {fecha,horario}=req.body;// Fecha y horario seleccionado desde la aplicación Android
 
     // Lógica para marcar el horario como ocupado en la base de datos
     // Actualiza el estado de disponibilidad del horario correspondiente
