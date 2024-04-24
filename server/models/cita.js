@@ -10,5 +10,5 @@ const RegisterSchema = new mongoose.Schema({
     sextoHorario: String
 })
 
-const RegisterModelCita = mongoose.model("citas", RegisterSchema);
+const RegisterModelCita = mongoose.model("cita", RegisterSchema);
 module.exports = RegisterModel;
