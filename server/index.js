@@ -155,8 +155,28 @@ app.post('/bookSlot', (req, res) => {
 
     // Lógica para marcar el horario como ocupado en la base de datos
     // Actualiza el estado de disponibilidad del horario correspondiente
+    try {
+        const { fecha, horario } = req.body;
 
-    res.json({ message: 'Horario reservado exitosamente.' });
+        // Buscar si ya existe un documento con la fecha proporcionada
+        const existingSlot = await RegisterModelCita.findOne({ fecha: fecha });
+
+        if (existingSlot) {
+            // Si ya existe un documento con la fecha, actualizar el primerHorario
+            existingSlot.primerHorario = horario;
+            await existingSlot.save(); // Guardar los cambios en la base de datos
+            res.json({ message: 'Horario reservado exitosamente.' });
+        } else {
+            // Si no existe un documento con la fecha, crear uno nuevo
+            await RegisterModelCita.create({ fecha: fecha, primerHorario: horario });
+            res.json({ message: 'Nuevo horario reservado exitosamente.' });
+        }
+    } catch (error) {
+        // Manejar errores
+        console.error(error);
+        res.status(500).json({ error: 'Error al reservar el horario.' });
+    }
+    //res.json({ message: 'Horario reservado exitosamente.' });
 });
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
