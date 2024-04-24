@@ -150,7 +150,7 @@ app.get('/availableSlots', (req, res) => {
 });
 
 // Endpoint para reservar un horario
-app.post('/bookSlot', (req, res) => {
+app.post('/bookSlot', async (req, res) => {
     const {fecha,horario}=req.body;// Fecha y horario seleccionado desde la aplicación Android
 
     // Lógica para marcar el horario como ocupado en la base de datos
