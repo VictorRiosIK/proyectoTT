@@ -166,8 +166,17 @@ app.post('/bookSlot', (req, res) => {
                         res.status(500).json({ error: 'Error al actualizar el horario existente.' });
                     });
             } else {
+                const newSlot = {
+                    fecha: fecha,
+                    primerHorario: horario,
+                    segundoHorario: "",
+                    tercerHorario: "",
+                    cuartoHorario: "",
+                    quintoHorario: "",
+                    sextoHorario: ""
+                };
                 // Si no existe un documento con la fecha, crear uno nuevo
-                return RegisterModelCita.create({ fecha: fecha, primerHorario: horario })
+                return RegisterModelCita.create(newSlot)
                     .then(() => {
                         res.json({ message: 'Nuevo horario reservado exitosamente.' });
                     })
