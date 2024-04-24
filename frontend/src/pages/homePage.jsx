@@ -5,7 +5,6 @@ import { faEnvelope, faStaffSnake,faComments,faTooth } from '@fortawesome/free-s
 import { useNavigate } from 'react-router-dom'
 
 
-
 function homePage() {
     const navigate = useNavigate();
 

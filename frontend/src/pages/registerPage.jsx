@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useState } from "react";
 import {Link} from 'react-router-dom'
-
+import {useAuth} from '../context/AuthContext.jsx'
 
 function registerPage() {
     const [name, setName] = useState()
@@ -9,11 +9,15 @@ function registerPage() {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const rol = 1;
+    const {signupEstudiante} = useAuth();
+
+
     const handleSubmit = (e) => {
       e.preventDefault();
-      axios.post('https://proyecto-tt-api.vercel.app/registerStudent', {name, boleta, email, password, rol})
-      .then(result => console.log(result))
-      .catch(err => console.log(err))
+      signupEstudiante(name,boleta,email,password,rol); //http://localhost:3001  https://proyecto-tt-api.vercel.app/registerStudent
+    //   axios.post('http://localhost:3001/registerStudent', {name, boleta, email, password, rol})
+    //   .then(result => console.log(result))
+    //   .catch(err => console.log(err))
     }
 
   return (

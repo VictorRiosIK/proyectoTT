@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import {registerRequest, loginRequest, verifyTokenRequest} from '../api/auth.js'
-//import Cookies from 'js-cookie'
+import Cookies from 'js-cookie'
 
 
 export const AuthContext = createContext();
@@ -19,23 +19,24 @@ export const AuthProvider = ({children}) =>{
     const [errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const signup = async(user) =>{
+    //SIGNUP Estudiante
+    const signupEstudiante = async(name, boleta, email, password, rol) =>{
         try{
-            const res = await registerRequest(user);
+            const res = await registerRequest(name, boleta, email, password, rol);
             console.log(res.data);
             setUser(res.data);
             setIsAuthenticated(true);
         }catch(error){
-            setErrors(error.response.data);
+            setErrors(error.response);
         }
     }
 
-    const signin = async(user) =>{
+    const signinEstudiante = async(email, password) =>{
         //return new Promise(async(resolve,reject)=>{
             try{
                 //Envia una peticion a back para verificar el ususario
-                const res = await loginRequest(user);
-                //console.log(res.data.cookie);
+                const res = await loginRequest(email, password);
+                console.log(res.data);
                 //Autentica al usuario
                 setIsAuthenticated(true);
                 //Guarda los datos del usuario en user
@@ -46,8 +47,8 @@ export const AuthProvider = ({children}) =>{
                 let inXMinutes = new Date(new Date().getTime() + x * 60 * 1000);
 
                 //Crea el token en el dominio actual para que sea posible acceder a otras paginas
-                // Cookies.set('token',res.data.cookie, { expires: inXMinutes })
-                // const cookies = Cookies.get();
+                Cookies.set('token',res.data.token, { expires: inXMinutes })
+                const cookies = Cookies.get();
                 //console.log(cookies);
                 return true;
             }catch(error){
@@ -65,34 +66,40 @@ export const AuthProvider = ({children}) =>{
     }
 
     const logout = ()=>{
-        // Cookies.remove("token");
+        Cookies.remove("token");
         setIsAuthenticated(false);
         setUser(null);
     }
 
     //funcion para eliminar los mensajes pasados un tiempo
     useEffect(() =>{
-        if(errors.length > 0){
-           const timer = setTimeout(()=>{
-                setErrors([])
-            },5000);
-            return () => clearTimeout(timer);
-        }
+        // if(errors.length > 0){
+        //    const timer = setTimeout(()=>{
+        //         setErrors([])
+        //     },5000);
+        //     return () => clearTimeout(timer);
+        // }
     },[errors])
 
     //Cuando carge la aplicacion, comprobar que existe la cookie
     useEffect(() =>{
         async function checkLogin () {
-            // const cookies = Cookies.get();
-            // if(!cookies.token){
-            //     setIsAuthenticated(false);
-            //     setLoading(false);
-            //     return setUser(null)
-            // }
+            const cookies = Cookies.get();
+            console.log(cookies.token)
+            if(!cookies.token){
+                setIsAuthenticated(false);
+                setLoading(false);
+                return setUser(null)
+            }else{
+                 
+                setIsAuthenticated(true);
+                //setUser(res.data);
+                setLoading(false);
+            }
 
-            //try{
-                //console.log(cookies.token);
-                //const res = await verifyTokenRequest(cookies.token);
+            // try{
+            //     console.log(cookies.token);
+            //     const res = await verifyTokenRequest(cookies.token);
             //     console.log(res);
             //     if(!res.data){
             //         setIsAuthenticated(false);
@@ -110,13 +117,13 @@ export const AuthProvider = ({children}) =>{
             //     setLoading(false);
             // }   
         }
-        //checkLogin();
+        checkLogin();
     },[])
 
     return (
         <AuthContext.Provider value={{
-            signup,
-            signin,
+            signupEstudiante,
+            signinEstudiante,
             logout,
             loading,
             user,

@@ -1,18 +1,31 @@
 import axios from 'axios'
 import { useState } from "react";
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
+import {useAuth} from '../context/AuthContext.jsx'
+import { useEffect } from 'react';
 
 function loginPage() {
-  const [name, setName] = useState()
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
+  const {signinEstudiante,isAuthenticated} = useAuth();
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('https://proyecto-tt-api.vercel.app/login', {email, password})
-    .then(result => console.log(result))
-    .catch(err => console.log(err))
+    signinEstudiante(email, password);
+    // axios.post('https://proyecto-tt-api.vercel.app/login', {email, password})
+    // .then(result => console.log(result))
+    // .catch(err => console.log(err))
   }
   
+  //Si esta autenticado cambia de pagina
+  useEffect(()=>{
+    if(isAuthenticated){
+        navigate('/');
+    }
+    
+  }, [isAuthenticated])
+
   return (
     <div>
       <div className="d-flex justify-content-center align-items-center bg-primary vh-100">
@@ -25,7 +38,7 @@ function loginPage() {
           </label>
           <input
             type="email"
-            placeholder="Email/Boleta"
+            placeholder="Email"
             autoComplete="off"
             name="email"
             className="form-control rounded-0"

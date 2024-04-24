@@ -11,10 +11,28 @@ function Navbar() {
                 <h1 className=" text-black  p-1">Servicios Estudiantiles</h1>
             </Link>
             <div className="d-flex" >
-                <div className="navbar-nav gap-4">
-                    <Link className='text-black' to={'/login'}>Ingresar</Link>
-                    <Link className='text-black' to={'/register'}>Registrar</Link>
-                </div>
+                {
+                    isAuthenticated ? //Si esta autenticado
+                    (
+                        <div className="navbar-nav gap-4">
+                            <Link className='text-black' to={'/login'}>Agendar</Link>
+                            <Link className='text-black' to={'/login'} onClick={()=> {
+                            logout();
+                            }}>Cerrar sesión</Link>
+                        </div>
+                    )
+                    :
+                    (
+                        <div className="navbar-nav gap-4">
+                            <Link className='text-black' to={'/login'}>Ingresar</Link>
+                            <Link className='text-black' to={'/register'}>Registrar</Link>
+                        </div>
+
+                        
+                    )
+                }
+
+                
             </div>
         </div>
     </nav>
