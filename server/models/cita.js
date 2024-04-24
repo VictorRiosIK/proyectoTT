@@ -11,4 +11,4 @@ const RegisterSchema = new mongoose.Schema({
 })
 
 const RegisterModelCita = mongoose.model("cita", RegisterSchema);
-module.exports = RegisterModel;
+module.exports = RegisterModelCita;
