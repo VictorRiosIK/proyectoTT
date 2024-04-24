@@ -4,6 +4,7 @@ const cors = require('cors')
 const RegisterModel = require('./models/Register')
 const RegisterStudentModel=require('./models/RegisterStudentModel');
 const RegisterProfessionalModel=require('./models/professional');
+const RegisterModelCita=require('./models/cita');
 const jwt = require('jsonwebtoken');
 const bodyParser=require('body-parser');
 const bcrypt = require('bcryptjs');
@@ -129,7 +130,7 @@ app.post('/login', (req, res) => {
 });
 // Endpoint para consultar los horarios disponibles para una fecha específica
 app.get('/availableSlots', (req, res) => {
-    const {dia,mes,anio}=req.body; // Fecha seleccionada desde la aplicación Android
+    const {fecha,horario}=req.body; // Fecha seleccionada desde la aplicación Android
 
     // Lógica para obtener los horarios disponibles desde la base de datos
     // Puedes usar Mongoose para interactuar con MongoDB y realizar consultas
@@ -150,12 +151,43 @@ app.get('/availableSlots', (req, res) => {
 
 // Endpoint para reservar un horario
 app.post('/bookSlot', (req, res) => {
-    const { date, startTime, endTime } = req.body; // Fecha y horario seleccionado desde la aplicación Android
+    const { fecha, horario } = req.body;
 
-    // Lógica para marcar el horario como ocupado en la base de datos
-    // Actualiza el estado de disponibilidad del horario correspondiente
-
-    res.json({ message: 'Horario reservado exitosamente.' });
+    RegisterModelCita.findOne({ fecha: fecha })
+        .then(existingSlot => {
+            if (existingSlot) {
+                // Si ya existe un documento con la fecha, actualizar el primerHorario
+                existingSlot.primerHorario = horario;
+                return existingSlot.save()
+                    .then(() => {
+                        res.json({ message: 'Horario reservado exitosamente.' });
+                    })
+                    .catch(err => {
+                        res.status(500).json({ error: 'Error al actualizar el horario existente.' });
+                    });
+            } else {
+                const newSlot = {
+                    fecha: fecha,
+                    primerHorario: horario,
+                    segundoHorario: "",
+                    tercerHorario: "",
+                    cuartoHorario: "",
+                    quintoHorario: "",
+                    sextoHorario: ""
+                };
+                // Si no existe un documento con la fecha, crear uno nuevo
+                return RegisterModelCita.create(newSlot)
+                    .then(() => {
+                        res.json({ message: 'Nuevo horario reservado exitosamente.' });
+                    })
+                    .catch(err => {
+                        res.status(500).json({ error: 'Error al crear el nuevo horario.' });
+                    });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Error al buscar el horario existente.' });
+        });
 });
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
