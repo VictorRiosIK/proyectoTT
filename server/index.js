@@ -150,33 +150,35 @@ app.get('/availableSlots', (req, res) => {
 });
 
 // Endpoint para reservar un horario
-app.post('/bookSlot', async (req, res) => {
-    const {fecha,horario}=req.body;// Fecha y horario seleccionado desde la aplicación Android
+app.post('/bookSlot', (req, res) => {
+    const { fecha, horario } = req.body;
 
-    // Lógica para marcar el horario como ocupado en la base de datos
-    // Actualiza el estado de disponibilidad del horario correspondiente
-    try {
-        const { fecha, horario } = req.body;
-
-        // Buscar si ya existe un documento con la fecha proporcionada
-        const existingSlot = await RegisterModelCita.findOne({ fecha: fecha });
-
-        if (existingSlot) {
-            // Si ya existe un documento con la fecha, actualizar el primerHorario
-            existingSlot.primerHorario = horario;
-            await existingSlot.save(); // Guardar los cambios en la base de datos
-            res.json({ message: 'Horario reservado exitosamente.' });
-        } else {
-            // Si no existe un documento con la fecha, crear uno nuevo
-            await RegisterModelCita.create({ fecha: fecha, primerHorario: horario });
-            res.json({ message: 'Nuevo horario reservado exitosamente.' });
-        }
-    } catch (error) {
-        // Manejar errores
-        console.error(error);
-        res.status(500).json({ error: 'Error al reservar el horario.' });
-    }
-    //res.json({ message: 'Horario reservado exitosamente.' });
+    RegisterModelCita.findOne({ fecha: fecha })
+        .then(existingSlot => {
+            if (existingSlot) {
+                // Si ya existe un documento con la fecha, actualizar el primerHorario
+                existingSlot.primerHorario = horario;
+                return existingSlot.save()
+                    .then(() => {
+                        res.json({ message: 'Horario reservado exitosamente.' });
+                    })
+                    .catch(err => {
+                        res.status(500).json({ error: 'Error al actualizar el horario existente.' });
+                    });
+            } else {
+                // Si no existe un documento con la fecha, crear uno nuevo
+                return RegisterModelCita.create({ fecha: fecha, primerHorario: horario })
+                    .then(() => {
+                        res.json({ message: 'Nuevo horario reservado exitosamente.' });
+                    })
+                    .catch(err => {
+                        res.status(500).json({ error: 'Error al crear el nuevo horario.' });
+                    });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Error al buscar el horario existente.' });
+        });
 });
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
