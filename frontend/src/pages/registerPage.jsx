@@ -21,8 +21,8 @@ function registerPage() {
     }
 
   return (
-    <div className="d-flex justify-content-center align-items-center bg-primary vh-100">
-    <div className="bg-white p-3 rounded w-25">
+    <div className="d-flex justify-content-center align-items-center  vh-100">
+    <div className="bg-primary p-3 rounded w-50">
       <h2>Registrate</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -34,7 +34,7 @@ function registerPage() {
             placeholder="Nombre"
             autoComplete="off"
             name="name"
-            className="form-control rounded-0"
+            className="form-control rounded-50"
             onChange={(e) => setName(e.target.value)}
           />
         </div>
@@ -47,7 +47,7 @@ function registerPage() {
             placeholder="Boleta"
             autoComplete="off"
             name="boleta"
-            className="form-control rounded-0"
+            className="form-control rounded-50"
             onChange={(e) => setBoleta(e.target.value)}
           />
         </div>
@@ -60,7 +60,7 @@ function registerPage() {
             placeholder="Email"
             autoComplete="off"
             name="email"
-            className="form-control rounded-0"
+            className="form-control rounded-50"
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
@@ -72,17 +72,17 @@ function registerPage() {
             type="password"
             placeholder="Contraseña"
             name="password"
-            className="form-control rounded-0"
+            className="form-control rounded-50"
             onChange={(e) => setPassword(e.target.value)}          
           />
         </div>
-        <button type="submit" className="btn btn-success w-100 rounded-0">
+        <button type="submit" className="btn btn-light w-100 rounded-50">
           Registrar
         </button>
         <p>¿Ya tienes cuenta?</p>
-        <button className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">
-        <Link className='text-black' to={'/login'}>Ingresar</Link>
-        </button>
+        <div >
+        <Link className='btn btn-dark w-100 rounded-50 text-decoration-none' to={'/login'}>Ingresar</Link>
+        </div>
       </form>
     </div>
   </div>

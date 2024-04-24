@@ -72,20 +72,20 @@ export const AuthProvider = ({children}) =>{
     }
 
     //funcion para eliminar los mensajes pasados un tiempo
-    useEffect(() =>{
+    //useEffect(() =>{
         // if(errors.length > 0){
         //    const timer = setTimeout(()=>{
         //         setErrors([])
         //     },5000);
         //     return () => clearTimeout(timer);
         // }
-    },[errors])
+    //},[errors])
 
     //Cuando carge la aplicacion, comprobar que existe la cookie
     useEffect(() =>{
         async function checkLogin () {
             const cookies = Cookies.get();
-            console.log(cookies.token)
+            //console.log(cookies);
             if(!cookies.token){
                 setIsAuthenticated(false);
                 setLoading(false);

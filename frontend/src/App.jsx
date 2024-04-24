@@ -6,7 +6,8 @@ import ProfilePage from './pages/profilePage.jsx'
 import RegisterPage from './pages/registerPage'
 import LoginPage from './pages/loginPage'
 import Navbar from './components/Navbar.jsx'
-
+import Footer from "./components/Footer.jsx";
+import ProtectedRoute from "./ProtectedRoute.jsx";
 
 function App() {
   
@@ -15,6 +16,7 @@ function App() {
        <AuthProvider>
         <BrowserRouter>
           <Navbar></Navbar>
+          <div className="px-4">
           <Routes>
               {/* Rutas publicas */}
             <Route path='/' element={<HomePage/>}></Route>
@@ -22,13 +24,15 @@ function App() {
             <Route path='/register' element={<RegisterPage/>}></Route>
 
               {/* Rutas privadas */}
-            {/* <Route element={<ProtectedRoute/>}>
-              <Route path='/tasks' element={<TasksPage/>}></Route>
-              <Route path='/tasks/new' element={<TaskFormpage/>}></Route>
-              <Route path='/tasks/:id' element={<TaskFormpage/>}></Route>
+            <Route element={<ProtectedRoute/>}>
               <Route path='/profile' element={<ProfilePage/>}></Route>
-            </Route> */}
+            </Route>
           </Routes>  
+          </div>
+          <div className="d-flex w-100">
+            <Footer></Footer> 
+          </div>
+          
         </BrowserRouter>
        </AuthProvider>
        

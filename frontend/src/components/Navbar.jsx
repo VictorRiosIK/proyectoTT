@@ -7,16 +7,19 @@ function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg bg-primary">
         <div className="container-fluid">
-            <Link to={'/'}>
-                <h1 className=" text-black  p-1">Servicios Estudiantiles</h1>
+            <Link className='text-decoration-none' to={'/'}>
+                <h1 className=" text-black p-1">Servicios Estudiantiles</h1>
             </Link>
             <div className="d-flex" >
                 {
                     isAuthenticated ? //Si esta autenticado
                     (
                         <div className="navbar-nav gap-4">
-                            <Link className='text-black' to={'/login'}>Agendar</Link>
-                            <Link className='text-black' to={'/login'} onClick={()=> {
+                            <Link className='p-2 btn btn-outline-light ' to={'/'}>Agendar OE</Link>
+                            <Link className='p-2 btn btn-outline-light ' to={'/'}>Agendar O</Link>
+                            <Link className='p-2 btn btn-outline-light ' to={'/'}>Libros</Link>
+                            <Link className='p-2 btn btn-outline-light ' to={'/profile'}>Perfil</Link>
+                            <Link className='p-2 btn btn-outline-light ' to={'/login'} onClick={()=> {
                             logout();
                             }}>Cerrar sesión</Link>
                         </div>
@@ -24,8 +27,8 @@ function Navbar() {
                     :
                     (
                         <div className="navbar-nav gap-4">
-                            <Link className='text-black' to={'/login'}>Ingresar</Link>
-                            <Link className='text-black' to={'/register'}>Registrar</Link>
+                            <Link className='p-2 btn btn-outline-light' to={'/login'}>Ingresar</Link>
+                            <Link className='p-2 btn btn-outline-light' to={'/register'}>Registrar</Link>
                         </div>
 
                         
