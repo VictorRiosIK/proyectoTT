@@ -194,12 +194,12 @@ app.post('/bookSlot', (req, res) => {
                 // Si no existe un documento con la fecha, crear uno nuevo con todos los horarios vacíos
                 const newSlot = {
                     fecha: fecha,
-                    primerHorario: horario === 1 ? "" : "",
-                    segundoHorario: horario === 2 ? "" : "",
-                    tercerHorario: horario === 3 ? "" : "",
-                    cuartoHorario: horario === 4 ? "" : "",
-                    quintoHorario: horario === 5 ? "" : "",
-                    sextoHorario: horario === 6 ? "" : ""
+                    primerHorario: horario === 1 ? horario : "",
+                    segundoHorario: horario === 2 ? horario : "",
+                    tercerHorario: horario === 3 ? horario : "",
+                    cuartoHorario: horario === 4 ? horario: "",
+                    quintoHorario: horario === 5 ? horario : "",
+                    sextoHorario: horario === 6 ? horario : ""
                 };
                 return RegisterModelCita.create(newSlot)
                     .then(() => {
