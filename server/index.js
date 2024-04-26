@@ -129,7 +129,7 @@ app.post('/login', (req, res) => {
         .catch(err => res.status(500).json({ error: "Error interno del servidor" }));
 });
 // Endpoint para consultar los horarios disponibles para una fecha específica
-app.get('/availableSlots', (req, res) => {
+app.post('/availableSlots', (req, res) => {
     const { fecha } = req.body; // Fecha seleccionada desde la aplicación Android
 
     // Consulta a la base de datos para obtener el documento correspondiente a la fecha
