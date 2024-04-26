@@ -242,6 +242,29 @@ app.post('/bookSlot', (req, res) => {
             res.status(500).json({ error: 'Error al buscar el horario existente.' });
         });
 });
+
+app.get('/allSlotsByCorreo', (req, res) => {
+    const { correo } = req.body; // Correo que se desea filtrar
+
+    // Consulta a la base de datos para obtener todos los horarios que coincidan con el correo
+    RegisterModelCita.find({
+        $or: [
+            { primerHorario: correo },
+            { segundoHorario: correo },
+            { tercerHorario: correo },
+            { cuartoHorario: correo },
+            { quintoHorario: correo },
+            { sextoHorario: correo }
+        ]
+    })
+    .select('fecha primerHorario segundoHorario tercerHorario cuartoHorario quintoHorario sextoHorario') // Selecciona los campos que deseas devolver
+    .then(slots => {
+        res.json({ slots });
+    })
+    .catch(err => {
+        res.status(500).json({ error: 'Error al obtener los horarios.' });
+    });
+});
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
