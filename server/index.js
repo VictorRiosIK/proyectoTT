@@ -130,23 +130,41 @@ app.post('/login', (req, res) => {
 });
 // Endpoint para consultar los horarios disponibles para una fecha específica
 app.get('/availableSlots', (req, res) => {
-    const {fecha,horario}=req.body; // Fecha seleccionada desde la aplicación Android
+    const { fecha } = req.body; // Fecha seleccionada desde la aplicación Android
 
-    // Lógica para obtener los horarios disponibles desde la base de datos
-    // Puedes usar Mongoose para interactuar con MongoDB y realizar consultas
+    // Consulta a la base de datos para obtener el documento correspondiente a la fecha
+    RegisterModelCita.findOne({ fecha: fecha })
+        .then(slot => {
+            if (!slot) {
+                return res.status(404).json({ error: 'No se encontraron horarios para la fecha especificada.' });
+            }
 
-    // Supongamos que availableSlots es un array con los horarios disponibles para la fecha seleccionada
-    const availableSlots = [
-        { startTime: '09:00', endTime: '10:30' },
-        { startTime: '10:30', endTime: '12:00' },
-        { startTime: '12:00', endTime: '13:30' },
-        { startTime: '13:30', endTime: '15:00' },
-        { startTime: '15:00', endTime: '16:30' },
-        { startTime: '16:30', endTime: '18:00' }
-        // Otros horarios disponibles...
-    ];
+            // Filtrar los horarios disponibles donde la cadena está vacía en el documento
+            const availableSlots = [];
+            if (slot.primerHorario === "") {
+                availableSlots.push({ startTime: '09:00', endTime: '10:30' });
+            }
+            if (slot.segundoHorario === "") {
+                availableSlots.push({ startTime: '10:30', endTime: '12:00' });
+            }
+            if (slot.tercerHorario === "") {
+                availableSlots.push({ startTime: '12:00', endTime: '13:30' });
+            }
+            if (slot.cuartoHorario === "") {
+                availableSlots.push({ startTime: '13:30', endTime: '15:00' });
+            }
+            if (slot.quintoHorario === "") {
+                availableSlots.push({ startTime: '15:00', endTime: '16:30' });
+            }
+            if (slot.sextoHorario === "") {
+                availableSlots.push({ startTime: '16:30', endTime: '18:00' });
+            }
 
-    res.json({ availableSlots });
+            res.json({ availableSlots });
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Error al obtener los horarios disponibles.' });
+        });
 });
 
 // Endpoint para reservar un horario
