@@ -258,9 +258,9 @@ app.post('/allSlotsByCorreo', (req, res) => {
         ]
     })
     .then(slots => {
-        // Filtrar los campos del documento que coinciden con el correo proporcionado
+        // Filtrar los campos del documento que coinciden con el correo proporcionado y agregar la fecha
         const filteredSlots = slots.map(slot => {
-            const filteredSlot = {};
+            const filteredSlot = { fecha: slot.fecha };
             Object.keys(slot._doc).forEach(key => {
                 if (slot[key] === correo) {
                     filteredSlot[key] = slot[key];
