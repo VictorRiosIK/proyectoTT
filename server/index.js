@@ -243,7 +243,7 @@ app.post('/bookSlot', (req, res) => {
         });
 });
 
-app.get('/allSlotsByCorreo', (req, res) => {
+app.post('/allSlotsByCorreo', (req, res) => {
     const { correo } = req.body; // Correo que se desea filtrar
 
     // Consulta a la base de datos para obtener todos los horarios que coincidan con el correo
@@ -257,9 +257,19 @@ app.get('/allSlotsByCorreo', (req, res) => {
             { sextoHorario: correo }
         ]
     })
-    .select('fecha primerHorario segundoHorario tercerHorario cuartoHorario quintoHorario sextoHorario') // Selecciona los campos que deseas devolver
     .then(slots => {
-        res.json({ slots });
+        // Filtrar los campos del documento que coinciden con el correo proporcionado
+        const filteredSlots = slots.map(slot => {
+            const filteredSlot = {};
+            Object.keys(slot._doc).forEach(key => {
+                if (slot[key] === correo) {
+                    filteredSlot[key] = slot[key];
+                }
+            });
+            return filteredSlot;
+        });
+
+        res.json({ slots: filteredSlots });
     })
     .catch(err => {
         res.status(500).json({ error: 'Error al obtener los horarios.' });
