@@ -156,26 +156,51 @@ app.post('/bookSlot', (req, res) => {
     RegisterModelCita.findOne({ fecha: fecha })
         .then(existingSlot => {
             if (existingSlot) {
-                // Si ya existe un documento con la fecha, actualizar el primerHorario
-                existingSlot.primerHorario = horario;
+                // Determinar la propiedad de horario a actualizar
+                let horarioField;
+                switch (horario) {
+                    case 1:
+                        horarioField = 'primerHorario';
+                        break;
+                    case 2:
+                        horarioField = 'segundoHorario';
+                        break;
+                    case 3:
+                        horarioField = 'tercerHorario';
+                        break;
+                    case 4:
+                        horarioField = 'cuartoHorario';
+                        break;
+                    case 5:
+                        horarioField = 'quintoHorario';
+                        break;
+                    case 6:
+                        horarioField = 'sextoHorario';
+                        break;
+                    default:
+                        return res.status(400).json({ error: 'Número de horario inválido.' });
+                }
+
+                // Actualizar el horario correspondiente
+                existingSlot[horarioField] = horario+""; // Asignar una cadena vacía por ahora
                 return existingSlot.save()
                     .then(() => {
-                        res.json({ message: 'Horario reservado exitosamente.' });
+                        res.json({ message: `Horario ${horarioField} actualizado exitosamente.` });
                     })
                     .catch(err => {
-                        res.status(500).json({ error: 'Error al actualizar el horario existente.' });
+                        res.status(500).json({ error: `Error al actualizar el horario ${horarioField}.` });
                     });
             } else {
+                // Si no existe un documento con la fecha, crear uno nuevo con todos los horarios vacíos
                 const newSlot = {
                     fecha: fecha,
-                    primerHorario: horario,
+                    primerHorario: "",
                     segundoHorario: "",
                     tercerHorario: "",
                     cuartoHorario: "",
                     quintoHorario: "",
                     sextoHorario: ""
                 };
-                // Si no existe un documento con la fecha, crear uno nuevo
                 return RegisterModelCita.create(newSlot)
                     .then(() => {
                         res.json({ message: 'Nuevo horario reservado exitosamente.' });
