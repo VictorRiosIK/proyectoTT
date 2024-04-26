@@ -179,7 +179,7 @@ app.post('/availableSlots', (req, res) => {
 
 // Endpoint para reservar un horario
 app.post('/bookSlot', (req, res) => {
-    const { fecha, horario } = req.body;
+    const { fecha, horario,correo } = req.body;
 
     RegisterModelCita.findOne({ fecha: fecha })
         .then(existingSlot => {
@@ -210,7 +210,7 @@ app.post('/bookSlot', (req, res) => {
                 }
 
                 // Actualizar el horario correspondiente
-                existingSlot[horarioField] = horario; // Asignar una cadena vacía por ahora
+                existingSlot[horarioField] = correo; // Asignar una cadena vacía por ahora
                 return existingSlot.save()
                     .then(() => {
                         res.json({ message: `Horario ${horarioField} actualizado exitosamente.` });
@@ -222,12 +222,12 @@ app.post('/bookSlot', (req, res) => {
                 // Si no existe un documento con la fecha, crear uno nuevo con todos los horarios vacíos
                 const newSlot = {
                     fecha: fecha,
-                    primerHorario: horario === 1 ? horario : "",
-                    segundoHorario: horario === 2 ? horario : "",
-                    tercerHorario: horario === 3 ? horario : "",
-                    cuartoHorario: horario === 4 ? horario: "",
-                    quintoHorario: horario === 5 ? horario : "",
-                    sextoHorario: horario === 6 ? horario : ""
+                    primerHorario: horario === 1 ? correo : "",
+                    segundoHorario: horario === 2 ? correo : "",
+                    tercerHorario: horario === 3 ? correo : "",
+                    cuartoHorario: horario === 4 ? correo: "",
+                    quintoHorario: horario === 5 ? correo : "",
+                    sextoHorario: horario === 6 ? correo : ""
                 };
                 return RegisterModelCita.create(newSlot)
                     .then(() => {
