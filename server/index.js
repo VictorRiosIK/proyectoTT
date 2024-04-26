@@ -182,7 +182,7 @@ app.post('/bookSlot', (req, res) => {
                 }
 
                 // Actualizar el horario correspondiente
-                existingSlot[horarioField] = horario+""; // Asignar una cadena vacía por ahora
+                existingSlot[horarioField] = ""; // Asignar una cadena vacía por ahora
                 return existingSlot.save()
                     .then(() => {
                         res.json({ message: `Horario ${horarioField} actualizado exitosamente.` });
@@ -194,12 +194,12 @@ app.post('/bookSlot', (req, res) => {
                 // Si no existe un documento con la fecha, crear uno nuevo con todos los horarios vacíos
                 const newSlot = {
                     fecha: fecha,
-                    primerHorario: "",
-                    segundoHorario: "",
-                    tercerHorario: "",
-                    cuartoHorario: "",
-                    quintoHorario: "",
-                    sextoHorario: ""
+                    primerHorario: horario === 1 ? "" : "",
+                    segundoHorario: horario === 2 ? "" : "",
+                    tercerHorario: horario === 3 ? "" : "",
+                    cuartoHorario: horario === 4 ? "" : "",
+                    quintoHorario: horario === 5 ? "" : "",
+                    sextoHorario: horario === 6 ? "" : ""
                 };
                 return RegisterModelCita.create(newSlot)
                     .then(() => {
