@@ -182,7 +182,7 @@ app.post('/bookSlot', (req, res) => {
                 }
 
                 // Actualizar el horario correspondiente
-                existingSlot[horarioField] = ""; // Asignar una cadena vacía por ahora
+                existingSlot[horarioField] = horario; // Asignar una cadena vacía por ahora
                 return existingSlot.save()
                     .then(() => {
                         res.json({ message: `Horario ${horarioField} actualizado exitosamente.` });
