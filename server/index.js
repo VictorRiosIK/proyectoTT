@@ -131,12 +131,22 @@ app.post('/login', (req, res) => {
 // Endpoint para consultar los horarios disponibles para una fecha específica
 app.post('/availableSlots', (req, res) => {
     const { fecha } = req.body; // Fecha seleccionada desde la aplicación Android
-
+    
     // Consulta a la base de datos para obtener el documento correspondiente a la fecha
     RegisterModelCita.findOne({ fecha: fecha })
         .then(slot => {
+             // Si no se encuentra un documento para la fecha, regresa todos los horarios disponibles
             if (!slot) {
-                return res.status(404).json({ error: 'No se encontraron horarios para la fecha especificada.' });
+                const availableSlots = [
+                    { startTime: '09:00', endTime: '10:30' },
+                    { startTime: '10:30', endTime: '12:00' },
+                    { startTime: '12:00', endTime: '13:30' },
+                    { startTime: '13:30', endTime: '15:00' },
+                    { startTime: '15:00', endTime: '16:30' },
+                    { startTime: '16:30', endTime: '18:00' }
+                    // Agrega aquí otros horarios disponibles si es necesario
+                ];
+                return res.json({ availableSlots });
             }
 
             // Filtrar los horarios disponibles donde la cadena está vacía en el documento
