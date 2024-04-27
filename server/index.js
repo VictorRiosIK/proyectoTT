@@ -294,6 +294,30 @@ app.post('/allSlotsByCorreo', (req, res) => {
         res.status(500).json({ error: 'Error al obtener los horarios.' });
     });
 });
+app.get('/allSlots', (req, res) => {
+    RegisterModelCita.find()
+        .then(slots => {
+            // Ajustar los datos de salida para incluir solo la fecha y todos los horarios
+            const adjustedSlots = slots.map(slot => {
+                // Crear un nuevo objeto para contener solo la fecha y todos los horarios
+                const adjustedSlot = {
+                    fecha: slot.fecha,
+                    primerHorario: slot.primerHorario,
+                    segundoHorario: slot.segundoHorario,
+                    tercerHorario: slot.tercerHorario,
+                    cuartoHorario: slot.cuartoHorario,
+                    quintoHorario: slot.quintoHorario,
+                    sextoHorario: slot.sextoHorario
+                };
+                return adjustedSlot;
+            });
+
+            res.json({ slots: adjustedSlots });
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Error al obtener los horarios.' });
+        });
+});
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
