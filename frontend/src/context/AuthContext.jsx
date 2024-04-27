@@ -26,6 +26,14 @@ export const AuthProvider = ({children}) =>{
             console.log(res.data);
             setUser(res.data);
             setIsAuthenticated(true);
+             //TIEMPO DE EXPIRACION EN x MINUTOS
+             const x = 60;
+             let inXMinutes = new Date(new Date().getTime() + x * 60 * 1000);
+
+             //Crea el token en el dominio actual para que sea posible acceder a otras paginas
+             Cookies.set('token',res.data.token, { expires: inXMinutes })
+             const cookies = Cookies.get();
+             //console.log(cookies);
         }catch(error){
             setErrors(error.response);
         }

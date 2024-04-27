@@ -15,9 +15,9 @@ function Navbar() {
                     isAuthenticated ? //Si esta autenticado
                     (
                         <div className="navbar-nav gap-4">
-                            <Link className='p-2 btn btn-outline-light ' to={'/'}>Agendar OE</Link>
-                            <Link className='p-2 btn btn-outline-light ' to={'/'}>Agendar O</Link>
-                            <Link className='p-2 btn btn-outline-light ' to={'/'}>Libros</Link>
+                            <Link className='p-2 btn btn-outline-light ' to={'/citas-psicologo'}>Psicologo</Link>
+                            <Link className='p-2 btn btn-outline-light ' to={'/citas-dentista'}>Dentista</Link>
+                            <Link className='p-2 btn btn-outline-light ' to={'/recordatorio'}>Recordatorio</Link>
                             <Link className='p-2 btn btn-outline-light ' to={'/profile'}>Perfil</Link>
                             <Link className='p-2 btn btn-outline-light ' to={'/login'} onClick={()=> {
                             logout();

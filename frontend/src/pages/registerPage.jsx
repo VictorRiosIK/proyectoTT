@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { useState } from "react";
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {useAuth} from '../context/AuthContext.jsx'
+import { useEffect } from 'react';
 
 function registerPage() {
     const [name, setName] = useState()
@@ -9,8 +10,8 @@ function registerPage() {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const rol = 1;
-    const {signupEstudiante} = useAuth();
-
+    const {signupEstudiante,  isAuthenticated} = useAuth();
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -19,7 +20,13 @@ function registerPage() {
     //   .then(result => console.log(result))
     //   .catch(err => console.log(err))
     }
+  //Si esta autenticado cambia de pagina
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
 
+  }, [isAuthenticated])
   return (
     <div className="d-flex justify-content-center align-items-center  vh-100">
     <div className="bg-primary p-3 rounded w-50">

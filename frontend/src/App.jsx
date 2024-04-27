@@ -3,6 +3,11 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext.jsx'
 import HomePage from './pages/homePage.jsx'
 import ProfilePage from './pages/profilePage.jsx'
+import AgendarOdontologo from "./pages/agendarOdontologo.jsx";
+import AgendarOrientacion from "./pages/agendarOrientacion.jsx";
+import MisCitasDentista from "./pages/misCitasDentista.jsx"
+import MisCitasPsicologo from "./pages/misCitasPsicologo.jsx"
+import Recordatorio from "./pages/recordatorio.jsx";
 import RegisterPage from './pages/registerPage'
 import LoginPage from './pages/loginPage'
 import Navbar from './components/Navbar.jsx'
@@ -25,6 +30,11 @@ function App() {
 
               {/* Rutas privadas */}
             <Route element={<ProtectedRoute/>}>
+              <Route path='/agendar-dentista' element={<AgendarOdontologo/>}></Route>
+              <Route path='/agendar-psicologo' element={<AgendarOrientacion/>}></Route>
+              <Route path='/citas-dentista' element={<MisCitasDentista/>}></Route>
+              <Route path='/citas-psicologo' element={<MisCitasPsicologo/>}></Route>
+              <Route path='/recordatorio' element={<Recordatorio/>}></Route>
               <Route path='/profile' element={<ProfilePage/>}></Route>
             </Route>
           </Routes>  
