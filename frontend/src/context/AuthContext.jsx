@@ -1,9 +1,11 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import {registerRequest, loginRequest, verifyTokenRequest} from '../api/auth.js'
+import {getHorariosRequest,agendarCitaRequest} from '../api/citas.js'
 import Cookies from 'js-cookie'
 
 
 export const AuthContext = createContext();
+
 
 export const useAuth = ()=>{
     const context = useContext(AuthContext);
@@ -14,10 +16,30 @@ export const useAuth = ()=>{
 }
 
 export const AuthProvider = ({children}) =>{
+    //Usuario
     const [user, setUser]= useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [errors, setErrors] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    //Citas
+    const [horariosSelect, setHorariosSelect] = useState([]);
+
+
+    const setLocalStorage = value => {
+        try {
+            if(value === null){
+                window.localStorage.clear()
+                return;
+            }    
+
+            setUser(value);
+            window.localStorage.setItem("user",JSON.stringify(value));
+            
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     //SIGNUP Estudiante
     const signupEstudiante = async(name, boleta, email, password, rol) =>{
@@ -25,6 +47,8 @@ export const AuthProvider = ({children}) =>{
             const res = await registerRequest(name, boleta, email, password, rol);
             console.log(res.data);
             setUser(res.data);
+            console.log(user)
+            setLocalStorage(res.data);
             setIsAuthenticated(true);
              //TIEMPO DE EXPIRACION EN x MINUTOS
              const x = 60;
@@ -49,6 +73,8 @@ export const AuthProvider = ({children}) =>{
                 setIsAuthenticated(true);
                 //Guarda los datos del usuario en user
                 setUser(res.data);
+                console.log(user);
+                setLocalStorage(res.data);
                 //console.log("Autenticado");
                 //TIEMPO DE EXPIRACION EN x MINUTOS
                 const x = 60;
@@ -73,11 +99,44 @@ export const AuthProvider = ({children}) =>{
         
     }
 
+    //Cerrar sesion
     const logout = ()=>{
         Cookies.remove("token");
         setIsAuthenticated(false);
         setUser(null);
+        setLocalStorage(null)
     }
+    
+    //*********************  CITAS  *********************
+
+    //GetHorariosCitas
+    const getHorariosCitas = async(fecha) =>{
+        try {
+            const res = await getHorariosRequest(fecha);
+            console.log(res.data.availableSlots);
+            const horarios = [];
+            const aux = res.data.availableSlots;
+            aux.map(e=>{
+                horarios.push(e.startTime+ ' - ' + e.endTime);
+            })
+            //console.log(horarios);
+            setHorariosSelect(horarios);
+            //console.log(horariosSelect);
+        } catch (error) {
+            
+        }
+    }
+
+    //AgendarCita
+    const agendarCitaDentista = async(fecha, horario, correo) =>{
+        try {
+            const res = await agendarCitaRequest(fecha, horario, correo);
+            console.log(res);
+        } catch (error) {
+            
+        }
+    }
+
 
     //funcion para eliminar los mensajes pasados un tiempo
     //useEffect(() =>{
@@ -133,9 +192,12 @@ export const AuthProvider = ({children}) =>{
             signupEstudiante,
             signinEstudiante,
             logout,
+            getHorariosCitas,
+            agendarCitaDentista,
             loading,
             user,
             isAuthenticated,
+            horariosSelect,
             errors
         }}>
             {children}
