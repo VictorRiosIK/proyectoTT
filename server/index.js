@@ -131,10 +131,16 @@ app.post('/login', (req, res) => {
 });
 // Endpoint para consultar los horarios disponibles para una fecha específica
 app.post('/availableSlots', (req, res) => {
-    const { fecha } = req.body; // Fecha seleccionada desde la aplicación Android
-    
-    // Consulta a la base de datos para obtener el documento correspondiente a la fecha
-    RegisterModelCita.findOne({ fecha: fecha })
+    const { fecha,tipo } = req.body; // Fecha seleccionada desde la aplicación Android
+    // Verificar si el tipo de profesional es Dentista o Psicologo
+    if (tipo !== 'Dentista' && tipo !== 'Psicologo') {
+        return res.status(400).json({ error: 'Tipo de profesional inválido.' });
+    }
+    // Determinar el modelo correspondiente según el tipo de profesional
+    const RegisterModel = tipo === 'Dentista' ? RegisterModelCita : RegisterModelCitaP;
+
+    // Consulta a la base de datos para obtener el documento correspondiente a la fecha y tipo de profesional
+    RegisterModel.findOne({ fecha: fecha })
         .then(slot => {
              // Si no se encuentra un documento para la fecha, regresa todos los horarios disponibles
             if (!slot) {
