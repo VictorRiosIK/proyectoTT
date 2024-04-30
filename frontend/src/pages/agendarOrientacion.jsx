@@ -6,8 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDays, faClock } from '@fortawesome/free-solid-svg-icons'
 import Select from 'react-select';
 import {getHorariosRequest,agendarCitaRequest} from '../api/citas.js'
+import { useNavigate } from 'react-router-dom'
 
 function agendarOrientacion() {
+  const navigate = useNavigate();
   const [startDate, setStartDate] = useState(new Date());
   const [touched, setTouched] = useState(false);
   const [horarioSelect, sethorarioSelect ] = useState(null);
@@ -32,7 +34,8 @@ function agendarOrientacion() {
       
       const horario = selectedH.value;
       const correo = user.email;
-      agendarCitaDentista(fecha, horario, correo);
+      agendarCitaDentista(fecha, horario, correo,'Psicologo');
+      navigate('/citas-psicologo')
     }
     
   }
@@ -41,7 +44,7 @@ function agendarOrientacion() {
 
   const getHorariosCitas = async(fecha) =>{
     try {
-        const res = await getHorariosRequest(fecha);
+        const res = await getHorariosRequest(fecha,'Psicologo');
         console.log(res.data.availableSlots);
         const horarios = [];
         const aux = res.data.availableSlots;

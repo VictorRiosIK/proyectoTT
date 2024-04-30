@@ -8,7 +8,7 @@ function misCitasPsicologo() {
   const getMisCitas = async () => {
     try {
       //setCitas([]);
-      const res = await getMisCitasRequest(user.email);
+      const res = await getMisCitasRequest(user.email,'Psicologo');
       console.log(res);
       cita = [];
       res.data.slots.forEach(e => {

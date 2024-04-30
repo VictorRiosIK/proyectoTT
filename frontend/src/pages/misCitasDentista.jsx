@@ -9,7 +9,7 @@ function misCitasDentista() {
   const getMisCitas = async () => {
     try {
       //setCitas([]);
-      const res = await getMisCitasRequest(user.email);
+      const res = await getMisCitasRequest(user.email,'Dentista');
       console.log(res);
       cita = [];
       res.data.slots.forEach(e => {

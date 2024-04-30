@@ -128,9 +128,9 @@ export const AuthProvider = ({children}) =>{
     }
 
     //AgendarCita
-    const agendarCitaDentista = async(fecha, horario, correo) =>{
+    const agendarCitaDentista = async(fecha, horario, correo,tipo) =>{
         try {
-            const res = await agendarCitaRequest(fecha, horario, correo);
+            const res = await agendarCitaRequest(fecha, horario, correo,tipo);
             console.log(res);
         } catch (error) {
             

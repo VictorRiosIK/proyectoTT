@@ -1,16 +1,16 @@
 import axios from './axios'
 
 //Obtener horarios disponibles
-export const getHorariosRequest = (fecha) => 
-                                axios.post('/availableSlots', {fecha});
+export const getHorariosRequest = (fecha,tipo) => 
+                                axios.post('/availableSlots', {fecha,tipo});
 
 
 //Agendar cita
-export const agendarCitaRequest = (fecha, horario, correo) => 
-                                axios.post('/bookSlot', {fecha, horario, correo});
+export const agendarCitaRequest = (fecha, horario, correo, tipo) => 
+                                axios.post('/bookSlot', {fecha, horario, correo, tipo});
 
 //Obtener mis citas
-export const getMisCitasRequest = (correo) => 
-                                axios.post('/allSlotsByCorreo', {correo});
+export const getMisCitasRequest = (correo,tipo) => 
+                                axios.post('/allSlotsByCorreo', {correo,tipo});
             
 
