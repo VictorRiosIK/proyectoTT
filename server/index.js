@@ -264,7 +264,86 @@ app.post('/bookSlot', (req, res) => {
         res.status(500).json({ error: 'Error al buscar la cita existente.' });
     });
     } else if (tipo === 'Psicologo') {
-        return res.json({ message: 'Horario reservado por Psicologo exitosamente.' });
+        // Lógica para Psicologo
+    RegisterModelCitaP.findOne({ $or: [
+        { primerHorario: correo },
+        { segundoHorario: correo },
+        { tercerHorario: correo },
+        { cuartoHorario: correo },
+        { quintoHorario: correo },
+        { sextoHorario: correo }
+    ]})
+    .then(existingSlot => {
+        if (existingSlot) {
+            return res.status(400).json({ error: 'Ya existe una cita para este correo.' });
+        } else {
+            // Determinar la propiedad de horario a actualizar o crear
+            let horarioField;
+            switch (horario) {
+                case 1:
+                    horarioField = 'primerHorario';
+                    break;
+                case 2:
+                    horarioField = 'segundoHorario';
+                    break;
+                case 3:
+                    horarioField = 'tercerHorario';
+                    break;
+                case 4:
+                    horarioField = 'cuartoHorario';
+                    break;
+                case 5:
+                    horarioField = 'quintoHorario';
+                    break;
+                case 6:
+                    horarioField = 'sextoHorario';
+                    break;
+                default:
+                    return res.status(400).json({ error: 'Número de horario inválido.' });
+            }
+
+            // Actualizar o crear la cita correspondiente
+            RegisterModelCitaP.findOne({ fecha: fecha })
+                .then(existingSlot => {
+                    if (existingSlot) {
+                        // Actualizar el horario correspondiente
+                        existingSlot[horarioField] = correo;
+                        return existingSlot.save()
+                            .then(() => {
+                                res.json({ message: `Horario ${horarioField} actualizado exitosamente.` });
+                            })
+                            .catch(err => {
+                                res.status(500).json({ error: `Error al actualizar el horario ${horarioField}.` });
+                            });
+                    } else {
+                        // Si no existe un documento con la fecha, crear uno nuevo con todos los horarios vacíos
+                        const newSlot = {
+                            fecha: fecha,
+                            primerHorario: horario === 1 ? correo : "",
+                            segundoHorario: horario === 2 ? correo : "",
+                            tercerHorario: horario === 3 ? correo : "",
+                            cuartoHorario: horario === 4 ? correo: "",
+                            quintoHorario: horario === 5 ? correo : "",
+                            sextoHorario: horario === 6 ? correo : ""
+                        };
+                        return RegisterModelCitaP.create(newSlot)
+                            .then(() => {
+                                res.json({ message: 'Nuevo horario reservado exitosamente.' });
+                            })
+                            .catch(err => {
+                                res.status(500).json({ error: 'Error al crear el nuevo horario.' });
+                            });
+                    }
+                })
+                .catch(err => {
+                    res.status(500).json({ error: 'Error al buscar el horario existente.' });
+                });
+        }
+    })
+    .catch(err => {
+        res.status(500).json({ error: 'Error al buscar la cita existente.' });
+    });
+       
     }
     
 });
