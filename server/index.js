@@ -356,10 +356,17 @@ app.post('/bookSlot', (req, res) => {
 });
 
 app.post('/allSlotsByCorreo', (req, res) => {
-    const { correo } = req.body; // Correo que se desea filtrar
+    const { correo, tipo } = req.body; // Correo que se desea filtrar y tipo de profesional
+
+    // Verificar si el tipo de profesional es Dentista o Psicologo
+    if (tipo !== 'Dentista' && tipo !== 'Psicologo') {
+        return res.status(400).json({ error: 'Tipo de profesional inválido.' });
+    }
+    // Determinar el modelo correspondiente según el tipo de profesional
+    const RegisterModel = tipo === 'Dentista' ? RegisterModelCita : RegisterModelCitaP;
 
     // Consulta a la base de datos para obtener todos los horarios que coincidan con el correo
-    RegisterModelCita.find({
+    RegisterModel.find({
         $or: [
             { primerHorario: correo },
             { segundoHorario: correo },
