@@ -31,26 +31,26 @@ app.post('/registerProfessional', (req, res) => {
     RegisterStudentModel.findOne({ email: email })
         .then(existingUser => {
             if (existingUser) {
-                return res.status(400).json({ error: 'El correo electrónico ya está registrado (Estudiante).' });
+                return res.status(400).json({ message: 'El correo electrónico ya está registrado (Estudiante).' });
             } else {
                 const hashedPassword = bcrypt.hashSync(password, 10);
                 RegisterProfessionalModel.findOne({ email: email })
                     .then(professional => {
                         if (professional) {
-                            return res.status(400).json({ error: 'Ya existe una cuenta de profesional.' });
+                            return res.status(400).json({ message: 'Ya existe una cuenta de profesional.' });
                         } else {
                             RegisterProfessionalModel.create({ name: name, email: email, password: hashedPassword, rol: rol })
                                 .then(result => {
                                     const token = jwt.sign({ email: email },jwtSecret);
                                     res.json({ professional: result, token: token });
                                 })
-                                .catch(err => res.status(500).json({ error: 'Error al crear la cuenta profesional.' }));
+                                .catch(err => res.status(500).json({ message: 'Error al crear la cuenta profesional.' }));
                         }
                     })
-                    .catch(err => res.status(500).json({ error: 'Error al buscar la cuenta profesional.' }));
+                    .catch(err => res.status(500).json({ message: 'Error al buscar la cuenta profesional.' }));
             }
         })
-        .catch(err => res.status(500).json({ error: 'Error al buscar la cuenta.' }));
+        .catch(err => res.status(500).json({ message: 'Error al buscar la cuenta.' }));
 });
 
 app.post('/registerStudent', (req, res) => {
@@ -62,14 +62,14 @@ app.post('/registerStudent', (req, res) => {
         .then(professional => {
             if (professional) {
                 // Si el correo electrónico ya existe en RegisterProfessionalModel, devolver un mensaje de error
-                return res.status(400).json({ error: 'Ya existe una cuenta registrada con este correo electrónico (profesional).' });
+                return res.status(400).json({ message: 'Ya existe una cuenta registrada con este correo electrónico (profesional).' });
             } else {
                 // Si el correo electrónico no existe en RegisterProfessionalModel, verificar si existe en RegisterStudentModel
                 RegisterStudentModel.findOne({ email: email })
                     .then(student => {
                         if (student) {
                             // Si el correo electrónico ya existe en RegisterStudentModel, devolver un mensaje de error
-                            return res.status(400).json({ error: 'Ya existe una cuenta registrada con este correo electrónico (estudiante).' });
+                            return res.status(400).json({ message: 'Ya existe una cuenta registrada con este correo electrónico (estudiante).' });
                         } else {
                             const hashedPassword = bcrypt.hashSync(password, 10);
                             // Si el correo electrónico no existe en ninguno de los dos modelos, crear el registro en RegisterStudentModel
@@ -78,13 +78,13 @@ app.post('/registerStudent', (req, res) => {
                                     const token = jwt.sign({ email: email }, jwtSecret);
                                     res.json({ user: result, token: token });
                                 })
-                                .catch(err => res.status(500).json({ error: 'Error al crear la cuenta de estudiante.' }));
+                                .catch(err => res.status(500).json({ message: 'Error al crear la cuenta de estudiante.' }));
                         }
                     })
-                    .catch(err => res.status(500).json({ error: 'Error al buscar la cuenta de estudiante.' }));
+                    .catch(err => res.status(500).json({ message: 'Error al buscar la cuenta de estudiante.' }));
             }
         })
-        .catch(err => res.status(500).json({ error: 'Error al buscar la cuenta de profesional.' }));
+        .catch(err => res.status(500).json({ message: 'Error al buscar la cuenta de profesional.' }));
 });
 
 app.post('/login', (req, res) => {
@@ -101,7 +101,7 @@ app.post('/login', (req, res) => {
                         const token = jwt.sign({ email: email }, jwtSecret);
                         res.json({ message: "Inicio de sesión exitoso", token: token, rol: student.rol,email:student.email });
                     } else {
-                        res.status(401).json({ error: "Credenciales inválidas" });
+                        res.status(401).json({ message: "Credenciales inválidas" });
                     }
                 });
             } else {
@@ -116,25 +116,25 @@ app.post('/login', (req, res) => {
                                     const token = jwt.sign({ email: email }, jwtSecret);
                                     res.json({ message: "Inicio de sesión exitoso", token: token, rol: professional.rol,email:professional.email });
                                 } else {
-                                    res.status(401).json({ error: "Credenciales inválidas" });
+                                    res.status(401).json({ message: "Credenciales inválidas" });
                                 }
                             });
                         } else {
                             // Si el correo electrónico no existe en RegisterStudentModel ni en RegisterProfessionalModel, devolver un error
-                            res.status(404).json({ error: "Usuario no encontrado" });
+                            res.status(404).json({ message: "Usuario no encontrado" });
                         }
                     })
-                    .catch(err => res.status(500).json({ error: "Error interno del servidor" }));
+                    .catch(err => res.status(500).json({ message: "Error interno del servidor" }));
             }
         })
-        .catch(err => res.status(500).json({ error: "Error interno del servidor" }));
+        .catch(err => res.status(500).json({ message: "Error interno del servidor" }));
 });
 // Endpoint para consultar los horarios disponibles para una fecha específica
 app.post('/availableSlots', (req, res) => {
     const { fecha,tipo } = req.body; // Fecha seleccionada desde la aplicación Android
     // Verificar si el tipo de profesional es Dentista o Psicologo
     if (tipo !== 'Dentista' && tipo !== 'Psicologo') {
-        return res.status(400).json({ error: 'Tipo de profesional inválido.' });
+        return res.status(400).json({ message: 'Tipo de profesional inválido.' });
     }
     // Determinar el modelo correspondiente según el tipo de profesional
     const RegisterModel = tipo === 'Dentista' ? RegisterModelCita : RegisterModelCitaP;
@@ -180,7 +180,7 @@ app.post('/availableSlots', (req, res) => {
             res.json({ availableSlots });
         })
         .catch(err => {
-            res.status(500).json({ error: 'Error al obtener los horarios disponibles.' });
+            res.status(500).json({ message: 'Error al obtener los horarios disponibles.' });
         });
 });
 
@@ -188,7 +188,7 @@ app.post('/availableSlots', (req, res) => {
 app.post('/bookSlot', (req, res) => {
     const { fecha, horario, correo, tipo } = req.body;
     if (tipo !== 'Dentista' && tipo !== 'Psicologo') {
-        return res.status(400).json({ error: 'Tipo de profesional inválido.' });
+        return res.status(400).json({ message: 'Tipo de profesional inválido.' });
     }
     if (tipo === 'Dentista') {
         // Verificar si ya existe una cita con el correo proporcionado
@@ -202,7 +202,7 @@ app.post('/bookSlot', (req, res) => {
     ]})
     .then(existingSlot => {
         if (existingSlot) {
-            return res.status(400).json({ error: 'Ya existe una cita para este correo.' });
+            return res.status(400).json({ message: 'Ya existe una cita para este correo.' });
         } else {
             // Determinar la propiedad de horario a actualizar o crear
             let horarioField;
@@ -226,7 +226,7 @@ app.post('/bookSlot', (req, res) => {
                     horarioField = 'sextoHorario';
                     break;
                 default:
-                    return res.status(400).json({ error: 'Número de horario inválido.' });
+                    return res.status(400).json({ message: 'Número de horario inválido.' });
             }
 
             // Actualizar o crear la cita correspondiente
@@ -240,7 +240,7 @@ app.post('/bookSlot', (req, res) => {
                                 res.json({ message: `Horario ${horarioField} actualizado exitosamente.` });
                             })
                             .catch(err => {
-                                res.status(500).json({ error: `Error al actualizar el horario ${horarioField}.` });
+                                res.status(500).json({ message: `Error al actualizar el horario ${horarioField}.` });
                             });
                     } else {
                         // Si no existe un documento con la fecha, crear uno nuevo con todos los horarios vacíos
@@ -258,17 +258,17 @@ app.post('/bookSlot', (req, res) => {
                                 res.json({ message: 'Nuevo horario reservado exitosamente.' });
                             })
                             .catch(err => {
-                                res.status(500).json({ error: 'Error al crear el nuevo horario.' });
+                                res.status(500).json({ message: 'Error al crear el nuevo horario.' });
                             });
                     }
                 })
                 .catch(err => {
-                    res.status(500).json({ error: 'Error al buscar el horario existente.' });
+                    res.status(500).json({ message: 'Error al buscar el horario existente.' });
                 });
         }
     })
     .catch(err => {
-        res.status(500).json({ error: 'Error al buscar la cita existente.' });
+        res.status(500).json({ message: 'Error al buscar la cita existente.' });
     });
     } else if (tipo === 'Psicologo') {
         // Lógica para Psicologo
@@ -282,7 +282,7 @@ app.post('/bookSlot', (req, res) => {
     ]})
     .then(existingSlot => {
         if (existingSlot) {
-            return res.status(400).json({ error: 'Ya existe una cita para este correo.' });
+            return res.status(400).json({ message: 'Ya existe una cita para este correo.' });
         } else {
             // Determinar la propiedad de horario a actualizar o crear
             let horarioField;
@@ -306,7 +306,7 @@ app.post('/bookSlot', (req, res) => {
                     horarioField = 'sextoHorario';
                     break;
                 default:
-                    return res.status(400).json({ error: 'Número de horario inválido.' });
+                    return res.status(400).json({ message: 'Número de horario inválido.' });
             }
 
             // Actualizar o crear la cita correspondiente
@@ -320,7 +320,7 @@ app.post('/bookSlot', (req, res) => {
                                 res.json({ message: `Horario ${horarioField} actualizado exitosamente.` });
                             })
                             .catch(err => {
-                                res.status(500).json({ error: `Error al actualizar el horario ${horarioField}.` });
+                                res.status(500).json({ message: `Error al actualizar el horario ${horarioField}.` });
                             });
                     } else {
                         // Si no existe un documento con la fecha, crear uno nuevo con todos los horarios vacíos
@@ -338,17 +338,17 @@ app.post('/bookSlot', (req, res) => {
                                 res.json({ message: 'Nuevo horario reservado exitosamente.' });
                             })
                             .catch(err => {
-                                res.status(500).json({ error: 'Error al crear el nuevo horario.' });
+                                res.status(500).json({ message: 'Error al crear el nuevo horario.' });
                             });
                     }
                 })
                 .catch(err => {
-                    res.status(500).json({ error: 'Error al buscar el horario existente.' });
+                    res.status(500).json({ message: 'Error al buscar el horario existente.' });
                 });
         }
     })
     .catch(err => {
-        res.status(500).json({ error: 'Error al buscar la cita existente.' });
+        res.status(500).json({ message: 'Error al buscar la cita existente.' });
     });
        
     }
@@ -360,7 +360,7 @@ app.post('/allSlotsByCorreo', (req, res) => {
 
     // Verificar si el tipo de profesional es Dentista o Psicologo
     if (tipo !== 'Dentista' && tipo !== 'Psicologo') {
-        return res.status(400).json({ error: 'Tipo de profesional inválido.' });
+        return res.status(400).json({ message: 'Tipo de profesional inválido.' });
     }
     // Determinar el modelo correspondiente según el tipo de profesional
     const RegisterModel = tipo === 'Dentista' ? RegisterModelCita : RegisterModelCitaP;
@@ -391,14 +391,14 @@ app.post('/allSlotsByCorreo', (req, res) => {
         res.json({ slots: filteredSlots });
     })
     .catch(err => {
-        res.status(500).json({ error: 'Error al obtener los horarios.' });
+        res.status(500).json({ message: 'Error al obtener los horarios.' });
     });
 });
 app.post('/allSlots', (req, res) => {
     const { tipo } = req.body; // Tipo de profesional
     // Verificar si el tipo de profesional es Dentista o Psicologo
     if (tipo !== 'Dentista' && tipo !== 'Psicologo') {
-        return res.status(400).json({ error: 'Tipo de profesional inválido.' });
+        return res.status(400).json({ message: 'Tipo de profesional inválido.' });
     }
     // Determinar el modelo correspondiente según el tipo de profesional
     const RegisterModel = tipo === 'Dentista' ? RegisterModelCita : RegisterModelCitaP;
@@ -423,7 +423,7 @@ app.post('/allSlots', (req, res) => {
             res.json({ slots: adjustedSlots });
         })
         .catch(err => {
-            res.status(500).json({ error: 'Error al obtener los horarios.' });
+            res.status(500).json({ message: 'Error al obtener los horarios.' });
         });
 });
 app.listen(3001, () => {
