@@ -5,6 +5,7 @@ const RegisterModel = require('./models/Register')
 const RegisterStudentModel=require('./models/RegisterStudentModel');
 const RegisterProfessionalModel=require('./models/professional');
 const RegisterModelCita=require('./models/cita');
+const RegisterModelCitaP=require('./models/RegisterModelCitaP');
 const jwt = require('jsonwebtoken');
 const bodyParser=require('body-parser');
 const bcrypt = require('bcryptjs');
