@@ -387,8 +387,16 @@ app.post('/allSlotsByCorreo', (req, res) => {
         res.status(500).json({ error: 'Error al obtener los horarios.' });
     });
 });
-app.get('/allSlots', (req, res) => {
-    RegisterModelCita.find()
+app.post('/allSlots', (req, res) => {
+    const { tipo } = req.body; // Tipo de profesional
+    // Verificar si el tipo de profesional es Dentista o Psicologo
+    if (tipo !== 'Dentista' && tipo !== 'Psicologo') {
+        return res.status(400).json({ error: 'Tipo de profesional inválido.' });
+    }
+    // Determinar el modelo correspondiente según el tipo de profesional
+    const RegisterModel = tipo === 'Dentista' ? RegisterModelCita : RegisterModelCitaP;
+
+    RegisterModel.find()
         .then(slots => {
             // Ajustar los datos de salida para incluir solo la fecha y todos los horarios
             const adjustedSlots = slots.map(slot => {
