@@ -8,7 +8,8 @@ import { useAuth } from '../context/AuthContext.jsx'
 function homePage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-  const user = JSON.parse(window.localStorage.getItem('user'));
+  const user = JSON.parse(window.localStorage.getItem('user')) ?? {rol:'Undefined'};
+  
   return (
     <div >
       <h1 className="text-center">Servicios Estudiantiles de ESCOM</h1>
@@ -61,7 +62,7 @@ function homePage() {
         <div className='row gap-2'>
           <div className='col bg-primary rounded-bottom pb-2'>
             {
-              user.rol === 'Alumno' &&
+              user.rol === 'Alumno' || user.rol === 'Undefined' &&
               <button onClick={() => {
                 if (isAuthenticated) {
                   navigate('/agendar-psicologo')
@@ -77,7 +78,7 @@ function homePage() {
           </div>
           <div className='col bg-primary rounded-bottom pb-2'>
             {
-              user.rol === 'Alumno' &&
+              user.rol === 'Alumno' || user.rol === 'Undefined' &&
               <button onClick={() => {
                 if (isAuthenticated) {
                   navigate('/agendar-dentista')
