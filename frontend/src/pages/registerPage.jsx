@@ -9,7 +9,7 @@ function registerPage() {
     const [boleta, setBoleta] = useState()
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
-    const rol = 1;
+    const rol = 'Alumno';
     const {signupEstudiante,  isAuthenticated} = useAuth();
     const navigate = useNavigate();
 

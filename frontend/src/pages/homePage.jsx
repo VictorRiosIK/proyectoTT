@@ -8,6 +8,7 @@ import { useAuth } from '../context/AuthContext.jsx'
 function homePage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const user = JSON.parse(window.localStorage.getItem('user'));
   return (
     <div >
       <h1 className="text-center">Servicios Estudiantiles de ESCOM</h1>
@@ -59,33 +60,39 @@ function homePage() {
         </div>
         <div className='row gap-2'>
           <div className='col bg-primary rounded-bottom pb-2'>
-            <button  onClick={() => {
-              if(isAuthenticated){
-                navigate('/agendar-psicologo')
-              }else{
-                navigate('/login')
-              }
-              
-            }}
-              className='btn btn-outline-light'>
-              Agendar cita
-            </button>
+            {
+              user.rol === 'Alumno' &&
+              <button onClick={() => {
+                if (isAuthenticated) {
+                  navigate('/agendar-psicologo')
+                } else {
+                  navigate('/login')
+                }
+
+              }}
+                className='btn btn-outline-light'>
+                Agendar cita
+              </button>
+            }
           </div>
           <div className='col bg-primary rounded-bottom pb-2'>
-            <button onClick={() =>{
-              if(isAuthenticated){
-                navigate('/agendar-dentista')
-              }else{
-                navigate('/login')
-              }
-              
-            }}
-              className='btn btn-outline-light'>
-              Agendar cita
-            </button>
+            {
+              user.rol === 'Alumno' &&
+              <button onClick={() => {
+                if (isAuthenticated) {
+                  navigate('/agendar-dentista')
+                } else {
+                  navigate('/login')
+                }
+
+              }}
+                className='btn btn-outline-light'>
+                Agendar cita
+              </button>
+            }
           </div>
           <div className='col bg-primary rounded-bottom pb-2'>
-            
+
           </div>
         </div>
       </div>

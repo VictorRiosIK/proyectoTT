@@ -45,9 +45,9 @@ export const AuthProvider = ({children}) =>{
     const signupEstudiante = async(name, boleta, email, password, rol) =>{
         try{
             const res = await registerRequest(name, boleta, email, password, rol);
-            console.log(res.data);
+            console.log(res);
             setUser(res.data);
-            console.log(user)
+            //console.log(user)
             setLocalStorage(res.data);
             setIsAuthenticated(true);
              //TIEMPO DE EXPIRACION EN x MINUTOS
@@ -68,12 +68,12 @@ export const AuthProvider = ({children}) =>{
             try{
                 //Envia una peticion a back para verificar el ususario
                 const res = await loginRequest(email, password);
-                console.log(res.data);
+                console.log(res);
                 //Autentica al usuario
                 setIsAuthenticated(true);
                 //Guarda los datos del usuario en user
                 setUser(res.data);
-                console.log(user);
+                //console.log(user);
                 setLocalStorage(res.data);
                 //console.log("Autenticado");
                 //TIEMPO DE EXPIRACION EN x MINUTOS
