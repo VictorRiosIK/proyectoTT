@@ -179,9 +179,12 @@ app.post('/availableSlots', (req, res) => {
 
 // Endpoint para reservar un horario
 app.post('/bookSlot', (req, res) => {
-    const { fecha, horario, correo } = req.body;
-
-    // Verificar si ya existe una cita con el correo proporcionado
+    const { fecha, horario, correo, tipo } = req.body;
+    if (tipo !== 'Dentista' && tipo !== 'Psicologo') {
+        return res.status(400).json({ error: 'Tipo de profesional inválido.' });
+    }
+    if (tipoProfesional === 'Dentista') {
+        // Verificar si ya existe una cita con el correo proporcionado
     RegisterModelCita.findOne({ $or: [
         { primerHorario: correo },
         { segundoHorario: correo },
@@ -260,6 +263,10 @@ app.post('/bookSlot', (req, res) => {
     .catch(err => {
         res.status(500).json({ error: 'Error al buscar la cita existente.' });
     });
+    } else if (tipoProfesional === 'Psicologo') {
+        return res.json({ message: 'Horario reservado por Psicologo exitosamente.' });
+    }
+    
 });
 
 app.post('/allSlotsByCorreo', (req, res) => {
