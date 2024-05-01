@@ -451,6 +451,34 @@ app.post('/searchByEmail', (req, res) => {
             res.status(500).json({ message: 'Error al buscar el usuario.' });
         });
 });
+
+// Ruta POST para guardar las respuestas
+app.post('/cuestionario', async (req, res) => {
+  try {
+    // Extrae el correo del usuario del cuerpo de la solicitud
+    const { emailUsuario, respuesta1, respuesta2, respuesta3, respuesta4, respuesta5 } = req.body;
+
+    // Crea una nueva instancia del modelo Respuestas con los datos del cuerpo de la solicitud
+    const respuestas = new Respuestas({
+      emailUsuario,
+      respuesta1,
+      respuesta2,
+      respuesta3,
+      respuesta4,
+      respuesta5
+    });
+
+    // Guarda las respuestas en la base de datos
+    await respuestas.save();
+
+    // Envía una respuesta de éxito
+    res.status(201).json({ message: 'Respuestas guardadas correctamente' });
+  } catch (error) {
+    // Si ocurre un error, envía una respuesta de error
+    console.error('Error al guardar las respuestas:', error);
+    res.status(500).json({ error: 'Error al guardar las respuestas' });
+  }
+});
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
