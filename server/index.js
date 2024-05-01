@@ -202,7 +202,7 @@ app.post('/bookSlot', (req, res) => {
     ]})
     .then(existingSlot => {
         if (existingSlot) {
-            return res.status(400).json({ message: 'Ya existe una cita para este correo.' });
+            return res.status(400).json({ message: 'Ya existe una cita para este correo en el apartado actual.' });
         } else {
             // Determinar la propiedad de horario a actualizar o crear
             let horarioField;
