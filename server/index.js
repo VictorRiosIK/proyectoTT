@@ -432,7 +432,7 @@ app.post('/searchByEmail', (req, res) => {
 
     // Verificar si el tipo de usuario es Alumno o Profesional
     if (tipo !== 'Alumno' && tipo !== 'Profesional') {
-        return res.status(400).json({ error: 'Tipo de usuario inválido.'.${correo}. ${tipo} });
+        return res.status(400).json({ error: 'Tipo de usuario inválido.'+correo+tipo });
     }
 
     // Determinar el modelo correspondiente según el tipo de usuario
