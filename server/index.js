@@ -409,6 +409,7 @@ app.post('/allSlots', (req, res) => {
             const adjustedSlots = slots.map(slot => {
                 // Crear un nuevo objeto para contener solo la fecha y todos los horarios
                 const adjustedSlot = {
+                    source: tipo,
                     fecha: slot.fecha,
                     primerHorario: slot.primerHorario,
                     segundoHorario: slot.segundoHorario,
