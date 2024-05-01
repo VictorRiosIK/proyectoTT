@@ -99,7 +99,7 @@ app.post('/login', (req, res) => {
                     if (result) {
                         // Si la contraseña es correcta, generar un token JWT y devolver el rol
                         const token = jwt.sign({ email: email }, jwtSecret);
-                        res.status(200).json({ message: "Inicio de sesión exitoso", token: token, rol: student.rol,email:student.email });
+                        res.status(200).json({ message: "Inicio de sesión exitoso", token: token, rol: student.rol,email:student.email,evaluacionP:student.evaluacionP });
                     } else {
                         res.status(401).json({ message: "Credenciales inválidas" });
                     }
