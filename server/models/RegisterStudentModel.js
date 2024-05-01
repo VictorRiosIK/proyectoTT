@@ -5,7 +5,11 @@ const RegisterSchema = new mongoose.Schema({
     email: String,
     password: String,
     boleta: String,
-    rol:String
+    rol:String,
+    evaluacionP: {
+        type: Number,
+        default: 0
+    }
 })
 
 const RegisterStudentModel = mongoose.model("users2", RegisterSchema);
