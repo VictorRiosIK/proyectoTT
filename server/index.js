@@ -453,32 +453,40 @@ app.post('/searchByEmail', (req, res) => {
         });
 });
 
-// Ruta POST para guardar las respuestas
-app.post('/cuestionario', async (req, res) => {
-  try {
-    // Extrae el correo del usuario del cuerpo de la solicitud
+app.post('/registerCuestionary', (req, res) => {
     const { emailUsuario, respuesta1, respuesta2, respuesta3, respuesta4, respuesta5 } = req.body;
 
-    // Crea una nueva instancia del modelo Respuestas con los datos del cuerpo de la solicitud
-    const respuestas = new Respuestas({
-      emailUsuario,
-      respuesta1,
-      respuesta2,
-      respuesta3,
-      respuesta4,
-      respuesta5
-    });
+    // Verificar si el usuario existe como estudiante
+    RegisterStudentModel.findOne({ email: emailUsuario })
+        .then(student => {
+            if (!student) {
+                // Si el usuario no está registrado como estudiante, responder con un mensaje de error
+                return res.status(400).json({ message: 'El usuario no está registrado como estudiante.' });
+            }
 
-    // Guarda las respuestas en la base de datos
-    await respuestas.save();
+            // Crear una nueva instancia del modelo RegisterCuestionary con los datos
+            const registerCuestionary = new RegisterCuestionary({
+                emailUsuario,
+                respuesta1,
+                respuesta2,
+                respuesta3,
+                respuesta4,
+                respuesta5
+            });
 
-    // Envía una respuesta de éxito
-    res.status(201).json({ message: 'Respuestas guardadas correctamente' });
-  } catch (error) {
-    // Si ocurre un error, envía una respuesta de error
-    console.error('Error al guardar las respuestas:', error);
-    res.status(500).json({ error: 'Error al guardar las respuestas' });
-  }
+            // Guardar el registro en la base de datos
+            registerCuestionary.save()
+                .then(() => {
+                    // Enviar una respuesta de éxito
+                    res.status(201).json({ message: 'Respuestas del cuestionario guardadas correctamente.' });
+                })
+                .catch(error => {
+                    // Si ocurre un error, enviar una respuesta de error
+                    console.error('Error al guardar las respuestas del cuestionario:', error);
+                    res.status(500).json({ error: 'Error al guardar las respuestas del cuestionario.' });
+                });
+        })
+        .catch(err => res.status(500).json({ message: 'Error al buscar el usuario como estudiante.' }));
 });
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
