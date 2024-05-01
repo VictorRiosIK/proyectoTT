@@ -440,6 +440,7 @@ app.post('/searchByEmail', (req, res) => {
 
     // Consultar en la base de datos para buscar la coincidencia por correo
     RegisterModel.findOne({ email: correo })
+        .select('name email boleta rol') // Proyección para obtener solo los campos necesarios
         .then(user => {
             if (!user) {
                 return res.status(404).json({ message: 'Usuario no encontrado.' });
