@@ -478,7 +478,7 @@ app.post('/registerCuestionary', (req, res) => {
             registerCuestionary.save()
                 .then(() => {
                     // Enviar una respuesta de éxito
-                    res.status(201).json({ message: 'Respuestas del cuestionario guardadas correctamente.' });
+                    res.status(200).json({ message: 'Respuestas del cuestionario guardadas correctamente.' });
                 })
                 .catch(error => {
                     // Si ocurre un error, enviar una respuesta de error
