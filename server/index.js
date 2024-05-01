@@ -427,6 +427,29 @@ app.post('/allSlots', (req, res) => {
             res.status(500).json({ message: 'Error al obtener los horarios.' });
         });
 });
+app.post('/searchByEmail', (req, res) => {
+    const { correo, tipo } = req.body; // Correo que se desea buscar y tipo de usuario
+
+    // Verificar si el tipo de usuario es Alumno o Profesional
+    if (tipo !== 'Alumno' && tipo !== 'Profesional') {
+        return res.status(400).json({ error: 'Tipo de usuario inválido.' });
+    }
+
+    // Determinar el modelo correspondiente según el tipo de usuario
+    const RegisterModel = tipo === 'Alumno' ? RegisterStudentModel : RegisterProfessionalModel;
+
+    // Consultar en la base de datos para buscar la coincidencia por correo
+    RegisterModel.findOne({ correo: correo })
+        .then(user => {
+            if (!user) {
+                return res.status(404).json({ message: 'Usuario no encontrado.' });
+            }
+            res.json({ user });
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Error al buscar el usuario.' });
+        });
+});
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
