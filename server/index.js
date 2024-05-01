@@ -42,7 +42,7 @@ app.post('/registerProfessional', (req, res) => {
                             RegisterProfessionalModel.create({ name: name, email: email, password: hashedPassword, rol: rol })
                                 .then(result => {
                                     const token = jwt.sign({ email: email },jwtSecret);
-                                    res.json({ professional: result, token: token });
+                                    res.status(200).json({ professional: result, token: token });
                                 })
                                 .catch(err => res.status(500).json({ message: 'Error al crear la cuenta profesional.' }));
                         }
@@ -76,7 +76,7 @@ app.post('/registerStudent', (req, res) => {
                             RegisterStudentModel.create({ name: name, email: email, password: hashedPassword, boleta: boleta, rol: rol })
                                 .then(result => {
                                     const token = jwt.sign({ email: email }, jwtSecret);
-                                    res.json({ user: result, token: token });
+                                    res.status(200).json({ user: result, token: token });
                                 })
                                 .catch(err => res.status(500).json({ message: 'Error al crear la cuenta de estudiante.' }));
                         }
@@ -99,7 +99,7 @@ app.post('/login', (req, res) => {
                     if (result) {
                         // Si la contraseña es correcta, generar un token JWT y devolver el rol
                         const token = jwt.sign({ email: email }, jwtSecret);
-                        res.json({ message: "Inicio de sesión exitoso", token: token, rol: student.rol,email:student.email });
+                        res.status(200).json({ message: "Inicio de sesión exitoso", token: token, rol: student.rol,email:student.email });
                     } else {
                         res.status(401).json({ message: "Credenciales inválidas" });
                     }
@@ -114,7 +114,7 @@ app.post('/login', (req, res) => {
                                 if (result) {
                                     // Si la contraseña es correcta, generar un token JWT y devolver el rol
                                     const token = jwt.sign({ email: email }, jwtSecret);
-                                    res.json({ message: "Inicio de sesión exitoso", token: token, rol: professional.rol,email:professional.email });
+                                    res.status(200).json({ message: "Inicio de sesión exitoso", token: token, rol: professional.rol,email:professional.email });
                                 } else {
                                     res.status(401).json({ message: "Credenciales inválidas" });
                                 }
@@ -153,7 +153,7 @@ app.post('/availableSlots', (req, res) => {
                     { startTime: '16:30', endTime: '18:00' }
                     // Agrega aquí otros horarios disponibles si es necesario
                 ];
-                return res.json({ availableSlots });
+                return res.status(200).json({ availableSlots });
             }
 
             // Filtrar los horarios disponibles donde la cadena está vacía en el documento
@@ -177,7 +177,7 @@ app.post('/availableSlots', (req, res) => {
                 availableSlots.push({ startTime: '16:30', endTime: '18:00' });
             }
 
-            res.json({ availableSlots });
+            res.status(200).json({ availableSlots });
         })
         .catch(err => {
             res.status(500).json({ message: 'Error al obtener los horarios disponibles.' });
@@ -237,7 +237,7 @@ app.post('/bookSlot', (req, res) => {
                         existingSlot[horarioField] = correo;
                         return existingSlot.save()
                             .then(() => {
-                                res.json({ message: `Cita agendada exitosamente.` });
+                                res.status(200).json({ message: `Cita agendada exitosamente.` });
                             })
                             .catch(err => {
                                 res.status(500).json({ message: `Error al actualizar el horario ${horarioField}.` });
@@ -255,7 +255,7 @@ app.post('/bookSlot', (req, res) => {
                         };
                         return RegisterModelCita.create(newSlot)
                             .then(() => {
-                                res.json({ message: 'Cita agendada exitosamente.' });
+                                res.status(200).json({ message: 'Cita agendada exitosamente.' });
                             })
                             .catch(err => {
                                 res.status(500).json({ message: 'Error al crear el nuevo horario.' });
@@ -317,7 +317,7 @@ app.post('/bookSlot', (req, res) => {
                         existingSlot[horarioField] = correo;
                         return existingSlot.save()
                             .then(() => {
-                                res.json({ message: `Cita agendada exitosamente.` });
+                                res.status(200).json({ message: `Cita agendada exitosamente.` });
                             })
                             .catch(err => {
                                 res.status(500).json({ message: `Error al actualizar el horario ${horarioField}.` });
@@ -335,7 +335,7 @@ app.post('/bookSlot', (req, res) => {
                         };
                         return RegisterModelCitaP.create(newSlot)
                             .then(() => {
-                                res.json({ message: 'Nuevo horario reservado exitosamente.' });
+                                res.status(200).json({ message: 'Nuevo horario reservado exitosamente.' });
                             })
                             .catch(err => {
                                 res.status(500).json({ message: 'Error al crear el nuevo horario.' });
@@ -388,7 +388,7 @@ app.post('/allSlotsByCorreo', (req, res) => {
             return filteredSlot;
         });
 
-        res.json({ slots: filteredSlots });
+        res.status(200).json({ slots: filteredSlots });
     })
     .catch(err => {
         res.status(500).json({ message: 'Error al obtener los horarios.' });
@@ -421,7 +421,7 @@ app.post('/allSlots', (req, res) => {
                 return adjustedSlot;
             });
 
-            res.json({ slots: adjustedSlots });
+            res.status(200).json({ slots: adjustedSlots });
         })
         .catch(err => {
             res.status(500).json({ message: 'Error al obtener los horarios.' });
@@ -445,7 +445,7 @@ app.post('/searchByEmail', (req, res) => {
             if (!user) {
                 return res.status(404).json({ message: 'Usuario no encontrado.' });
             }
-            res.json({ user });
+            res.status(200).json({ user });
         })
         .catch(err => {
             res.status(500).json({ message: 'Error al buscar el usuario.' });
