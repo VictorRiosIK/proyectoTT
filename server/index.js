@@ -237,7 +237,7 @@ app.post('/bookSlot', (req, res) => {
                         existingSlot[horarioField] = correo;
                         return existingSlot.save()
                             .then(() => {
-                                res.json({ message: `Horario ${horarioField} actualizado exitosamente.` });
+                                res.json({ message: `Cita agendada exitosamente.` });
                             })
                             .catch(err => {
                                 res.status(500).json({ message: `Error al actualizar el horario ${horarioField}.` });
@@ -255,7 +255,7 @@ app.post('/bookSlot', (req, res) => {
                         };
                         return RegisterModelCita.create(newSlot)
                             .then(() => {
-                                res.json({ message: 'Nuevo horario reservado exitosamente.' });
+                                res.json({ message: 'Cita agendada exitosamente.' });
                             })
                             .catch(err => {
                                 res.status(500).json({ message: 'Error al crear el nuevo horario.' });
@@ -282,7 +282,7 @@ app.post('/bookSlot', (req, res) => {
     ]})
     .then(existingSlot => {
         if (existingSlot) {
-            return res.status(400).json({ message: 'Ya existe una cita para este correo.' });
+            return res.status(400).json({ message: 'Ya existe una cita para este correo en el apartado actual.' });
         } else {
             // Determinar la propiedad de horario a actualizar o crear
             let horarioField;
@@ -317,7 +317,7 @@ app.post('/bookSlot', (req, res) => {
                         existingSlot[horarioField] = correo;
                         return existingSlot.save()
                             .then(() => {
-                                res.json({ message: `Horario ${horarioField} actualizado exitosamente.` });
+                                res.json({ message: `Cita agendada exitosamente.` });
                             })
                             .catch(err => {
                                 res.status(500).json({ message: `Error al actualizar el horario ${horarioField}.` });
@@ -432,7 +432,7 @@ app.post('/searchByEmail', (req, res) => {
 
     // Verificar si el tipo de usuario es Alumno o Profesional
     if (tipo !== 'Alumno' && tipo !== 'Profesional') {
-        return res.status(400).json({ error: 'Tipo de usuario inválido.' });
+        return res.status(400).json({ message: 'Tipo de usuario inválido.' });
     }
 
     // Determinar el modelo correspondiente según el tipo de usuario
@@ -448,7 +448,7 @@ app.post('/searchByEmail', (req, res) => {
             res.json({ user });
         })
         .catch(err => {
-            res.status(500).json({ error: 'Error al buscar el usuario.' });
+            res.status(500).json({ message: 'Error al buscar el usuario.' });
         });
 });
 app.listen(3001, () => {
