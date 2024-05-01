@@ -501,6 +501,26 @@ app.post('/registerCuestionary', (req, res) => {
         })
         .catch(err => res.status(500).json({ message: 'Error al buscar el usuario como estudiante.' }));
 });
+
+app.post('/getCuestionaryResponses', (req, res) => {
+    const { emailUsuario } = req.body;
+
+    // Buscar las respuestas de cuestionario para el usuario dado
+    RegisterCuestionary.findOne({ emailUsuario })
+        .then(cuestionary => {
+            if (!cuestionary) {
+                // Si no se encuentra ninguna respuesta de cuestionario, devolver un mensaje de error
+                return res.status(404).json({ message: 'No se encontraron respuestas de cuestionario para este usuario.' });
+            }
+
+            // Si se encuentra una respuesta de cuestionario, devolverla en la respuesta
+            res.status(200).json(cuestionary);
+        })
+        .catch(error => {
+            console.error('Error al buscar las respuestas de cuestionario:', error);
+            res.status(500).json({ error: 'Error al buscar las respuestas de cuestionario.' });
+        });
+});
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
