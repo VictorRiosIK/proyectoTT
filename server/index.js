@@ -521,6 +521,41 @@ app.post('/getCuestionaryResponses', (req, res) => {
             res.status(500).json({ error: 'Error al buscar las respuestas de cuestionario.' });
         });
 });
+
+// Ruta para enviar correos
+app.post('/enviarcorreo', (req, res) => {
+    // Extraer los datos del cuerpo de la solicitud
+    const { destinatario, asunto, mensaje } = req.body;
+
+    // Configurar el transporte
+    let transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'tt2024a062@gmail.com', // Tu dirección de correo electrónico
+            pass: 'Tta622024' // Tu contraseña de correo electrónico
+        }
+    });
+
+    // Configurar los detalles del correo electrónico
+    let mailOptions = {
+        from: 'tt2024a062@gmail.com', // Remitente
+        to: destinatario, // Destinatario
+        subject: asunto, // Asunto
+        text: mensaje // Cuerpo del correo electrónico
+    };
+
+    // Enviar el correo electrónico
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log('Error al enviar el correo electrónico:', error);
+            res.status(500).send('Error al enviar el correo electrónico');
+        } else {
+            console.log('Correo electrónico enviado:', info.response);
+            res.status(200).send('Correo electrónico enviado con éxito');
+        }
+    });
+});
+
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
