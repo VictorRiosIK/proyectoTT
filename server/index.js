@@ -537,49 +537,60 @@ app.post('/enviarcorreo', (req, res) => {
         }
     });
 
-    // Configurar los detalles del correo electrónico con HTML y CSS
-let mailOptions = {
-    from: 'vrios718@gmail.com', // Remitente
-    to: destinatario, // Destinatario
-    subject: mensaje, // Asunto
-    html: `
-        <html>
-            <head>
-                <style>
-                    /* Estilos CSS en línea */
-                    body {
-                        font-family: Arial, sans-serif;
-                        background-color: #f2f2f2;
-                    }
-                    .container {
-                        max-width: 600px;
-                        margin: 0 auto;
-                        padding: 20px;
-                        background-color: #ffffff;
-                        border-radius: 10px;
-                        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-                    }
-                    h1 {
-                        color: #333333;
-                    }
-                    p {
-                        color: #666666;
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <h1>¡Hola!</h1>
-                    <p>Este es un correo electrónico de prueba enviado desde Node.js.</p>
-                    <p>Puedes personalizar el contenido y los estilos según tus necesidades.</p>
-                </div>
-            </body>
-        </html>
-    `
-};
+// HTML y CSS en línea para el correo electrónico
+let correoHTML = `
+    <html>
+        <head>
+            <style>
+                /* Estilos CSS en línea */
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f2f2f2;
+                    margin: 0;
+                    padding: 0;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #ffffff;
+                    border-radius: 10px;
+                    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                }
+                h1 {
+                    color: #333333;
+                    text-align: center;
+                }
+                p {
+                    color: #666666;
+                    text-align: center;
+                }
+                .boton {
+                    display: block;
+                    width: 200px;
+                    margin: 20px auto;
+                    padding: 10px;
+                    background-color: #007bff;
+                    color: #ffffff;
+                    text-align: center;
+                    text-decoration: none;
+                    border-radius: 5px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>¡Bienvenido!</h1>
+                <p>Gracias por crear una cuenta.</p>
+                <p>Por favor, haz clic en el siguiente botón para verificar tu cuenta:</p>
+                <a href="https://tu-sitio-web.com/verificar-cuenta" class="boton">Verificar cuenta</a>
+            </div>
+        </body>
+    </html>
+`;
 
     // Enviar el correo electrónico
-    transporter.sendMail(mailOptions, (error, info) => {
+    transporter.sendMail(correoHTML, (error, info) => {
         if (error) {
             console.log('Error al enviar el correo electrónico:', error);
             res.status(500).send('Error al enviar el correo electrónico');
