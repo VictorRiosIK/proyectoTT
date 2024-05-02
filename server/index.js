@@ -152,8 +152,10 @@ app.post('/registerStudent', (req, res) => {
                                     transporter.sendMail(mailOptions, (error, info) => {
                                         if (error) {
                                             console.log('Error al enviar el correo electrónico de verificación:', error);
+                                             res.status(500).json({ message: 'Error al enviar el correo electrónico de verificación' })
                                         } else {
                                             console.log('Correo electrónico de verificación enviado:', info.response);
+                                            res.status(200).json({ message: 'Correo electrónico de verificación enviado' });
                                         }
                                     });
 
