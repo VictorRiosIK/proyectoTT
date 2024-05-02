@@ -537,13 +537,46 @@ app.post('/enviarcorreo', (req, res) => {
         }
     });
 
-    // Configurar los detalles del correo electrónico
-    let mailOptions = {
-        from: 'vrios718@gmail.com', // Remitente
-        to: destinatario, // Destinatario
-        subject: asunto, // Asunto
-        text: mensaje // Cuerpo del correo electrónico
-    };
+    // Configurar los detalles del correo electrónico con HTML y CSS
+let mailOptions = {
+    from: 'vrios718@gmail.com', // Remitente
+    to: destinatario, // Destinatario
+    subject: mensaje, // Asunto
+    html: `
+        <html>
+            <head>
+                <style>
+                    /* Estilos CSS en línea */
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f2f2f2;
+                    }
+                    .container {
+                        max-width: 600px;
+                        margin: 0 auto;
+                        padding: 20px;
+                        background-color: #ffffff;
+                        border-radius: 10px;
+                        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                    }
+                    h1 {
+                        color: #333333;
+                    }
+                    p {
+                        color: #666666;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>¡Hola!</h1>
+                    <p>Este es un correo electrónico de prueba enviado desde Node.js.</p>
+                    <p>Puedes personalizar el contenido y los estilos según tus necesidades.</p>
+                </div>
+            </body>
+        </html>
+    `
+};
 
     // Enviar el correo electrónico
     transporter.sendMail(mailOptions, (error, info) => {
