@@ -589,6 +589,14 @@ let correoHTML = `
     </html>
 `;
 
+// Configurar los detalles del correo electrónico
+let mailOptions = {
+    from: 'vrios718@gmail.com', // Remitente
+    to: destinatario, // Destinatario
+    subject: mensaje, // Asunto
+    html: correoHTML // Cuerpo del correo electrónico
+};
+
     // Enviar el correo electrónico
     transporter.sendMail(correoHTML, (error, info) => {
         if (error) {
