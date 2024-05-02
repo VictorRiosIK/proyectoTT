@@ -532,14 +532,14 @@ app.post('/enviarcorreo', (req, res) => {
     let transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
-            user: 'vrios718tt@gmail.com', // Tu dirección de correo electrónico
-            pass: 'Console.$5' // Tu contraseña de correo electrónico
+            user: 'vrios718@gmail.com', // Tu dirección de correo electrónico
+            pass: 'fqchchfldzzfafqu' // Tu contraseña de correo electrónico
         }
     });
 
     // Configurar los detalles del correo electrónico
     let mailOptions = {
-        from: 'vrios718tt@gmail.com', // Remitente
+        from: 'vrios718@gmail.com', // Remitente
         to: destinatario, // Destinatario
         subject: asunto, // Asunto
         text: mensaje // Cuerpo del correo electrónico
