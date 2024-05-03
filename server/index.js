@@ -217,12 +217,17 @@ app.post('/login', (req, res) => {
     RegisterStudentModel.findOne({ email: email })
         .then(student => {
             if (student) {
-                // Si el correo electrónico existe en RegisterStudentModel, comparar la contraseña
+                // Verificar si la cuenta está verificada
+                if (student.cuentaValidada === 0) {
+                    return res.status(401).json({ message: "La cuenta no ha sido verificada. Por favor, revise su correo electrónico." });
+                }
+
+                // Si la cuenta está verificada, comparar la contraseña
                 bcrypt.compare(password, student.password, function (err, result) {
                     if (result) {
                         // Si la contraseña es correcta, generar un token JWT y devolver el rol
                         const token = jwt.sign({ email: email }, jwtSecret);
-                        res.status(200).json({ message: "Inicio de sesión exitoso", token: token, rol: student.rol,email:student.email,evaluacionP:student.evaluacionP });
+                        res.status(200).json({ message: "Inicio de sesión exitoso", token: token, rol: student.rol, email: student.email, evaluacionP: student.evaluacionP });
                     } else {
                         res.status(401).json({ message: "Credenciales inválidas" });
                     }
@@ -237,7 +242,7 @@ app.post('/login', (req, res) => {
                                 if (result) {
                                     // Si la contraseña es correcta, generar un token JWT y devolver el rol
                                     const token = jwt.sign({ email: email }, jwtSecret);
-                                    res.status(200).json({ message: "Inicio de sesión exitoso", token: token, rol: professional.rol,email:professional.email });
+                                    res.status(200).json({ message: "Inicio de sesión exitoso", token: token, rol: professional.rol, email: professional.email });
                                 } else {
                                     res.status(401).json({ message: "Credenciales inválidas" });
                                 }
