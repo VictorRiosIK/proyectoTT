@@ -74,10 +74,11 @@ app.post('/registerStudent', (req, res) => {
                             return res.status(400).json({ message: 'Ya existe una cuenta registrada con este correo electrónico (estudiante).' });
                         } else {
                             const hashedPassword = bcrypt.hashSync(password, 10);
+                             const token = jwt.sign({ email: email }, jwtSecret);
                             // Si el correo electrónico no existe en ninguno de los dos modelos, crear el registro en RegisterStudentModel
-                            RegisterStudentModel.create({ name: name, email: email, password: hashedPassword, boleta: boleta, rol: rol })
+                            RegisterStudentModel.create({ name: name, email: email, password: hashedPassword, boleta: boleta, rol: rol,, token: token})
                                 .then(result => {
-                                    const token = jwt.sign({ email: email }, jwtSecret);
+                                   
                                     // Enviar el correo electrónico de verificación
                                     // Configurar el transporte
                                     let transporter = nodemailer.createTransport({
@@ -134,7 +135,7 @@ app.post('/registerStudent', (req, res) => {
                                                     <h1>¡Bienvenido, ${name}!</h1>
                                                     <p>Gracias por registrarte.</p>
                                                     <p>Por favor, haz clic en el siguiente botón para verificar tu cuenta:</p>
-                                                    <a href="https://proyecto-tt-api.vercel.app/verificaCorreo?email=${email}" class="boton">Verificar cuenta</a>
+                                                    <a href="https://proyecto-tt-api.vercel.app/verificaCorreo?email=${email}&token=${token}" class="boton">Verificar cuenta</a>
                                                 </div>
                                             </body>
                                         </html>
