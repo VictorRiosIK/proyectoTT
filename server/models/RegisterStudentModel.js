@@ -9,6 +9,11 @@ const RegisterSchema = new mongoose.Schema({
     evaluacionP: {
         type: Number,
         default: 0
+    },
+    token:string,
+    cuentaValidada:{
+        type:Number,
+        default:0
     }
 })
 
