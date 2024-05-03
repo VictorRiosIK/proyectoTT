@@ -171,13 +171,44 @@ app.post('/registerStudent', (req, res) => {
         .catch(err => res.status(500).json({ message: 'Error al buscar la cuenta de profesional.' }));
 });
 app.get('/verificaCorreo', (req, res) => {
-    const { email,token } = req.query;
+    const { email, token } = req.query;
 
-    // Aquí podrías realizar alguna lógica adicional, como verificar en tu base de datos si el correo ha sido verificado anteriormente,
-    // actualizar el estado de verificación del correo, etc.
+    // Verificar si el correo electrónico y el token están presentes en la solicitud
+    if (!email || !token) {
+        return res.status(400).json({ message: 'Correo electrónico y token son requeridos.' });
+    }
 
-    // Por ahora, simplemente devolvemos un mensaje indicando que la cuenta ha sido verificada
-    res.send(`La cuenta asociada al correo electrónico ${email} ha sido verificada. ${token}`);
+    // Buscar en la base de datos la cuenta asociada al correo electrónico proporcionado
+    RegisterStudentModel.findOne({ email: email })
+        .then(student => {
+            if (!student) {
+                return res.status(404).json({ message: 'No se encontró una cuenta asociada a este correo electrónico.' });
+            } else {
+                // Verificar si el token proporcionado coincide con el token almacenado en la cuenta
+                if (student.token !== token) {
+                    return res.status(403).json({ message: 'El token proporcionado no es válido.' });
+                } else {
+                    // Si el correo y el token son válidos, actualizar el estado de verificación de la cuenta si es necesario
+                    if (student.cuentaValidada === 1) {
+                        return res.status(200).json({ message: 'La cuenta ya ha sido verificada anteriormente.' });
+                    } else {
+                        // Actualizar el estado de verificación de la cuenta a 1
+                        student.cuentaValidada = 1;
+                        // Guardar el cambio en la base de datos
+                        student.save()
+                            .then(() => {
+                                return res.status(200).json({ message: 'La cuenta ha sido verificada exitosamente.' });
+                            })
+                            .catch(error => {
+                                return res.status(500).json({ message: 'Error al actualizar el estado de verificación de la cuenta.', error: error });
+                            });
+                    }
+                }
+            }
+        })
+        .catch(error => {
+            return res.status(500).json({ message: 'Error al buscar la cuenta.', error: error });
+        });
 });
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
@@ -613,112 +644,7 @@ app.post('/getCuestionaryResponses', (req, res) => {
         });
 });
 
-// Ruta para enviar correos
-app.post('/enviarcorreo', (req, res) => {
-    // Extraer los datos del cuerpo de la solicitud
-    const { destinatario, asunto, mensaje, token } = req.body;
 
-    // Comprobar si existe una cuenta con el correo electrónico recibido
-    RegisterStudentModel.findOne({ email: destinatario })
-        .then(student => {
-            if (!student) {
-                // Si no se encuentra una cuenta con el correo electrónico, enviar un error
-                return res.status(404).json({ message: 'No se encontró una cuenta asociada a este correo electrónico.' });
-            } else {
-                // Verificar si el token recibido coincide con el token almacenado en la cuenta
-                if (student.token !== token) {
-                    return res.status(403).json({ message: 'El token proporcionado no es válido.' });
-                } else {
-                    // Actualizar el valor de la variable 'cuentaValidada' a 1
-                    student.cuentaValidada = 1;
-                    // Guardar el cambio en la base de datos
-                    student.save()
-                        .then(() => {
-                            
-                            res.status(200).json({ message: 'Cuenta validada exitosamente' });
-                        })
-                        .catch(error => {
-                            res.status(500).json({ message: 'Error al actualizar la cuenta.', error: error });
-                        });
-                }
-            }
-        })
-        .catch(error => {
-            res.status(500).json({ message: 'Error al buscar la cuenta.', error: error });
-        });
-});
-
-// HTML y CSS en línea para el correo electrónico
-let correoHTML = `
-    <html>
-        <head>
-            <style>
-                /* Estilos CSS en línea */
-                body {
-                    font-family: Arial, sans-serif;
-                    background-color: #f2f2f2;
-                    margin: 0;
-                    padding: 0;
-                }
-                .container {
-                    max-width: 600px;
-                    margin: 0 auto;
-                    padding: 20px;
-                    background-color: #ffffff;
-                    border-radius: 10px;
-                    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-                }
-                h1 {
-                    color: #333333;
-                    text-align: center;
-                }
-                p {
-                    color: #666666;
-                    text-align: center;
-                }
-                .boton {
-                    display: block;
-                    width: 200px;
-                    margin: 20px auto;
-                    padding: 10px;
-                    background-color: #007bff;
-                    color: #ffffff;
-                    text-align: center;
-                    text-decoration: none;
-                    border-radius: 5px;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>¡Bienvenido!</h1>
-                <p>Gracias por crear una cuenta.</p>
-                <p>Por favor, haz clic en el siguiente botón para verificar tu cuenta:</p>
-                <a href="https://tu-sitio-web.com/verificar-cuenta" class="boton">Verificar cuenta</a>
-            </div>
-        </body>
-    </html>
-`;
-
-// Configurar los detalles del correo electrónico
-let mailOptions = {
-    from: 'vrios718@gmail.com', // Remitente
-    to: destinatario, // Destinatario
-    subject: mensaje, // Asunto
-    html: correoHTML // Cuerpo del correo electrónico
-};
-
-    // Enviar el correo electrónico
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log('Error al enviar el correo electrónico:', error);
-            res.status(500).send('Error al enviar el correo electrónico');
-        } else {
-            console.log('Correo electrónico enviado:', info.response);
-            res.status(200).send('Correo electrónico enviado con éxito');
-        }
-    });
-});
 
 // Ruta para enviar correos
 app.post('/enviarcorreoctc', (req, res) => {
