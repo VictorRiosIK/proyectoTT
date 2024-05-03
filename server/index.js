@@ -169,7 +169,15 @@ app.post('/registerStudent', (req, res) => {
         })
         .catch(err => res.status(500).json({ message: 'Error al buscar la cuenta de profesional.' }));
 });
+app.get('/verificaCorreo', (req, res) => {
+    const { email } = req.query;
 
+    // Aquí podrías realizar alguna lógica adicional, como verificar en tu base de datos si el correo ha sido verificado anteriormente,
+    // actualizar el estado de verificación del correo, etc.
+
+    // Por ahora, simplemente devolvemos un mensaje indicando que la cuenta ha sido verificada
+    res.send(`La cuenta asociada al correo electrónico ${email} ha sido verificada.`);
+});
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
 
