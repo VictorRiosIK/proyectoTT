@@ -10,7 +10,7 @@ const RegisterSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    token:string,
+    token:String,
     cuentaValidada:{
         type:Number,
         default:0
