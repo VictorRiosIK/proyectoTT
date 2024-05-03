@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import {registerRequest, loginRequest, verifyTokenRequest} from '../api/auth.js'
+import {registerRequest, loginRequest, verifyTokenRequest, registerProfessionalRequest} from '../api/auth.js'
 import {getHorariosRequest,agendarCitaRequest} from '../api/citas.js'
 import Cookies from 'js-cookie'
 
@@ -42,6 +42,32 @@ export const AuthProvider = ({children}) =>{
         }
     }
 
+    //SIGNUP profesional
+    const signupProfesional = async(name, email, password, rol) =>{
+        try{
+            const res = await registerProfessionalRequest(name, email, password, rol);
+            console.log(res);
+            if(res.status === 200)
+                setAdd('Registro con exito')
+            //setUser(res.data);
+            //console.log(user)
+            //setLocalStorage(res.data);
+            //setIsAuthenticated(true);
+             //TIEMPO DE EXPIRACION EN x MINUTOS
+            //  const x = 60;
+            //  let inXMinutes = new Date(new Date().getTime() + x * 60 * 1000);
+
+             //Crea el token en el dominio actual para que sea posible acceder a otras paginas
+             //Cookies.set('token',res.data.token, { expires: inXMinutes })
+             //const cookies = Cookies.get();
+             //console.log(cookies);
+        }catch(error){
+            console.log(error)
+            //setErrors(error);
+        }
+    }
+
+
     //SIGNUP Estudiante
     const signupEstudiante = async(name, boleta, email, password, rol) =>{
         try{
@@ -53,8 +79,8 @@ export const AuthProvider = ({children}) =>{
             //setLocalStorage(res.data);
             //setIsAuthenticated(true);
              //TIEMPO DE EXPIRACION EN x MINUTOS
-             const x = 60;
-             let inXMinutes = new Date(new Date().getTime() + x * 60 * 1000);
+            //  const x = 60;
+            //  let inXMinutes = new Date(new Date().getTime() + x * 60 * 1000);
 
              //Crea el token en el dominio actual para que sea posible acceder a otras paginas
              //Cookies.set('token',res.data.token, { expires: inXMinutes })
@@ -202,6 +228,7 @@ export const AuthProvider = ({children}) =>{
 
     return (
         <AuthContext.Provider value={{
+            signupProfesional,
             signupEstudiante,
             signinEstudiante,
             logout,

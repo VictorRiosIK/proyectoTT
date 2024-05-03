@@ -55,7 +55,7 @@ function Navbar() {
                     (
                         <div className="navbar-nav gap-4">
                             
-                            <Link className='p-2 btn btn-outline-light' to={'/register'}>Registrar profesional</Link>
+                            <Link className='p-2 btn btn-outline-light' to={'/register-pro'}>Registrar profesional</Link>
                             <Link className='p-2 btn btn-light disabled '>{user.rol}</Link>
                             <Link className='p-2 btn btn-outline-light ' to={'/login'} onClick={()=> {
                             logout();
