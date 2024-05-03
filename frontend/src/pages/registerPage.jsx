@@ -10,33 +10,52 @@ function registerPage() {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const rol = 'Alumno';
-    const {signupEstudiante,  isAuthenticated} = useAuth();
+    const {signupEstudiante,  isAuthenticated, errors,adds} = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
       e.preventDefault();
-      signupEstudiante(name,boleta,email,password,rol); //http://localhost:3001  https://proyecto-tt-api.vercel.app/registerStudent
+      if(name && boleta && email && password && rol){
+        signupEstudiante(name,boleta,email,password,rol);
+      }
+       //http://localhost:3001  https://proyecto-tt-api.vercel.app/registerStudent
     //   axios.post('http://localhost:3001/registerStudent', {name, boleta, email, password, rol})
     //   .then(result => console.log(result))
     //   .catch(err => console.log(err))
     }
   //Si esta autenticado cambia de pagina
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/');
-    }
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     navigate('/');
+  //   }
 
-  }, [isAuthenticated])
+  // }, [isAuthenticated])
+
   return (
     <div className="d-flex justify-content-center align-items-center  vh-100">
     <div className="bg-primary p-3 rounded w-50">
       <h2>Registrate</h2>
+        {
+          errors.map((error, i) =>(
+              <div className='bg-danger text-white p-2 rounded' key={i}>
+                  {error}
+              </div>
+              
+          ))
+        }
+        {
+          (adds !== null) &&
+          <div className='bg-success  text-black p-2 rounded' key={adds}>
+                {adds}
+            </div>
+            
+        }
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="name">
             <strong>Nombre</strong>
           </label>
-          <input
+          <input required
             type="text"
             placeholder="Nombre"
             autoComplete="off"
@@ -49,7 +68,7 @@ function registerPage() {
           <label htmlFor="boleta">
             <strong>Boleta</strong>
           </label>
-          <input
+          <input required
             type="text"
             placeholder="Boleta"
             autoComplete="off"
@@ -62,7 +81,7 @@ function registerPage() {
           <label htmlFor="email">
             <strong>Email</strong>
           </label>
-          <input
+          <input required
             type="email"
             placeholder="Email"
             autoComplete="off"
@@ -75,7 +94,7 @@ function registerPage() {
           <label htmlFor="password">
             <strong>Contraseña</strong>
           </label>
-          <input
+          <input required
             type="password"
             placeholder="Contraseña"
             name="password"

@@ -17,9 +17,10 @@ export const useAuth = ()=>{
 
 export const AuthProvider = ({children}) =>{
     //Usuario
-    const [user, setUser]= useState(null);
+    const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [errors, setErrors] = useState([]);
+    const [adds , setAdd] = useState(null);
     const [loading, setLoading] = useState(true);
 
     //Citas
@@ -45,21 +46,23 @@ export const AuthProvider = ({children}) =>{
     const signupEstudiante = async(name, boleta, email, password, rol) =>{
         try{
             const res = await registerRequest(name, boleta, email, password, rol);
-            console.log(res);
-            setUser(res.data);
+            console.log(res.data);
+            setAdd(res.data.message)
+            //setUser(res.data);
             //console.log(user)
-            setLocalStorage(res.data);
-            setIsAuthenticated(true);
+            //setLocalStorage(res.data);
+            //setIsAuthenticated(true);
              //TIEMPO DE EXPIRACION EN x MINUTOS
              const x = 60;
              let inXMinutes = new Date(new Date().getTime() + x * 60 * 1000);
 
              //Crea el token en el dominio actual para que sea posible acceder a otras paginas
-             Cookies.set('token',res.data.token, { expires: inXMinutes })
-             const cookies = Cookies.get();
+             //Cookies.set('token',res.data.token, { expires: inXMinutes })
+             //const cookies = Cookies.get();
              //console.log(cookies);
         }catch(error){
-            setErrors(error.response);
+            console.log(error)
+            //setErrors(error);
         }
     }
 
@@ -139,14 +142,24 @@ export const AuthProvider = ({children}) =>{
 
 
     //funcion para eliminar los mensajes pasados un tiempo
-    //useEffect(() =>{
-        // if(errors.length > 0){
-        //    const timer = setTimeout(()=>{
-        //         setErrors([])
-        //     },5000);
-        //     return () => clearTimeout(timer);
-        // }
-    //},[errors])
+    useEffect(() =>{
+        if(errors.length > 0){
+           const timer = setTimeout(()=>{
+                setErrors([])
+            },6000);
+            return () => clearTimeout(timer);
+        }
+    },[errors])
+
+    //funcion para eliminar los mensajes pasados un tiempo
+    useEffect(() =>{
+        if(adds !== null){
+           const timer = setTimeout(()=>{
+                setAdd(null)
+            },6000);
+            return () => clearTimeout(timer);
+        }
+    },[adds])
 
     //Cuando carge la aplicacion, comprobar que existe la cookie
     useEffect(() =>{
@@ -198,7 +211,8 @@ export const AuthProvider = ({children}) =>{
             user,
             isAuthenticated,
             horariosSelect,
-            errors
+            errors,
+            adds
         }}>
             {children}
         </AuthContext.Provider>
