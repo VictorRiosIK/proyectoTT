@@ -76,7 +76,7 @@ app.post('/registerStudent', (req, res) => {
                             const hashedPassword = bcrypt.hashSync(password, 10);
                              const token = jwt.sign({ email: email }, jwtSecret);
                             // Si el correo electrónico no existe en ninguno de los dos modelos, crear el registro en RegisterStudentModel
-                            RegisterStudentModel.create({ name: name, email: email, password: hashedPassword, boleta: boleta, rol: rol,, token: token})
+                            RegisterStudentModel.create({ name: name, email: email, password: hashedPassword, boleta: boleta, rol: rol, token: token})
                                 .then(result => {
                                    
                                     // Enviar el correo electrónico de verificación
