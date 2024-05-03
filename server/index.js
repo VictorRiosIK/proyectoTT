@@ -591,6 +591,8 @@ app.post('/registerCuestionary', (req, res) => {
                 return res.status(400).json({ message: 'El usuario no está registrado como estudiante.' });
             }
 
+           
+
             // Verificar si ya existe una respuesta de cuestionario para el usuario dado
             RegisterCuestionary.findOne({ emailUsuario })
                 .then(existingCuestionary => {
@@ -612,23 +614,32 @@ app.post('/registerCuestionary', (req, res) => {
                     // Guardar el registro en la base de datos
                     registerCuestionary.save()
                         .then(() => {
-                            // Enviar una respuesta de éxito
-                            res.status(200).json({ message: 'Respuestas del cuestionario guardadas correctamente.' });
+                            // Actualizar la propiedad evaluacionP del usuario en el modelo RegisterStudentModel
+                            student.evaluacionP = 1;
+                            // Guardar los cambios en el usuario
+                            student.save()
+                                .then(() => {
+                                    // Enviar una respuesta de éxito
+                                    res.status(200).json({ message: 'Respuestas del cuestionario guardadas correctamente.' });
+                                })
+                                .catch(error => {
+                                    console.error('Error al actualizar la evaluación del usuario:', error);
+                                    res.status(500).json({ message: 'Error al actualizar la evaluación del usuario.' });
+                                });
                         })
                         .catch(error => {
                             // Si ocurre un error, enviar una respuesta de error
                             console.error('Error al guardar las respuestas del cuestionario:', error);
-                            res.status(500).json({ error: 'Error al guardar las respuestas del cuestionario.' });
+                            res.status(500).json({ message: 'Error al guardar las respuestas del cuestionario.' });
                         });
                 })
                 .catch(error => {
                     console.error('Error al buscar la respuesta de cuestionario existente:', error);
-                    res.status(500).json({ error: 'Error al buscar la respuesta de cuestionario existente.' });
+                    res.status(500).json({ message: 'Error al buscar la respuesta de cuestionario existente.' });
                 });
         })
         .catch(err => res.status(500).json({ message: 'Error al buscar el usuario como estudiante.' }));
 });
-
 app.post('/getCuestionaryResponses', (req, res) => {
     const { emailUsuario } = req.body;
 
