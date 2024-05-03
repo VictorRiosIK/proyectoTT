@@ -616,16 +616,37 @@ app.post('/getCuestionaryResponses', (req, res) => {
 // Ruta para enviar correos
 app.post('/enviarcorreo', (req, res) => {
     // Extraer los datos del cuerpo de la solicitud
-    const { destinatario, asunto, mensaje } = req.body;
+    const { destinatario, asunto, mensaje, token } = req.body;
 
-    // Configurar el transporte
-    let transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-            user: 'vrios718@gmail.com', // Tu dirección de correo electrónico
-            pass: 'fqchchfldzzfafqu' // Tu contraseña de correo electrónico
-        }
-    });
+    // Comprobar si existe una cuenta con el correo electrónico recibido
+    RegisterStudentModel.findOne({ email: destinatario })
+        .then(student => {
+            if (!student) {
+                // Si no se encuentra una cuenta con el correo electrónico, enviar un error
+                return res.status(404).json({ message: 'No se encontró una cuenta asociada a este correo electrónico.' });
+            } else {
+                // Verificar si el token recibido coincide con el token almacenado en la cuenta
+                if (student.token !== token) {
+                    return res.status(403).json({ message: 'El token proporcionado no es válido.' });
+                } else {
+                    // Actualizar el valor de la variable 'cuentaValidada' a 1
+                    student.cuentaValidada = 1;
+                    // Guardar el cambio en la base de datos
+                    student.save()
+                        .then(() => {
+                            
+                            res.status(200).json({ message: 'Cuenta validada exitosamente' });
+                        })
+                        .catch(error => {
+                            res.status(500).json({ message: 'Error al actualizar la cuenta.', error: error });
+                        });
+                }
+            }
+        })
+        .catch(error => {
+            res.status(500).json({ message: 'Error al buscar la cuenta.', error: error });
+        });
+});
 
 // HTML y CSS en línea para el correo electrónico
 let correoHTML = `
