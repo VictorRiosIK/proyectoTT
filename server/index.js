@@ -746,7 +746,37 @@ let mailOptions = {
     });
 });
 
+app.post('/cancelAppointment', (req, res) => {
+    const { fecha, correo, tipo } = req.body; // Fecha, correo y tipo de profesional
 
+    // Determinar el modelo correspondiente según el tipo de profesional
+    const RegisterModel = tipo === 'Dentista' ? RegisterModelCita : RegisterModelCitaP;
+
+    // Consultar en la base de datos para buscar la coincidencia por fecha y correo
+    RegisterModel.findOne({ fecha: fecha })
+        .then(slot => {
+            if (!slot) {
+                return res.status(404).json({ message: 'No se encontraron horarios para la fecha proporcionada.' });
+            }
+
+            // Verificar si el correo está presente en alguno de los horarios
+            const horariosDisponibles = [];
+            Object.keys(slot._doc).forEach(key => {
+                if (slot[key] === correo) {
+                    horariosDisponibles.push(key);
+                }
+            });
+
+            if (horariosDisponibles.length === 0) {
+                return res.status(404).json({ message: 'No se encontraron horarios para el correo proporcionado.' });
+            }
+
+            res.json({ horariosDisponibles });
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Error al buscar los horarios.' });
+        });
+});
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
