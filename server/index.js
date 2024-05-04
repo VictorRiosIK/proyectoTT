@@ -957,6 +957,24 @@ app.post('/saveFollowStudent', (req, res) => {
             res.status(500).json({ error: 'Error al guardar los datos del cuestionario.' });
         });
 });
+
+app.post('/getFollowStudentsByEmail', (req, res) => {
+    const { email } = req.body; // Correo electrónico a buscar
+
+    // Consultar en la base de datos para encontrar todas las coincidencias por correo electrónico
+    FollowStudent.find({ email: email })
+        .then(students => {
+            if (students.length === 0) {
+                return res.status(404).json({ message: 'No se encontraron estudiantes siguiendo este correo electrónico.' });
+            }
+
+            res.json({ students: students });
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Error al buscar estudiantes.' });
+        });
+});
+
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
