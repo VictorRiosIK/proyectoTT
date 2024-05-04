@@ -903,14 +903,15 @@ app.post('/rescheduleAppointment', (req, res) => {
         });
 });
 app.post('/saveFollowStudent', (req, res) => {
-    const { email, comentario, fechaCita, horarioCita } = req.body;
+    const { email, comentario, fechaCita, horarioCita,tipo } = req.body;
 
     // Crear una instancia del modelo con los datos recibidos
     const newCuestionaryData = new followStudent({
         email: email,
         comentario: comentario,
         fechaCita: fechaCita,
-        horarioCita: horarioCita
+        horarioCita: horarioCita,
+        tipo:tipo
     });
 
     // Guardar los datos en la base de datos
