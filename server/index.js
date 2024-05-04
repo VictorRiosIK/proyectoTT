@@ -760,18 +760,26 @@ app.post('/cancelAppointment', (req, res) => {
             }
 
             // Verificar si el correo está presente en alguno de los horarios
-            const horariosDisponibles = [];
+            let horarioEncontrado = false;
             Object.keys(slot._doc).forEach(key => {
                 if (slot[key] === correo) {
-                    horariosDisponibles.push(key);
+                    slot[key] = ""; // Limpiar el contenido del horario
+                    horarioEncontrado = true;
                 }
             });
 
-            if (horariosDisponibles.length === 0) {
+            if (!horarioEncontrado) {
                 return res.status(404).json({ message: 'No se encontraron horarios para el correo proporcionado.' });
             }
 
-            res.json({ horariosDisponibles });
+            // Guardar los cambios en la base de datos
+            slot.save()
+                .then(() => {
+                    res.json({ message: 'Se ha cancelado la cita correctamente.' });
+                })
+                .catch(err => {
+                    res.status(500).json({ error: 'Error al cancelar la cita.' });
+                });
         })
         .catch(err => {
             res.status(500).json({ error: 'Error al buscar los horarios.' });
