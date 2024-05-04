@@ -916,6 +916,40 @@ app.post('/saveFollowStudent', (req, res) => {
     // Guardar los datos en la base de datos
     newCuestionaryData.save()
         .then(() => {
+            const RegisterModel = tipo === 'Dentista' ? RegisterModelCita : RegisterModelCitaP;
+
+    // Consultar en la base de datos para buscar la coincidencia por fecha y correo
+    RegisterModel.findOne({ fecha: fechaCita })
+        .then(slot => {
+            if (!slot) {
+                return res.status(404).json({ message: 'No se encontraron horarios para la fecha proporcionada.' });
+            }
+
+            // Verificar si el correo está presente en alguno de los horarios
+            let horarioEncontrado = false;
+            Object.keys(slot._doc).forEach(key => {
+                if (slot[key] === email) {
+                    slot[key] = ""; // Limpiar el contenido del horario
+                    horarioEncontrado = true;
+                }
+            });
+
+            if (!horarioEncontrado) {
+                return res.status(404).json({ message: 'No se encontraron horarios para el correo proporcionado.' });
+            }
+
+            // Guardar los cambios en la base de datos
+            slot.save()
+                .then(() => {
+                    res.json({ message: 'Se ha guardado correctamente el seguimiento y se da por finalizada la cita.' });
+                })
+                .catch(err => {
+                    res.status(500).json({ error: 'Error al guardar seguimiento la cita.' });
+                });
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Error al buscar los horarios.' });
+        });
             res.status(200).json({ message: 'Los datos del cuestionario han sido guardados exitosamente.' });
         })
         .catch(err => {
