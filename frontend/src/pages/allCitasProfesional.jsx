@@ -22,7 +22,7 @@ function allCitasProfesional() {
 
     return (
         <div>
-            <h1 className='text-center'>Mis citas con el dentista</h1>
+            <h1 className='text-center'>Ver citas pendientes</h1>
 
             <div className='d-flex w-100 gap-3'>
                 <ul className="list-group w-100">
