@@ -962,7 +962,7 @@ app.post('/getFollowStudentsByEmail', (req, res) => {
     const { email } = req.body; // Correo electrónico a buscar
 
     // Consultar en la base de datos para encontrar todas las coincidencias por correo electrónico
-    FollowStudent.find({ email: email })
+    followStudent.find({ email: email })
         .then(students => {
             if (students.length === 0) {
                 return res.status(404).json({ message: 'No se encontraron estudiantes siguiendo este correo electrónico.' });
