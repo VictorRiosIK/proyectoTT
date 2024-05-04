@@ -959,19 +959,19 @@ app.post('/saveFollowStudent', (req, res) => {
 });
 
 app.post('/getFollowStudentsByEmail', (req, res) => {
-    const { email } = req.body; // Correo electrónico a buscar
+    const { email, tipo } = req.body; // Correo electrónico y tipo a buscar
 
-    // Consultar en la base de datos para encontrar todas las coincidencias por correo electrónico
-    followStudent.find({ email: email })
-        .then(students => {
-            if (students.length === 0) {
-                return res.status(404).json({ message: 'No se encontraron estudiantes siguiendo este correo electrónico.' });
+    // Consultar en el modelo FollowStudent para encontrar todas las coincidencias por correo electrónico y tipo
+    FollowStudent.find({ email: email, tipo: tipo })
+        .then(users => {
+            if (users.length === 0) {
+                return res.status(404).json({ message: `No se encontraron alumnos siguiendo este correo electrónico con tipo ${tipo}.` });
             }
 
-            res.json({ followStudent: students });
+            res.json({ users: users });
         })
         .catch(err => {
-            res.status(500).json({ error: 'Error al buscar estudiantes.' });
+            res.status(500).json({ error: 'Error al buscar usuarios.' });
         });
 });
 
