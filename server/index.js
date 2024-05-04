@@ -942,7 +942,7 @@ app.post('/saveFollowStudent', (req, res) => {
             // Guardar los cambios en la base de datos
             slot.save()
                 .then(() => {
-                    res.json({ message: 'Se ha guardado correctamente el seguimiento y se da por finalizada la cita.' });
+                    res.status(200).json({ message: 'Los datos del seguimiento han sido guardados exitosamente y se da por finalizada la cita.' });
                 })
                 .catch(err => {
                     res.status(500).json({ error: 'Error al guardar seguimiento la cita.' });
@@ -951,7 +951,7 @@ app.post('/saveFollowStudent', (req, res) => {
         .catch(err => {
             res.status(500).json({ error: 'Error al buscar los horarios.' });
         });
-            res.status(200).json({ message: 'Los datos del cuestionario han sido guardados exitosamente.' });
+           
         })
         .catch(err => {
             res.status(500).json({ error: 'Error al guardar los datos del cuestionario.' });
