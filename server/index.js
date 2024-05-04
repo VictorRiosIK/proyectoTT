@@ -968,7 +968,7 @@ app.post('/getFollowStudentsByEmail', (req, res) => {
                 return res.status(404).json({ message: 'No se encontraron estudiantes siguiendo este correo electrónico.' });
             }
 
-            res.json({ students: students });
+            res.json({ followStudent: students });
         })
         .catch(err => {
             res.status(500).json({ error: 'Error al buscar estudiantes.' });
