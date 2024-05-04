@@ -785,6 +785,55 @@ app.post('/cancelAppointment', (req, res) => {
             res.status(500).json({ error: 'Error al buscar los horarios.' });
         });
 });
+
+app.post('/rescheduleAppointment', (req, res) => {
+    const { fechaNueva, horarioNuevo, correo, tipo, fechaVieja } = req.body; // Propiedades recibidas en el cuerpo de la petición
+
+    // Determinar el modelo correspondiente según el tipo de profesional
+    const RegisterModel = tipo === 'Dentista' ? RegisterModelCita : RegisterModelCitaP;
+
+    // Consultar en la base de datos para buscar la cita programada en la fecha vieja
+    RegisterModel.findOne({ fecha: fechaVieja })
+        .then(slot => {
+            if (!slot) {
+                return res.status(404).json({ message: 'No se encontró una cita programada en la fecha proporcionada.' });
+            }
+
+            // Verificar si el correo está programado en el horario de la fecha vieja
+            let horarioEncontrado = false;
+            let horarioViejo;
+            Object.entries(slot._doc).forEach(([key, value]) => {
+                if (value === correo) {
+                    horarioEncontrado = true;
+                    horarioViejo = key;
+                }
+            });
+
+            if (!horarioEncontrado) {
+                return res.status(404).json({ message: 'No se encontró una cita programada para el correo proporcionado en la fecha vieja.' });
+            }
+
+            // Limpiar el horario de la fecha vieja
+            slot[horarioViejo] = "";
+
+            // Buscar el horario nuevo y asignar el correo
+            const horarioNuevoKey = `horario${horarioNuevo}`;
+            slot[horarioNuevoKey] = correo;
+
+            // Guardar los cambios en la base de datos
+            slot.save()
+                .then(() => {
+                    res.json({ message: 'La cita ha sido reprogramada exitosamente.' });
+                })
+                .catch(err => {
+                    res.status(500).json({ error: 'Error al reprogramar la cita.' });
+                });
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Error al buscar la cita programada en la fecha vieja.' });
+        });
+});
+
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
