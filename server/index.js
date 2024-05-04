@@ -856,7 +856,7 @@ app.post('/rescheduleAppointment', (req, res) => {
                                 return res.status(400).json({ message: 'Número de horario inválido.' });
                         }
                         // Actualizar o crear la cita correspondiente
-                        RegisterModel.findOne({ fecha: fecha })
+                        RegisterModel.findOne({ fecha: fechaNueva })
                             .then(existingSlot => {
                                 if (existingSlot) {
                                     // Actualizar el horario correspondiente
@@ -871,7 +871,7 @@ app.post('/rescheduleAppointment', (req, res) => {
                                 } else {
                                     // Si no existe un documento con la fecha, crear uno nuevo con todos los horarios vacíos
                                     const newSlot = {
-                                        fecha: fecha,
+                                        fecha: fechaNueva,
                                         primerHorario: horarioNuevo === 1 ? correo : "",
                                         segundoHorario: horarioNuevo === 2 ? correo : "",
                                         tercerHorario: horarioNuevo === 3 ? correo : "",
