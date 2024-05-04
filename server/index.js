@@ -962,7 +962,7 @@ app.post('/getFollowStudentsByEmail', (req, res) => {
     const { email, tipo } = req.body; // Correo electrónico y tipo a buscar
 
     // Consultar en el modelo FollowStudent para encontrar todas las coincidencias por correo electrónico y tipo
-    FollowStudent.find({ email: email, tipo: tipo })
+    followStudent.find({ email: email, tipo: tipo })
         .then(users => {
             if (users.length === 0) {
                 return res.status(404).json({ message: `No se encontraron alumnos siguiendo este correo electrónico con tipo ${tipo}.` });
