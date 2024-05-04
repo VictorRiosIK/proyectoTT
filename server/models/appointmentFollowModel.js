@@ -6,5 +6,5 @@ const RegisterSchema = new mongoose.Schema({
   horarioCita:String
 })
 
-const RegisterCuestionary = mongoose.model("respcuestionary", RegisterSchema);
-module.exports = RegisterCuestionary;
+const followStudent = mongoose.model("followStudent", RegisterSchema);
+module.exports = followStudent;
