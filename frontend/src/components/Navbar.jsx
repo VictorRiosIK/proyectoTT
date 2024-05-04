@@ -29,7 +29,7 @@ function Navbar() {
                     : isAuthenticated && user.rol === 'Psicologo' ? 
                     (
                         <div className="navbar-nav gap-4">
-                            <Link className='p-2 btn btn-outline-light' to={'/login'}>Citas pendientes</Link>
+                            <Link className='p-2 btn btn-outline-light' to={'/all-citas'}>Citas pendientes</Link>
                             
                             <Link className='p-2 btn btn-light disabled '>{user.rol}</Link>
                             <Link className='p-2 btn btn-outline-light ' to={'/login'} onClick={()=> {
@@ -42,7 +42,7 @@ function Navbar() {
                     : isAuthenticated && user.rol === 'Dentista' ? 
                     (
                         <div className="navbar-nav gap-4">
-                            <Link className='p-2 btn btn-outline-light' to={'/login'}>Citas pendientes</Link>
+                            <Link className='p-2 btn btn-outline-light' to={'/all-citas'}>Citas pendientes</Link>
                             
                             <Link className='p-2 btn btn-light disabled '>{user.rol}</Link>
                             <Link className='p-2 btn btn-outline-light ' to={'/login'} onClick={()=> {

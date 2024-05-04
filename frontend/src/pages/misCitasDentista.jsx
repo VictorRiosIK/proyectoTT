@@ -56,22 +56,22 @@ function misCitasDentista() {
       <h1 className='text-center'>Mis citas con el dentista</h1>
 
       <div className='d-flex w-100 gap-3'>
-        <ul class="list-group w-100">
-          <li class="list-group-item text-center fw-bold fs-4">Fecha</li>
+        <ul className="list-group w-100">
+          <li className="list-group-item text-center fw-bold fs-4">Fecha</li>
         </ul>
-        <ul class="list-group w-100">
-          <li class="list-group-item text-center fw-bold fs-4">Horario</li>
+        <ul className="list-group w-100">
+          <li className="list-group-item text-center fw-bold fs-4">Horario</li>
         </ul>
       </div>
       {
         citas.length !== 0 ?
         citas.map(e => (
           <div key={e.fecha} className='d-flex w-100 gap-3'>
-            <ul class="list-group w-100">
-              <li class="list-group-item text-center fw-bold fs-4">{e.fecha}</li>
+            <ul className="list-group w-100">
+              <li className="list-group-item text-center fw-bold fs-4">{e.fecha}</li>
             </ul>
-            <ul class="list-group w-100">
-              <li class="list-group-item text-center fw-bold fs-4">{e.horario}</li>
+            <ul className="list-group w-100">
+              <li className="list-group-item text-center fw-bold fs-4">{e.horario}</li>
             </ul>
           </div>
       ))

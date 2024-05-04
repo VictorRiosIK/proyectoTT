@@ -12,5 +12,9 @@ export const agendarCitaRequest = (fecha, horario, correo, tipo) =>
 //Obtener mis citas
 export const getMisCitasRequest = (correo,tipo) => 
                                 axios.post('/allSlotsByCorreo', {correo,tipo});
-            
+
+                                
+//Obtener las citas de un profesional
+export const getMisCitasProRequest = (tipo) => 
+                                axios.post('/allSlots', {tipo});
 
