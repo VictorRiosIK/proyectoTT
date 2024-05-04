@@ -8,6 +8,7 @@ const RegisterProfessionalModel=require('./models/professional');
 const RegisterModelCita=require('./models/cita');
 const RegisterModelCitaP=require('./models/RegisterModelCitaP');
 const RegisterCuestionary=require('./models/RegisterCuestionary');
+const 
 const jwt = require('jsonwebtoken');
 const bodyParser=require('body-parser');
 const bcrypt = require('bcryptjs');
@@ -901,7 +902,26 @@ app.post('/rescheduleAppointment', (req, res) => {
             res.status(500).json({ error: 'Error al buscar la cita programada en la fecha vieja.' });
         });
 });
+app.post('/saveFollowStudent', (req, res) => {
+    const { email, comentario, fechaCita, horarioCita } = req.body;
 
+    // Crear una instancia del modelo con los datos recibidos
+    const newCuestionaryData = new RegisterCuestionary({
+        email: email,
+        comentario: comentario,
+        fechaCita: fechaCita,
+        horarioCita: horarioCita
+    });
+
+    // Guardar los datos en la base de datos
+    newCuestionaryData.save()
+        .then(() => {
+            res.status(200).json({ message: 'Los datos del cuestionario han sido guardados exitosamente.' });
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Error al guardar los datos del cuestionario.' });
+        });
+});
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
