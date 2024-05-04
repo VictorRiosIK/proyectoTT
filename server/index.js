@@ -831,41 +831,67 @@ app.post('/rescheduleAppointment', (req, res) => {
                 // Guardar los cambios en la base de datos para la cita en la fecha vieja
                 slot.save()
                     .then(() => {
+                           let horarioField;
                         // Verificar si ya existe una cita programada en la fecha nueva
-                        RegisterModel.findOne({ fecha: fechaNueva })
-                            .then(newSlot => {
-                                if (!newSlot) {
-                                    // Si no existe, crear un nuevo documento para la fecha nueva
-                                    const newSlot = new RegisterModel({
-                                        fecha: fechaNueva,
-                                        [horarioNuevo]: correo
-                                    });
-
-                                    // Guardar la nueva cita en la base de datos
-                                    newSlot.save()
-                                        .then(() => {
-                                            res.json({ message: 'La cita ha sido reprogramada exitosamente.' });
-                                        })
-                                        .catch(err => {
-                                            res.status(500).json({ error: 'Error al programar la cita en la fecha nueva.' });
-                                        });
-                                } else {
-                                    // Si ya existe, agendar la cita en el horario nuevo
-                                    newSlot[horarioNuevo] = correo;
-
-                                    // Guardar los cambios en la base de datos para la cita en la fecha nueva
-                                    newSlot.save()
-                                        .then(() => {
-                                            res.json({ message: 'La cita ha sido reprogramada exitosamente.' });
-                                        })
-                                        .catch(err => {
-                                            res.status(500).json({ error: 'Error al reprogramar la cita en la fecha nueva.' });
-                                        });
-                                }
+                         switch (horarioNuevo) {
+                                case 1:
+                                    horarioField = 'primerHorario';
+                                    break;
+                                case 2:
+                                    horarioField = 'segundoHorario';
+                                    break;
+                                case 3:
+                                    horarioField = 'tercerHorario';
+                                    break;
+                                case 4:
+                                    horarioField = 'cuartoHorario';
+                                    break;
+                                case 5:
+                                    horarioField = 'quintoHorario';
+                                    break;
+                                case 6:
+                                    horarioField = 'sextoHorario';
+                                    break;
+                                default:
+                                    return res.status(400).json({ message: 'Número de horario inválido.' });
+                            }
+                        / Actualizar o crear la cita correspondiente
+            RegisterModel.findOne({ fecha: fecha })
+                .then(existingSlot => {
+                    if (existingSlot) {
+                        // Actualizar el horario correspondiente
+                        existingSlot[horarioField] = correo;
+                        return existingSlot.save()
+                            .then(() => {
+                                res.status(200).json({ message: `Cita reagendada exitosamente.` });
                             })
                             .catch(err => {
-                                res.status(500).json({ error: 'Error al buscar la cita programada en la fecha nueva.' });
+                                res.status(500).json({ message: `Error al actualizar el horario ${horarioField}.` });
                             });
+                    } else {
+                        // Si no existe un documento con la fecha, crear uno nuevo con todos los horarios vacíos
+                        const newSlot = {
+                            fecha: fecha,
+                            primerHorario: horarioNuevo === 1 ? correo : "",
+                            segundoHorario: horarioNuevo === 2 ? correo : "",
+                            tercerHorario: horarioNuevo === 3 ? correo : "",
+                            cuartoHorario: horarioNuevo === 4 ? correo: "",
+                            quintoHorario: horarioNuevo === 5 ? correo : "",
+                            sextoHorario: horarioNuevo === 6 ? correo : ""
+                        };
+                        return RegisterModel.create(newSlot)
+                            .then(() => {
+                                res.status(200).json({ message: 'Nuevo horario reservado exitosamente.' });
+                            })
+                            .catch(err => {
+                                res.status(500).json({ message: 'Error al crear el nuevo horario.' });
+                            });
+                    }
+                })
+                .catch(err => {
+                    res.status(500).json({ message: 'Error al buscar el horario existente.' });
+                });
+        } 
                     })
                     .catch(err => {
                         res.status(500).json({ error: 'Error al limpiar el horario de la fecha vieja.' });
