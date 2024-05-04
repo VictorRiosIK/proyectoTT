@@ -855,7 +855,7 @@ app.post('/rescheduleAppointment', (req, res) => {
                                 default:
                                     return res.status(400).json({ message: 'Número de horario inválido.' });
                             }
-                        / Actualizar o crear la cita correspondiente
+                        // Actualizar o crear la cita correspondiente
             RegisterModel.findOne({ fecha: fecha })
                 .then(existingSlot => {
                     if (existingSlot) {
