@@ -8,7 +8,7 @@ const RegisterProfessionalModel=require('./models/professional');
 const RegisterModelCita=require('./models/cita');
 const RegisterModelCitaP=require('./models/RegisterModelCitaP');
 const RegisterCuestionary=require('./models/RegisterCuestionary');
-const 
+const followStudent=require('./models/followStudent');
 const jwt = require('jsonwebtoken');
 const bodyParser=require('body-parser');
 const bcrypt = require('bcryptjs');
@@ -906,7 +906,7 @@ app.post('/saveFollowStudent', (req, res) => {
     const { email, comentario, fechaCita, horarioCita } = req.body;
 
     // Crear una instancia del modelo con los datos recibidos
-    const newCuestionaryData = new RegisterCuestionary({
+    const newCuestionaryData = new followStudent({
         email: email,
         comentario: comentario,
         fechaCita: fechaCita,
