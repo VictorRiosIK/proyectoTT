@@ -15,7 +15,7 @@ function agendarOrientacion() {
   const [horarioSelect, sethorarioSelect ] = useState(null);
   const [opcionesS, setOpciones ] = useState([]);
   const user = JSON.parse(window.localStorage.getItem('user'));
-  const { horariosSelect: horarioS,agendarCitaDentista} = useAuth();
+  const { horariosSelect: horarioS,agendarCita} = useAuth();
   //console.log(user.email); getHorariosCitas,
   
   //console.log(user);
@@ -34,7 +34,7 @@ function agendarOrientacion() {
       
       const horario = selectedH.value;
       const correo = user.email;
-      agendarCitaDentista(fecha, horario, correo,'Psicologo');
+      agendarCita(fecha, horario, correo,'Psicologo');
       navigate('/citas-psicologo')
     }
     
@@ -45,7 +45,7 @@ function agendarOrientacion() {
   const getHorariosCitas = async(fecha) =>{
     try {
         const res = await getHorariosRequest(fecha,'Psicologo');
-        console.log(res.data.availableSlots);
+        console.log(res);
         const horarios = [];
         const aux = res.data.availableSlots;
         aux.map(e=>{
@@ -76,7 +76,7 @@ function agendarOrientacion() {
         });
   
         setOpciones(opciones);
-        console.log(opcionesS);
+        //console.log(opcionesS);
     } catch (error) {
         
     }

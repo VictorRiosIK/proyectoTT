@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getMisCitasRequest } from '../api/citas.js'
+import { getMisCitasRequest, cancelCitaRequest, reagendarCitaRequest } from '../api/citas.js'
 
 
 function misCitasDentista() {
@@ -46,6 +46,14 @@ function misCitasDentista() {
     }
   }
 
+  //CANCELAR CITA
+  const cancelarCita = async(fecha) =>{
+    console.log(user);
+    console.log(fecha);
+    const res =  await cancelCitaRequest(fecha, user.email, 'Dentista');
+    console.log(res);
+    getMisCitas();
+  }
 
   useEffect(() => {
     getMisCitas();
@@ -54,7 +62,12 @@ function misCitasDentista() {
   return (
     <div>
       <h1 className='text-center'>Mis citas con el dentista</h1>
-
+      <div className='w-100 my-4'>
+        <h5>*NOTA: No se puede cancelar ni reagendar una cita faltando 24 horas para la cita</h5>
+      {/* <button className='btn btn-outline-dark w-25 rounded-75' onClick={()=>{alert("Hola")}}>
+        <FontAwesomeIcon className='fs-3 icon-link icon-link-hover' icon={faQuestion} />
+      </button> */}
+      </div>
       <div className='d-flex w-100 gap-3'>
         <ul className="list-group w-100">
           <li className="list-group-item text-center fw-bold fs-4">Fecha</li>
@@ -62,16 +75,29 @@ function misCitasDentista() {
         <ul className="list-group w-100">
           <li className="list-group-item text-center fw-bold fs-4">Horario</li>
         </ul>
+        <ul className="list-group w-100">
+          <li className="list-group-item text-center fw-bold fs-4">Acciones</li>
+        </ul>
       </div>
       {
         citas.length !== 0 ?
         citas.map(e => (
           <div key={e.fecha} className='d-flex w-100 gap-3'>
             <ul className="list-group w-100">
-              <li className="list-group-item text-center fw-bold fs-4">{e.fecha}</li>
+              <li className="list-group-item text-center fw-bold fs-4">
+                <p className='my-4 w-100'>{e.fecha}</p>
+                </li>
             </ul>
             <ul className="list-group w-100">
-              <li className="list-group-item text-center fw-bold fs-4">{e.horario}</li>
+              <li className="list-group-item text-center fw-bold fs-4">
+                <p className='my-4 w-100'>{e.horario}</p>
+                </li>
+            </ul>
+            <ul className="list-group w-100">
+              <li className="list-group-item text-center fw-bold fs-4">
+              <button className='btn btn-danger w-100 rounded-50' onClick={()=>{cancelarCita(e.fecha)}}>Cancelar</button>
+              <button className='btn btn-warning w-100 rounded-50'>Reagendar</button>
+              </li>
             </ul>
           </div>
       ))

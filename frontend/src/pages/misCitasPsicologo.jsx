@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
-import { getMisCitasRequest } from '../api/citas.js'
+import { getMisCitasRequest, cancelCitaRequest, reagendarCitaRequest } from '../api/citas.js'
+import { faQuestion } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 function misCitasPsicologo() {
   const user = JSON.parse(window.localStorage.getItem('user'));
   const [citas,setCitas] = useState([]);
   let cita = []
+
+  //OBTENER LA CITAS DEL ALUMNO
   const getMisCitas = async () => {
     try {
       //setCitas([]);
@@ -45,6 +49,15 @@ function misCitasPsicologo() {
     }
   }
 
+  //CANCELAR CITA
+  const cancelarCita = async(fecha) =>{
+    console.log(user);
+    console.log(fecha);
+    const res =  await cancelCitaRequest(fecha, user.email, 'Psicologo');
+    console.log(res);
+    getMisCitas();
+  }
+  //REAGENDAR CITA
 
   useEffect(() => {
     getMisCitas();
@@ -52,25 +65,46 @@ function misCitasPsicologo() {
 
   return (
     <div>
-      <h1 className='text-center'>Mis citas con el psicologo</h1>
-
+      <h1 className='text-center w-100'>Mis citas con el psicologo </h1>
+      <div className='w-100 my-4'>
+        <h5>*NOTA: No se puede cancelar ni reagendar una cita faltando 24 horas para la cita</h5>
+      {/* <button className='btn btn-outline-dark w-25 rounded-75' onClick={()=>{alert("Hola")}}>
+        <FontAwesomeIcon className='fs-3 icon-link icon-link-hover' icon={faQuestion} />
+      </button> */}
+      </div>
       <div className='d-flex w-100 gap-3'>
-        <ul class="list-group w-100">
-          <li class="list-group-item text-center fw-bold fs-4">Fecha</li>
+        <ul className="list-group w-100">
+          <li className="list-group-item text-center fw-bold fs-4">Fecha</li>
         </ul>
-        <ul class="list-group w-100">
-          <li class="list-group-item text-center fw-bold fs-4">Horario</li>
+        <ul className="list-group w-100">
+          <li className="list-group-item text-center fw-bold fs-4">Horario</li>
+        </ul>
+        <ul className="list-group w-100">
+          <li className="list-group-item text-center fw-bold fs-4">Acciones</li>
         </ul>
       </div>
       {
         citas.length !== 0 ?
         citas.map(e => (
           <div key={e.fecha} className='d-flex w-100 gap-3'>
-            <ul class="list-group w-100">
-              <li class="list-group-item text-center fw-bold fs-4">{e.fecha}</li>
+            <ul className="list-group w-100">
+              <li className="list-group-item text-center fw-bold fs-4 ">
+              <p className='my-4 w-100'>{e.fecha}</p>
+              </li>
             </ul>
-            <ul class="list-group w-100">
-              <li class="list-group-item text-center fw-bold fs-4">{e.horario}</li>
+            <ul className="list-group w-100">
+              <li className="list-group-item text-center fw-bold fs-4 ">
+                <p className='my-4 w-100'>{e.horario}</p>
+              </li>
+            </ul>
+            <ul className="list-group w-100">
+              <li className="list-group-item text-center fw-bold fs-4 ">
+              <div className='d-flex gap-4'>
+              <button className='btn btn-danger w-100 rounded-50' onClick={()=>{cancelarCita(e.fecha)}}>Cancelar</button>
+              </div>
+              <button className='btn btn-warning w-100 rounded-50'>Reagendar</button>
+              </li>
+              
             </ul>
           </div>
       ))

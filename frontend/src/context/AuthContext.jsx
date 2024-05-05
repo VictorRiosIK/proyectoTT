@@ -157,7 +157,7 @@ export const AuthProvider = ({children}) =>{
     }
 
     //AgendarCita
-    const agendarCitaDentista = async(fecha, horario, correo,tipo) =>{
+    const agendarCita = async(fecha, horario, correo,tipo) =>{
         try {
             const res = await agendarCitaRequest(fecha, horario, correo,tipo);
             console.log(res);
@@ -233,7 +233,7 @@ export const AuthProvider = ({children}) =>{
             signinEstudiante,
             logout,
             getHorariosCitas,
-            agendarCitaDentista,
+            agendarCita,
             loading,
             user,
             isAuthenticated,
