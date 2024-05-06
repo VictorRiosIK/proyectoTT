@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import {registerRequest, loginRequest, verifyTokenRequest, registerProfessionalRequest} from '../api/auth.js'
-import {getHorariosRequest,agendarCitaRequest} from '../api/citas.js'
+import {getHorariosRequest,agendarCitaRequest, enviarCuestionarioRequest} from '../api/citas.js'
 import Cookies from 'js-cookie'
 
 
@@ -166,6 +166,18 @@ export const AuthProvider = ({children}) =>{
         }
     }
 
+    //Enviar cuestionario Psicologo
+    const enviarCuestionario = async (emailUsuario, respuesta1, respuesta2, respuesta3, respuesta4, respuesta5) =>{
+        try {
+            const res = await enviarCuestionarioRequest(emailUsuario, respuesta1, respuesta2, respuesta3, respuesta4, respuesta5);
+            
+            console.log(res);
+        } catch (error) {
+            setErrors([error.response.data.message]);
+            console.log(error);
+        }
+    }
+
 
     //funcion para eliminar los mensajes pasados un tiempo
     useEffect(() =>{
@@ -234,6 +246,7 @@ export const AuthProvider = ({children}) =>{
             logout,
             getHorariosCitas,
             agendarCita,
+            enviarCuestionario,
             loading,
             user,
             isAuthenticated,
