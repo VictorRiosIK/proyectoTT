@@ -8,6 +8,7 @@ import AgendarOrientacion from "./pages/agendarOrientacion.jsx";
 import MisCitasDentista from "./pages/misCitasDentista.jsx"
 import MisCitasPsicologo from "./pages/misCitasPsicologo.jsx"
 import AllCitasProfesional from "./pages/allCitasProfesional.jsx";
+import DetallesCitaPro from "./pages/detallesCitaPro.jsx";
 import CuestionarioPPage from "./pages/cuestionarioPPage.jsx";
 import Recordatorio from "./pages/recordatorio.jsx";
 import RegisterPage from './pages/registerPage'
@@ -38,6 +39,7 @@ function App() {
               <Route path='/citas-dentista' element={<MisCitasDentista/>}></Route>
               <Route path='/citas-psicologo' element={<MisCitasPsicologo/>}></Route>
               <Route path='/all-citas' element={<AllCitasProfesional/>}></Route>
+              <Route path='/detalles-cita/:id/:horario/:fecha' element={<DetallesCitaPro/>}></Route>
               <Route path='/recordatorio' element={<Recordatorio/>}></Route>
               <Route path='/register-pro' element={<RegisterProPage/>}></Route>
               <Route path='/cuestionario' element={<CuestionarioPPage/>}></Route>

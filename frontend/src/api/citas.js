@@ -16,15 +16,15 @@ export const getMisCitasRequest = (correo,tipo) =>
 export const getMisCitasProRequest = (tipo) => 
                                 axios.post('/allSlots', {tipo});
 
-//Obtener 
-export const BuscarPorEmailRequest = (correo, tipo) => 
+//*Obtener datos de un Alumno o profesional
+export const buscarPorEmailRequest = (correo, tipo) => 
                                 axios.post('/searchByEmail', {correo, tipo});
 
-//Registrar cuestionario
+//*Registrar cuestionario
 export const enviarCuestionarioRequest = (emailUsuario, respuesta1, respuesta2, respuesta3, respuesta4, respuesta5) => 
                                 axios.post('/registerCuestionary', {emailUsuario, respuesta1, respuesta2, respuesta3, respuesta4, respuesta5});
 
-//Obtener respuestas de cuestionario
+//*Obtener respuestas de cuestionario
 export const getRespuestasCuestionarioRequest = (emailUsuario) => 
                                 axios.post('/getCuestionaryResponses', {emailUsuario});
 
