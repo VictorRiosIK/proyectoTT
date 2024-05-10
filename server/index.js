@@ -993,13 +993,15 @@ app.post('/enviarNotificacion', (req, res) => {
       body: mensaje,
     },
     // Otras opciones como datos adicionales...
+    // Aquí se agrega el campo 'scheduledTime' para programar el envío de la notificación
+    scheduledTime: horaFormateada.toDate()
   };
 
   const options = {
     timeToLive: 60 * 60, // Tiempo de vida de la notificación en segundos (opcional)
   };
 
-  admin.messaging().sendAtTime(payload, horaFormateada.toDate(), options)
+  admin.messaging().send(payload)
     .then((response) => {
       console.log("Notificación programada enviada:", response);
       res.status(200).send("Notificación programada enviada");
