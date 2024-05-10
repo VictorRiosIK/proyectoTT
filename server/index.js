@@ -13,7 +13,7 @@ const jwt = require('jsonwebtoken');
 const bodyParser=require('body-parser');
 const bcrypt = require('bcryptjs');
 const config = require('./Config.json');
-
+const moment = require('moment');
 const jwtSecret = config.jwtSecret;
 const mongoURI = config.mongoURI;
 const admin = require("firebase-admin");
@@ -980,7 +980,33 @@ app.post('/getFollowStudentsByEmail', (req, res) => {
             res.status(500).json({ error: 'Error al buscar usuarios.' });
         });
 });
+app.post('/enviarNotificacion', (req, res) => {
+  const { fecha, mensaje } = req.body;
 
+  const fechaProgramada = moment(fecha);
+
+  const payload = {
+    notification: {
+      title: "Título de la notificación",
+      body: mensaje,
+    },
+    // Otras opciones como datos adicionales...
+  };
+
+  const options = {
+    timeToLive: 60 * 60, // Tiempo de vida de la notificación en segundos (opcional)
+  };
+
+  admin.messaging().sendAtTime(payload, fechaProgramada.toDate(), options)
+    .then((response) => {
+      console.log("Notificación programada enviada:", response);
+      res.status(200).send("Notificación programada enviada");
+    })
+    .catch((error) => {
+      console.error("Error al programar la notificación:", error);
+      res.status(500).send("Error al programar la notificación");
+    });
+});
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
