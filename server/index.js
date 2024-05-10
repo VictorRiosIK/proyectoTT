@@ -16,7 +16,13 @@ const config = require('./Config.json');
 
 const jwtSecret = config.jwtSecret;
 const mongoURI = config.mongoURI;
+const admin = require("firebase-admin");
 
+const serviceAccount = require("./tt2024-f835d-68fdaeb8d78b.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 mongoose.connect(mongoURI);
 const app = express()
 app.use(cors());
