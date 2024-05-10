@@ -995,7 +995,7 @@ app.post('/enviarNotificacion', (req, res) => {
     condition: "''",
     // Otras opciones como datos adicionales...
     // Aquí se agrega el campo 'scheduledTime' para programar el envío de la notificación
-    scheduledTime: horaFormateada.toDate()
+    time_to_live: Math.floor((horaFormateada.toDate().getTime() - Date.now()) / 1000)
   };
 
   const options = {
