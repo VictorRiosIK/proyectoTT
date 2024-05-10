@@ -992,6 +992,7 @@ app.post('/enviarNotificacion', (req, res) => {
       title: "Título de la notificación",
       body: mensaje,
     },
+    token: "", 
     // Otras opciones como datos adicionales...
     // Aquí se agrega el campo 'scheduledTime' para programar el envío de la notificación
     scheduledTime: horaFormateada.toDate()
