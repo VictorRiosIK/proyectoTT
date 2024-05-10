@@ -981,9 +981,11 @@ app.post('/getFollowStudentsByEmail', (req, res) => {
         });
 });
 app.post('/enviarNotificacion', (req, res) => {
-  const { fecha, mensaje } = req.body;
+  const { fecha, hora, minuto, mensaje } = req.body;
 
-  const fechaProgramada = moment(fecha);
+  // Parsea la fecha y la hora en el formato correcto utilizando Moment.js
+  const fechaFormateada = moment(fecha, 'DD/MM/YYYY').format('YYYY-MM-DD');
+  const horaFormateada = moment(`${fechaFormateada} ${hora}:${minuto}`, 'YYYY-MM-DD HH:mm');
 
   const payload = {
     notification: {
@@ -997,7 +999,7 @@ app.post('/enviarNotificacion', (req, res) => {
     timeToLive: 60 * 60, // Tiempo de vida de la notificación en segundos (opcional)
   };
 
-  admin.messaging().sendAtTime(payload, fechaProgramada.toDate(), options)
+  admin.messaging().sendAtTime(payload, horaFormateada.toDate(), options)
     .then((response) => {
       console.log("Notificación programada enviada:", response);
       res.status(200).send("Notificación programada enviada");
