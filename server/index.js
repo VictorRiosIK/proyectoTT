@@ -1035,10 +1035,11 @@ app.post('/searchStudentByEmail', (req, res) => {
 
 // Endpoint para actualizar la contraseña
 app.post('/updatePassword', (req, res) => {
-    const { email, password, newPassword } = req.body;
-
+    const { email, password, newPassword,tipo } = req.body;
+    // Determinar qué modelo utilizar según el tipo
+    const RegisterModel = tipo === 'Alumno' || tipo === 'Admin' ? RegisterStudentModel : RegisterProfessionalModel;
     // Buscar el estudiante por su correo electrónico
-    RegisterStudentModel.findOne({ email: email })
+    RegisterModel.findOne({ email: email })
         .then(student => {
             if (!student) {
                 return res.status(404).json({ message: 'Estudiante no encontrado' });
@@ -1053,7 +1054,7 @@ app.post('/updatePassword', (req, res) => {
                             return res.status(500).json({ message: 'Error al cifrar la nueva contraseña' });
                         }
                         // Actualizar la contraseña en la base de datos
-                        RegisterStudentModel.updateOne({ email: email }, { password: hashedPassword })
+                        RegisterModel.updateOne({ email: email }, { password: hashedPassword })
                             .then(() => {
                                 res.status(200).json({ message: 'Contraseña actualizada exitosamente' });
                             })
@@ -1069,8 +1070,8 @@ app.post('/updatePassword', (req, res) => {
             });
         })
         .catch(err => {
-            console.error('Error al buscar estudiante:', err);
-            res.status(500).json({ message: 'Error al buscar estudiante' });
+            console.error('Error al buscar cuenta:', err);
+            res.status(500).json({ message: 'Error al buscar cuenta' });
         });
 });
 // Endpoint para buscar un profesional por correo electrónico
