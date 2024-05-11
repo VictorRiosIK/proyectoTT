@@ -1032,6 +1032,47 @@ app.post('/searchStudentByEmail', (req, res) => {
             res.status(500).json({ message: 'Error al buscar estudiante' });
         });
 });
+
+// Endpoint para actualizar la contraseña
+app.post('/updatePassword', (req, res) => {
+    const { email, password, newPassword } = req.body;
+
+    // Buscar el estudiante por su correo electrónico
+    RegisterStudentModel.findOne({ email: email })
+        .then(student => {
+            if (!student) {
+                return res.status(404).json({ message: 'Estudiante no encontrado' });
+            }
+
+            // Comparar la contraseña proporcionada con la contraseña almacenada en la base de datos
+            bcrypt.compare(password, student.password, (err, result) => {
+                if (result) {
+                    // Si la contraseña actual coincide, cifrar la nueva contraseña y actualizarla en la base de datos
+                    bcrypt.hash(newPassword, 10, (err, hashedPassword) => {
+                        if (err) {
+                            return res.status(500).json({ message: 'Error al cifrar la nueva contraseña' });
+                        }
+                        // Actualizar la contraseña en la base de datos
+                        RegisterStudentModel.updateOne({ email: email }, { password: hashedPassword })
+                            .then(() => {
+                                res.status(200).json({ message: 'Contraseña actualizada exitosamente' });
+                            })
+                            .catch(err => {
+                                console.error('Error al actualizar la contraseña:', err);
+                                res.status(500).json({ message: 'Error al actualizar la contraseña' });
+                            });
+                    });
+                } else {
+                    // Si la contraseña actual no coincide, devolver un mensaje de error
+                    res.status(401).json({ message: 'Credenciales inválidas' });
+                }
+            });
+        })
+        .catch(err => {
+            console.error('Error al buscar estudiante:', err);
+            res.status(500).json({ message: 'Error al buscar estudiante' });
+        });
+});
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
