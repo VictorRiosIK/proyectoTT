@@ -13,10 +13,16 @@ const jwt = require('jsonwebtoken');
 const bodyParser=require('body-parser');
 const bcrypt = require('bcryptjs');
 const config = require('./Config.json');
-
+const moment = require('moment');
 const jwtSecret = config.jwtSecret;
 const mongoURI = config.mongoURI;
+const admin = require("firebase-admin");
 
+const serviceAccount = require("./tt2024-f835d-68fdaeb8d78b.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 mongoose.connect(mongoURI);
 const app = express()
 app.use(cors());
@@ -974,7 +980,119 @@ app.post('/getFollowStudentsByEmail', (req, res) => {
             res.status(500).json({ error: 'Error al buscar usuarios.' });
         });
 });
+app.post('/enviarNotificacion', (req, res) => {
+  const { fecha, hora, minuto, mensaje } = req.body;
 
+  // Parsea la fecha y la hora en el formato correcto utilizando Moment.js
+  const fechaFormateada = moment(fecha, 'DD/MM/YYYY').format('YYYY-MM-DD');
+  const horaFormateada = moment(`${fechaFormateada} ${hora}:${minuto}`, 'YYYY-MM-DD HH:mm');
+
+  const payload = {
+    notification: {
+      title: "Título de la notificación",
+      body: mensaje,
+    },
+    condition: "''",
+    // Otras opciones como datos adicionales...
+    // Aquí se agrega el campo 'scheduledTime' para programar el envío de la notificación
+    time_to_live: Math.floor((horaFormateada.toDate().getTime() - Date.now()) / 1000)
+  };
+
+  const options = {
+    timeToLive: 60 * 60, // Tiempo de vida de la notificación en segundos (opcional)
+  };
+
+  admin.messaging().send(payload)
+    .then((response) => {
+      console.log("Notificación programada enviada:", response);
+      res.status(200).send("Notificación programada enviada");
+    })
+    .catch((error) => {
+      console.error("Error al programar la notificación:", error);
+      res.status(500).send("Error al programar la notificación");
+    });
+});
+
+app.post('/searchStudentByEmail', (req, res) => {
+    const { email } = req.body;
+
+    RegisterStudentModel.findOne({ email: email })
+        .then(student => {
+            if (student) {
+                // Si se encuentra un estudiante con el correo electrónico proporcionado, devolverlo en la respuesta
+                res.status(200).json({ student: student });
+            } else {
+                // Si no se encuentra ningún estudiante con el correo electrónico proporcionado, devolver un mensaje de error
+                res.status(404).json({ message: 'Estudiante no encontrado' });
+            }
+        })
+        .catch(err => {
+            // Si ocurre algún error durante la búsqueda, devolver un mensaje de error
+            console.error('Error al buscar estudiante:', err);
+            res.status(500).json({ message: 'Error al buscar estudiante' });
+        });
+});
+
+// Endpoint para actualizar la contraseña
+app.post('/updatePassword', (req, res) => {
+    const { email, password, newPassword } = req.body;
+
+    // Buscar el estudiante por su correo electrónico
+    RegisterStudentModel.findOne({ email: email })
+        .then(student => {
+            if (!student) {
+                return res.status(404).json({ message: 'Estudiante no encontrado' });
+            }
+
+            // Comparar la contraseña proporcionada con la contraseña almacenada en la base de datos
+            bcrypt.compare(password, student.password, (err, result) => {
+                if (result) {
+                    // Si la contraseña actual coincide, cifrar la nueva contraseña y actualizarla en la base de datos
+                    bcrypt.hash(newPassword, 10, (err, hashedPassword) => {
+                        if (err) {
+                            return res.status(500).json({ message: 'Error al cifrar la nueva contraseña' });
+                        }
+                        // Actualizar la contraseña en la base de datos
+                        RegisterStudentModel.updateOne({ email: email }, { password: hashedPassword })
+                            .then(() => {
+                                res.status(200).json({ message: 'Contraseña actualizada exitosamente' });
+                            })
+                            .catch(err => {
+                                console.error('Error al actualizar la contraseña:', err);
+                                res.status(500).json({ message: 'Error al actualizar la contraseña' });
+                            });
+                    });
+                } else {
+                    // Si la contraseña actual no coincide, devolver un mensaje de error
+                    res.status(401).json({ message: 'Credenciales inválidas' });
+                }
+            });
+        })
+        .catch(err => {
+            console.error('Error al buscar estudiante:', err);
+            res.status(500).json({ message: 'Error al buscar estudiante' });
+        });
+});
+// Endpoint para buscar un profesional por correo electrónico
+app.post('/searchProfessionalByEmail', (req, res) => {
+    const { email } = req.body;
+
+    RegisterProfessionalModel.findOne({ email: email })
+        .then(professional => {
+            if (professional) {
+                // Si se encuentra un profesional con el correo electrónico proporcionado, devolverlo en la respuesta
+                res.status(200).json({ professional: professional });
+            } else {
+                // Si no se encuentra ningún profesional con el correo electrónico proporcionado, devolver un mensaje de error
+                res.status(404).json({ message: 'Profesional no encontrado' });
+            }
+        })
+        .catch(err => {
+            // Si ocurre algún error durante la búsqueda, devolver un mensaje de error
+            console.error('Error al buscar profesional:', err);
+            res.status(500).json({ message: 'Error al buscar profesional' });
+        });
+});
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
