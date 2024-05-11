@@ -1012,6 +1012,26 @@ app.post('/enviarNotificacion', (req, res) => {
       res.status(500).send("Error al programar la notificación");
     });
 });
+
+app.post('/searchStudentByEmail', (req, res) => {
+    const { email } = req.body;
+
+    RegisterStudentModel.findOne({ email: email })
+        .then(student => {
+            if (student) {
+                // Si se encuentra un estudiante con el correo electrónico proporcionado, devolverlo en la respuesta
+                res.status(200).json({ student: student });
+            } else {
+                // Si no se encuentra ningún estudiante con el correo electrónico proporcionado, devolver un mensaje de error
+                res.status(404).json({ message: 'Estudiante no encontrado' });
+            }
+        })
+        .catch(err => {
+            // Si ocurre algún error durante la búsqueda, devolver un mensaje de error
+            console.error('Error al buscar estudiante:', err);
+            res.status(500).json({ message: 'Error al buscar estudiante' });
+        });
+});
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
