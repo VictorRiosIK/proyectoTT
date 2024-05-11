@@ -1073,6 +1073,26 @@ app.post('/updatePassword', (req, res) => {
             res.status(500).json({ message: 'Error al buscar estudiante' });
         });
 });
+// Endpoint para buscar un profesional por correo electrónico
+app.post('/searchProfessionalByEmail', (req, res) => {
+    const { email } = req.body;
+
+    RegisterProfessionalModel.findOne({ email: email })
+        .then(professional => {
+            if (professional) {
+                // Si se encuentra un profesional con el correo electrónico proporcionado, devolverlo en la respuesta
+                res.status(200).json({ professional: professional });
+            } else {
+                // Si no se encuentra ningún profesional con el correo electrónico proporcionado, devolver un mensaje de error
+                res.status(404).json({ message: 'Profesional no encontrado' });
+            }
+        })
+        .catch(err => {
+            // Si ocurre algún error durante la búsqueda, devolver un mensaje de error
+            console.error('Error al buscar profesional:', err);
+            res.status(500).json({ message: 'Error al buscar profesional' });
+        });
+});
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
