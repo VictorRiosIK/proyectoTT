@@ -13,7 +13,7 @@ function Navbar() {
 
     return (
         <div>
-            <nav className="navbar navbar-expand-lg bg-primary font-serif">
+            <nav className="navbar navbar-expand-lg bg-primary abel-regular">
                 <div className="container-fluid">
                     <Link className='btn btn-outline-dark text-decoration-none  text-center' to={'/'}>
                         <FontAwesomeIcon className='d-flex  p-1 text-center fs-1' icon={faHouse} />
@@ -74,11 +74,11 @@ function Navbar() {
                                             :
                                             (
                                                 <div className="navbar-nav gap-4">
-                                                    <Link className='flex p-2 btn btn-outline-light' to={'/login'}>
+                                                    <Link className='flex p-2 btn btn-outline-dark' to={'/login'}>
                                                     <FontAwesomeIcon className='flex  p-1 text-center' icon={faUser} />
                                                         Ingresar
                                                     </Link>
-                                                    <Link className='flex p-2 btn btn-outline-light' to={'/register'}>
+                                                    <Link className='flex p-2 btn btn-outline-dark' to={'/register'}>
                                                     <FontAwesomeIcon className='flex  p-1 text-center' icon={faUserPlus} />
                                                         Registrar
                                                         </Link>

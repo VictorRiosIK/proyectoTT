@@ -162,7 +162,8 @@ export const AuthProvider = ({children}) =>{
             const res = await agendarCitaRequest(fecha, horario, correo,tipo);
             console.log(res);
         } catch (error) {
-            
+            console.log(error.response.data.message);
+            setErrors([error.response.data.message])
         }
     }
 

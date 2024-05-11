@@ -18,6 +18,7 @@ import Navbar from './components/Navbar.jsx'
 import Footer from "./components/Footer.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 
+
 function App() {
 
   return (

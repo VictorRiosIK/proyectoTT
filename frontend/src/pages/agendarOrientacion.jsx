@@ -19,7 +19,7 @@ function agendarOrientacion() {
   const [opcionesS, setOpciones] = useState([]);
   const [Titulo, setTitulo] = useState('Agendar cita con psicologo');
   const user = JSON.parse(window.localStorage.getItem('user'));
-  const { horariosSelect: horarioS, agendarCita } = useAuth();
+  const { horariosSelect: horarioS, agendarCita, errors } = useAuth();
   let fechaR = '';
   let horarioR = '';
   //console.log(user.email); getHorariosCitas,
@@ -62,8 +62,11 @@ function agendarOrientacion() {
         const fecha = startDate.toLocaleString('en-GB').substring(0, 10);
         const horario = selectedH.value;
         const correo = user.email;
-        await reagendarCita(fecha, horario, correo)
-        navigate('/citas-psicologo')
+        await reagendarCita(fecha, horario, correo);
+        if(errors === []){
+          navigate('/citas-psicologo')
+        }
+        
 
       } else {
         console.log(startDate.toLocaleString('en-GB').substring(0, 10), selectedH.value)
@@ -73,7 +76,9 @@ function agendarOrientacion() {
         const horario = selectedH.value;
         const correo = user.email;
         await agendarCita(fecha, horario, correo, 'Psicologo');
-        navigate('/citas-psicologo')
+        if(errors === []){
+          navigate('/citas-psicologo')
+        }
       }
 
 
@@ -201,6 +206,14 @@ function agendarOrientacion() {
             <div className="d-flex bg-white rounded justify-content-center align-items-center w-100">
               <div className=" p-3 w-100 ">
                 {/* <h2 className="text-center fw-bold mb-4 text-white">Agendar cita con psicologo</h2> */}
+                {
+                errors.map((error, i) => (
+                  <div className='bg-danger text-white p-2 rounded' key={i}>
+                    {error}
+                  </div>
+
+                ))
+              }
                 <div className="mb-3 text-center w-100">
                   <label className="text-center w-100 fw-bold fs-4 text-[#800040]" htmlFor="day">
                     Selecciona el día:
