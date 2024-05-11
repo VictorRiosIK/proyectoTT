@@ -1,3 +1,51 @@
-@tailwind base;
-@tailwind components;
+/*@tailwind base;
+/*@tailwind components;*/
 @tailwind utilities;
+/**/
+
+
+body {
+    /* background: #bc4e9c; */
+    /* fallback for old browsers */
+    /* background: -webkit-linear-gradient(to right, #f80759, #bc4e9c); */
+    /* Chrome 10-25, Safari 5.1-6 */
+    /* background: linear-gradient(to right, #f80759, #bc4e9c); */
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+
+    background: #00c6ff;
+    background: -webkit-linear-gradient(to right, #0072ff, #00c6ff);
+    background: linear-gradient(to right, #0072ff, #00c6ff);
+
+
+}
+
+nav {
+    /* background: #bc4e9c;
+    background: -webkit-linear-gradient(to right, #f80759, #bc4e9c);
+    background: linear-gradient(to right, #f80759, #bc4e9c); */
+
+
+    background: #00c6ff;
+    background: -webkit-linear-gradient(to right, #0072ff, #00c6ff);
+    background: linear-gradient(to right, #0072ff, #00c6ff);
+}
+
+footer {
+    /* background: #bc4e9c;
+    background: -webkit-linear-gradient(to right, #f80759, #bc4e9c);
+    background: linear-gradient(to right, #f80759, #bc4e9c); */
+
+    background: #00c6ff;
+    background: -webkit-linear-gradient(to right, #0072ff, #00c6ff);
+    background: linear-gradient(to right, #0072ff, #00c6ff);
+}
+
+.header {
+    background-image: url(./assets/portada.jpg);
+    height: 15rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}

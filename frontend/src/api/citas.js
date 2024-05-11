@@ -32,7 +32,7 @@ export const getRespuestasCuestionarioRequest = (emailUsuario) =>
 export const cancelCitaRequest = (fecha, correo, tipo) => 
                                 axios.post('/cancelAppointment', {fecha, correo, tipo});
 
-//Reagendar una cita de un alumno
+//*Reagendar una cita de un alumno
 export const reagendarCitaRequest = (fechaNueva, horarioNuevo, correo, tipo, fechaVieja ) => 
                                 axios.post('/rescheduleAppointment', {fechaNueva, horarioNuevo, correo, tipo, fechaVieja });
 
