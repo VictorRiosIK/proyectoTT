@@ -8,17 +8,19 @@ import { cambiarContraseñaRequest } from '../api/citas.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 //Importar el icono
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons'
+import { buscarPorEmailRequest } from '../api/citas.js';
 
 function cambiarContra() {
     const [vieja, setVieja] = useState();
     const [nueva, setNueva] = useState();
     const navigate = useNavigate();
     const [errors, setErrors] = useState([]);
-    const [adds , setAdd] = useState([]);
+    const [adds, setAdd] = useState([]);
+    const [boleta, setBoleta] = useState([]);
     const user = JSON.parse(window.localStorage.getItem('user'));
-    const updateContrasena = async() => {
+    const updateContrasena = async () => {
         try {
-            const res = await cambiarContraseñaRequest(user.email, vieja, nueva,user.rol);
+            const res = await cambiarContraseñaRequest(user.email, vieja, nueva, user.rol);
             console.log(res)
             setAdd([res.data.message])
         } catch (error) {
@@ -27,13 +29,17 @@ function cambiarContra() {
         }
     }
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(vieja, nueva);
         await updateContrasena();
-        // axios.post('https://proyecto-tt-api.vercel.app/login', {email, password})
-        // .then(result => console.log(result))
-        // .catch(err => console.log(err))
+       
+    }
+
+    const getAlumno = async()=>{
+        const res = await buscarPorEmailRequest(user.email,'Alumno');
+        console.log(res);
+        setBoleta(res.data.user);
     }
 
     //funcion para eliminar los mensajes pasados un tiempo
@@ -55,6 +61,12 @@ function cambiarContra() {
         }
     }, [adds])
 
+    useEffect(() => {
+        if (user.rol === 'Alumno') {
+            getAlumno();
+        }
+    }, [])
+
     return (
         <div className='d-flex justify-content-center align-items-center  py-5 font-serif'>
             <div className="container text-center">
@@ -67,7 +79,8 @@ function cambiarContra() {
                     <div className="col h-[30rem] m-0 p-0">
                         <div className="bg-sky-700 h-[30rem] p-3 rounded w-100 content-center">
                             <div className="">
-                                <h2 className='text-white fs-2 mb-4'>Actualizar contraseña</h2>
+
+                                {/* <h2 className='text-white fs-2 mb-4'>Actualizar contraseña</h2> */}
                                 {
                                     errors.map((error, i) => (
                                         <div className='bg-danger text-white p-2 rounded' key={i}>
@@ -84,6 +97,37 @@ function cambiarContra() {
 
                                     ))
                                 }
+
+                                <div className="mb-3">
+                                    <label htmlFor="email" className='flex'>
+                                        <strong className='text-white fs-5'>Correo</strong>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="Correo"
+                                        className="form-control rounded-50"
+                                        value={user.email}
+                                        disabled
+                                    />
+                                </div>
+
+                                {
+                                    user.rol === 'Alumno' &&
+                                    <div className="mb-3">
+                                    <label htmlFor="email" className='flex'>
+                                        <strong className='text-white fs-5'>Boleta</strong>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="Correo"
+                                        className="form-control rounded-50"
+                                        value={boleta.boleta}
+                                        disabled
+                                    />
+                                </div>
+                                }
+
+
                                 <form className='' onSubmit={handleSubmit}>
                                     <div className="mb-3">
                                         <label htmlFor="email" className='flex'>
