@@ -1108,7 +1108,7 @@ app.post('/notification', (req, res) => {
   });
 
   // Guardar la notificación en la base de datos
-  RegisterModelNotification.save()
+  nuevaNotificacion.save()
     .then(() => {
       res.status(201).json({ mensaje: 'Notificación guardada correctamente' });
     })
