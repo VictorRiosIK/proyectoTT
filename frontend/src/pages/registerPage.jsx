@@ -80,7 +80,7 @@ function registerPage() {
                   <label htmlFor="boleta" className='flex'>
                     <strong className='text-white fs-5 '>Boleta</strong>
                   </label>
-                  <input required
+                  <input required minLength={10}
                     type="text"
                     placeholder="Boleta"
                     autoComplete="off"
@@ -106,7 +106,7 @@ function registerPage() {
                   <label htmlFor="password" className='flex'>
                     <strong className='text-white fs-5 '>Contraseña</strong>
                   </label>
-                  <input required
+                  <input required 
                     type="password"
                     placeholder="Contraseña"
                     name="password"

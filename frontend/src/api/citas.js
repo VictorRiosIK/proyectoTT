@@ -37,10 +37,10 @@ export const reagendarCitaRequest = (fechaNueva, horarioNuevo, correo, tipo, fec
                                 axios.post('/rescheduleAppointment', {fechaNueva, horarioNuevo, correo, tipo, fechaVieja });
 
 
-//Guardar 
+//*Guardar 
 export const guardarSeguimientoRequest = ( email, comentario, fechaCita, horarioCita,tipo) => 
                                 axios.post('/saveFollowStudent', { email, comentario, fechaCita, horarioCita,tipo});
 
-//Obtener seguimiento
+//*Obtener seguimiento
 export const getSeguimientoRequest = (email, tipo) => 
                                 axios.post('/getFollowStudentsByEmail', {email, tipo});

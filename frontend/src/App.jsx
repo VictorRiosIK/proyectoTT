@@ -22,7 +22,7 @@ import ProtectedRoute from "./ProtectedRoute.jsx";
 function App() {
 
   return (
-    <div>
+    <div className="abel-regular">
       <AuthProvider>
         <BrowserRouter>
           <Navbar></Navbar>

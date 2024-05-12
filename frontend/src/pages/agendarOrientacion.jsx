@@ -19,7 +19,8 @@ function agendarOrientacion() {
   const [opcionesS, setOpciones] = useState([]);
   const [Titulo, setTitulo] = useState('Agendar cita con psicologo');
   const user = JSON.parse(window.localStorage.getItem('user'));
-  const { horariosSelect: horarioS, agendarCita, errors } = useAuth();
+  const { horariosSelect: horarioS, } = useAuth();
+  const [errors, setErrors] = useState([]);
   let fechaR = '';
   let horarioR = '';
   //console.log(user.email); getHorariosCitas,
@@ -52,6 +53,19 @@ function agendarOrientacion() {
     selectedH = selectedOption
     console.log(selectedH)
   }
+
+  //AgendarCitaRequest
+  const agendarCitaReq = async (fecha, horario, correo, tipo) => {
+    try {
+      const res = await agendarCitaRequest(fecha, horario, correo, tipo);
+      console.log(res);
+      navigate('/citas-psicologo');
+    } catch (error) {
+      console.log(error.response.data.message);
+      setErrors([error.response.data.message])
+    }
+  }
+
   const AgendarCita = async () => {
     if (selectedH !== '') {
 
@@ -63,10 +77,6 @@ function agendarOrientacion() {
         const horario = selectedH.value;
         const correo = user.email;
         await reagendarCita(fecha, horario, correo);
-        if(errors === []){
-          navigate('/citas-psicologo')
-        }
-        
 
       } else {
         console.log(startDate.toLocaleString('en-GB').substring(0, 10), selectedH.value)
@@ -75,10 +85,8 @@ function agendarOrientacion() {
 
         const horario = selectedH.value;
         const correo = user.email;
-        await agendarCita(fecha, horario, correo, 'Psicologo');
-        if(errors === []){
-          navigate('/citas-psicologo')
-        }
+        await agendarCitaReq(fecha, horario, correo, 'Psicologo');
+
       }
 
 
@@ -89,13 +97,14 @@ function agendarOrientacion() {
   const reagendarCita = async (fecha, horario, correo) => {
     try {
       getCita();
-      if(fechaR){
+      if (fechaR) {
         console.log(fecha, horario, correo, 'Psicologo', fechaR);
         const res = await reagendarCitaRequest(fecha, horario, correo, 'Psicologo', fechaR);
         console.log(res);
+        navigate('/citas-psicologo')
       }
-      
-      
+
+
     } catch (error) {
       console.log(error);
     }
@@ -147,6 +156,16 @@ function agendarOrientacion() {
   useEffect(() => {
     getCita();
   }, []);
+
+  //funcion para eliminar los mensajes pasados un tiempo
+  useEffect(() => {
+    if (errors.length > 0) {
+      const timer = setTimeout(() => {
+        setErrors([])
+      }, 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [errors])
 
   useEffect(() => {
     setOpciones([]);
@@ -207,13 +226,13 @@ function agendarOrientacion() {
               <div className=" p-3 w-100 ">
                 {/* <h2 className="text-center fw-bold mb-4 text-white">Agendar cita con psicologo</h2> */}
                 {
-                errors.map((error, i) => (
-                  <div className='bg-danger text-white p-2 rounded' key={i}>
-                    {error}
-                  </div>
+                  errors.map((error, i) => (
+                    <div className='bg-danger text-white p-2 rounded' key={i}>
+                      {error}
+                    </div>
 
-                ))
-              }
+                  ))
+                }
                 <div className="mb-3 text-center w-100">
                   <label className="text-center w-100 fw-bold fs-4 text-[#800040]" htmlFor="day">
                     Selecciona el día:

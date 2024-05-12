@@ -156,16 +156,7 @@ export const AuthProvider = ({children}) =>{
         }
     }
 
-    //AgendarCita
-    const agendarCita = async(fecha, horario, correo,tipo) =>{
-        try {
-            const res = await agendarCitaRequest(fecha, horario, correo,tipo);
-            console.log(res);
-        } catch (error) {
-            console.log(error.response.data.message);
-            setErrors([error.response.data.message])
-        }
-    }
+    
 
     //Enviar cuestionario Psicologo
     const enviarCuestionario = async (emailUsuario, respuesta1, respuesta2, respuesta3, respuesta4, respuesta5) =>{
@@ -246,7 +237,6 @@ export const AuthProvider = ({children}) =>{
             signinEstudiante,
             logout,
             getHorariosCitas,
-            agendarCita,
             enviarCuestionario,
             loading,
             user,

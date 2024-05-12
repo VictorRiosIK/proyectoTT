@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { getMisCitasRequest, cancelCitaRequest, reagendarCitaRequest } from '../api/citas.js'
-import { faQuestion } from '@fortawesome/free-solid-svg-icons'
 //Importar componente de iconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 //Importar el icono
@@ -96,24 +95,24 @@ function misCitasPsicologo() {
           citas.map(e => (
             <div key={e.fecha} className='flex w-100 gap-3 my-2'>
               <ul className="list-group w-100">
-                <li className="list-group-item text-center fw-bold fs-4 ">
+                <li className="list-group-item text-center fw-bold fs-4 h-[7rem]">
                   <p className='my-4 w-100'>{e.fecha}</p>
                 </li>
               </ul>
               <ul className="list-group w-100">
-                <li className="list-group-item text-center fw-bold fs-4 ">
+                <li className="list-group-item text-center fw-bold fs-4 h-[7rem]">
                   <p className='my-4 w-100'>{e.horario}</p>
                 </li>
               </ul>
               <ul className="list-group w-100">
-                <li className="list-group-item text-center fw-bold fs-4 ">
-                  <div className='d-flex gap-4'>
-                    <button className='btn btn-danger w-100 rounded-50 text-center fw-bold' onClick={() => { cancelarCita(e.fecha) }}>
+                <li className="list-group-item text-center fw-bold fs-4 h-[7rem]">
+                  <div className='d-flex gap-4 '>
+                    <button className='btn btn-danger w-100 rounded-50 text-center fw-bold my-1' onClick={() => { cancelarCita(e.fecha) }}>
                       <FontAwesomeIcon className='fs-5 mx-2' icon={faTrash} />
                       Cancelar
                     </button>
                   </div>
-                  <button className='btn btn-warning w-100 rounded-50 fw-bold' onClick={() => { reagendarCita(e.fecha.split('/'),e.horario) }}>
+                  <button className='btn btn-warning w-100 rounded-50 fw-bold my-1' onClick={() => { reagendarCita(e.fecha.split('/'),e.horario) }}>
                   <FontAwesomeIcon className='fs-5 mx-2' icon={faCalendarMinus} />
                   Reagendar
                 </button>

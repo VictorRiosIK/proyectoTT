@@ -18,8 +18,9 @@ function agendarOdontologo() {
   const [horarioSelect, sethorarioSelect] = useState(null);
   const [opcionesS, setOpciones] = useState([]);
   const user = JSON.parse(window.localStorage.getItem('user'));
-  const { horariosSelect: horarioS, agendarCita } = useAuth();
+  const { horariosSelect: horarioS } = useAuth();
   const [Titulo, setTitulo] = useState('Agendar cita con dentista');
+  const [errors, setErrors] = useState([]);
   let fechaR = '';
   let horarioR = '';
   //console.log(user.email); getHorariosCitas,
@@ -51,7 +52,21 @@ function agendarOdontologo() {
     selectedH = selectedOption
     console.log(selectedH)
   }
-  const AgendarCita = async() => {
+
+  //AgendarCitaRequest
+  const agendarCitaReq = async (fecha, horario, correo, tipo) => {
+    try {
+      const res = await agendarCitaRequest(fecha, horario, correo, tipo);
+      console.log(res);
+      navigate('/citas-dentista');
+    } catch (error) {
+      console.log(error.response.data.message);
+      setErrors([error.response.data.message])
+    }
+  }
+
+
+  const AgendarCita = async () => {
     if (selectedH !== '') {
       if (params.fecha && params.horario) {
         //console.log(startDate.toLocaleString('en-GB').substring(0, 10), selectedH.value)
@@ -61,18 +76,18 @@ function agendarOdontologo() {
         const horario = selectedH.value;
         const correo = user.email;
         await reagendarCita(fecha, horario, correo)
-        navigate('/citas-dentista')
-      }else{
+
+      } else {
         console.log(startDate.toLocaleString('en-GB').substring(0, 10), selectedH.value)
         console.log(user.email)
         const fecha = startDate.toLocaleString('en-GB').substring(0, 10);
-  
+
         const horario = selectedH.value;
         const correo = user.email;
-        await agendarCita(fecha, horario, correo, 'Dentista');
-        navigate('/citas-dentista');
+        await agendarCitaReq(fecha, horario, correo, 'Dentista');
+
       }
-      
+
     }
 
   }
@@ -80,10 +95,11 @@ function agendarOdontologo() {
   const reagendarCita = async (fecha, horario, correo) => {
     try {
       getCita();
-      if(fechaR){
+      if (fechaR) {
         console.log(fecha, horario, correo, 'Psicologo', fechaR);
         const res = await reagendarCitaRequest(fecha, horario, correo, 'Dentista', fechaR);
         console.log(res);
+        navigate('/citas-dentista')
       }
     } catch (error) {
       console.log(error);
@@ -137,6 +153,15 @@ function agendarOdontologo() {
     getCita();
   }, []);
 
+  //funcion para eliminar los mensajes pasados un tiempo
+  useEffect(() => {
+    if (errors.length > 0) {
+      const timer = setTimeout(() => {
+        setErrors([])
+      }, 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [errors])
 
 
   useEffect(() => {
@@ -185,7 +210,7 @@ function agendarOdontologo() {
       <div className=" text-center">
         <div className="row align-items-start m-5 bg-[#800040] rounded">
           <div className="col self-center h-[30rem] w-[50%] content-center  rounded m-0 ">
-          <div className="bg-white rounded w-100 h-[90%] content-center">
+            <div className="bg-white rounded w-100 h-[90%] content-center">
               <h1 className='mb-4 mx-2 text-[#800040] '>{Titulo}</h1>
               <img src={image} alt="" className='max-w-[300px] min-w-[100px] w-100' />
               {/* <p className='mt-4 mb-0 fs-4 text-sky-700'>¿No tienes cuenta?</p> */}
@@ -194,6 +219,14 @@ function agendarOdontologo() {
           <div className="col self-center h-[30rem] w-[100%] content-center  rounded m-0 ">
             <div className="d-flex justify-content-center align-items-center">
               <div className="bg-white p-3 rounded w-100">
+                {
+                  errors.map((error, i) => (
+                    <div className='bg-danger text-white p-2 rounded' key={i}>
+                      {error}
+                    </div>
+
+                  ))
+                }
                 <h2 className="text-center fw-bold mb-4 "></h2>
                 <div className="mb-3 text-center w-100">
                   <label className="text-center w-100 fw-bold fs-4 text-[#800040]" htmlFor="day">
