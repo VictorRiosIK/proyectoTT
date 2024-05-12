@@ -31,9 +31,9 @@ function Navbar() {
                                             <FontAwesomeIcon className='flex  p-1 text-center' icon={faRectangleList} />
                                             Dentista
                                         </Link>
-                                        <Link className='flex p-2 btn btn-outline-dark ' to={'/recordatorio'}>Recordatorio</Link>
+                                        {/* <Link className='flex p-2 btn btn-outline-dark ' to={'/recordatorio'}>Recordatorio</Link> */}
                                         {/* <Link className='p-2 btn btn-outline-light ' onClick={()=>{console.log(user);}}>Perfil</Link> */}
-                                        <Link className='flex p-2 btn btn-dark disabled'>{user.rol}</Link>
+                                        <Link className='flex p-2 btn btn-dark' to={'/cambiar-contrasena'}>{user.rol}</Link>
                                         <Link className='flex p-2 btn btn-outline-dark ' to={'/login'} onClick={() => {
                                             logout();
                                         }}>
@@ -50,7 +50,7 @@ function Navbar() {
                                                 Citas pendientes
                                             </Link>
 
-                                            <Link className='flex p-2 btn btn-dark disabled '>{user.rol}</Link>
+                                            <Link className='flex p-2 btn btn-dark' to={'/cambiar-contrasena'}>{user.rol}</Link>
                                             <Link className='flex p-2 btn btn-outline-dark ' to={'/login'} onClick={() => {
                                                 logout();
                                             }}>
@@ -69,7 +69,7 @@ function Navbar() {
                                                     Citas pendientes
                                                 </Link>
 
-                                                <Link className='flex p-2 btn btn-dark disabled '>{user.rol}</Link>
+                                                <Link className='flex p-2 btn btn-dark' to={'/cambiar-contrasena'}>{user.rol}</Link>
                                                 <Link className='flex p-2 btn btn-outline-dark ' to={'/login'} onClick={() => {
                                                     logout();
                                                 }}>
@@ -87,7 +87,7 @@ function Navbar() {
                                                         <FontAwesomeIcon className='flex  p-1 text-center' icon={faUserTie} />
                                                         Registrar profesional
                                                     </Link>
-                                                    <Link className='flex p-2 btn btn-dark disabled '>{user.rol}</Link>
+                                                    <Link className='flex p-2 btn btn-dark' to={'/cambiar-contrasena'}>{user.rol}</Link>
                                                     <Link className='flex p-2 btn btn-outline-dark ' to={'/login'} onClick={() => {
                                                         logout();
                                                     }}>

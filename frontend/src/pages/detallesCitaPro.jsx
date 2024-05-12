@@ -1,4 +1,5 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+
 import { useEffect, useState } from 'react';
 import { buscarPorEmailRequest, getRespuestasCuestionarioRequest, guardarSeguimientoRequest, getSeguimientoRequest } from '../api/citas.js';
 //Importar componente de iconos
@@ -9,6 +10,7 @@ import { faEye, faClipboardQuestion, faFlagCheckered } from '@fortawesome/free-s
 
 function detallesCitaPro() {
     const params = useParams();
+    const navigate = useNavigate();
     const user = JSON.parse(window.localStorage.getItem('user'));
     const [datosAlumno, setDatosAlumno] = useState([]);
     const [cuestionario, setCuestionario] = useState([]);
@@ -95,6 +97,7 @@ function detallesCitaPro() {
         try {
             const res = await guardarSeguimientoRequest(email, comentario, fechaCita, horarioCita, tipo);
             console.log(res);
+            navigate('/');
         } catch (error) {
             console.log(error);
         }

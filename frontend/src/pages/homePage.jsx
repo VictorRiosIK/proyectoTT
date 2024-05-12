@@ -1,7 +1,7 @@
 //Importar componente de iconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 //Importar el icono
-import { faStaffSnake, faComments, faTooth,faCalendarCheck  } from '@fortawesome/free-solid-svg-icons'
+import { faStaffSnake, faComments, faTooth, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import portada from '../assets/portada.jpg'
@@ -10,7 +10,7 @@ function homePage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const user = JSON.parse(window.localStorage.getItem('user')) ?? { rol: 'Undefined' };
-  console.log(user.rol)
+  
   return (
     <div className='abel-regular' >
       {/* <h1 className="text-center">Servicios Estudiantiles de ESCOM</h1> */}
@@ -59,7 +59,7 @@ function homePage() {
             </div>
             <div className='text-2xl text-[#800040]'>
               <p>Ubicada en la planta baja del Edificio de Gobierno, a un costado de Gestión Escolar. Brinda atención en caso de sentir alguna molestia o síntoma que pueda estar relacionada con alguna enfermedad.
-                </p>
+              </p>
             </div>
 
 
@@ -71,13 +71,17 @@ function homePage() {
               (user.rol === 'Alumno' || user.rol === 'Undefined') &&
               <button onClick={() => {
                 if (isAuthenticated) {
-                  navigate('/agendar-psicologo')
+                  if (user.evaluacionP === 0) {
+                    navigate('/cuestionario')
+                  } else {
+                    navigate('/agendar-psicologo')
+                  }
                 } else {
                   navigate('/login')
                 }
               }}
                 className='btn btn-outline-light'>
-                  <FontAwesomeIcon className='mx-2' icon={faCalendarCheck} />
+                <FontAwesomeIcon className='mx-2' icon={faCalendarCheck} />
                 Agendar cita
               </button>
             }
@@ -94,7 +98,7 @@ function homePage() {
 
               }}
                 className='btn btn-outline-light '>
-                  <FontAwesomeIcon className='mx-2' icon={faCalendarCheck} />
+                <FontAwesomeIcon className='mx-2' icon={faCalendarCheck} />
                 Agendar cita
               </button>
             }

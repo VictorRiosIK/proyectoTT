@@ -13,6 +13,7 @@ import CuestionarioPPage from "./pages/cuestionarioPPage.jsx";
 import Recordatorio from "./pages/recordatorio.jsx";
 import RegisterPage from './pages/registerPage'
 import RegisterProPage from "./pages/registerProPage.jsx";
+import CambiarContra from "./pages/cambiarContra.jsx";
 import LoginPage from './pages/loginPage'
 import Navbar from './components/Navbar.jsx'
 import Footer from "./components/Footer.jsx";
@@ -46,6 +47,7 @@ function App() {
                 <Route path='/recordatorio' element={<Recordatorio />}></Route>
                 <Route path='/register-pro' element={<RegisterProPage />}></Route>
                 <Route path='/cuestionario' element={<CuestionarioPPage />}></Route>
+                <Route path='/cambiar-contrasena' element={<CambiarContra />}></Route>
                 <Route path='/profile' element={<ProfilePage />}></Route>
               </Route>
             </Routes>

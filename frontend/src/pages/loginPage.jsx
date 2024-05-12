@@ -88,8 +88,6 @@ function loginPage() {
           </div>
         </div>
       </div>
-
-
     </div>
   )
 }
