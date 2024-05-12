@@ -1100,7 +1100,7 @@ app.post('/notification', (req, res) => {
   const { token, titulo, cuerpo, hora } = req.body;
 
   // Crear una nueva instancia de la notificación
-  const nuevaNotificacion = new Notificacion({
+  const nuevaNotificacion = new RegisterModelNotification({
     token: token,
     titulo: titulo,
     cuerpo: cuerpo,
