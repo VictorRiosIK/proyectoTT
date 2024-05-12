@@ -9,6 +9,7 @@ const RegisterModelCita=require('./models/cita');
 const RegisterModelCitaP=require('./models/RegisterModelCitaP');
 const RegisterCuestionary=require('./models/RegisterCuestionary');
 const followStudent=require('./models/appointmentFollowModel');
+const RegisterModelNotification=require('./models/RegisterModelNotification');
 const jwt = require('jsonwebtoken');
 const bodyParser=require('body-parser');
 const bcrypt = require('bcryptjs');
