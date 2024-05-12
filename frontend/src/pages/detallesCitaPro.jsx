@@ -295,7 +295,7 @@ function detallesCitaPro() {
                                 {
                                     seguimiento.length !== 0 &&
                                     seguimiento.map(e => (
-                                        <div className="row align-items-start my-1">
+                                        <div key={e._id} className="row align-items-start my-1">
                                             <div className="col ">
                                                 <ul className="list-group w-100 ">
                                                     <li className="list-group-item text-center content-center fw-bold fs-4 bg-emerald-700 text-white h-[6rem]">{e.fechaCita}</li>
