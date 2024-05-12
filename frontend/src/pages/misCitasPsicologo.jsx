@@ -3,12 +3,13 @@ import { getMisCitasRequest, cancelCitaRequest, reagendarCitaRequest } from '../
 //Importar componente de iconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 //Importar el icono
-import { faTrash, faCalendarMinus } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faCalendarMinus, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { Link, useNavigate } from 'react-router-dom'
 
 function misCitasPsicologo() {
   const user = JSON.parse(window.localStorage.getItem('user'));
   const [citas, setCitas] = useState([]);
+  const [showError, setShowError] = useState(false);
   let cita = []
   const navigate = useNavigate();
   //OBTENER LA CITAS DEL ALUMNO
@@ -52,29 +53,75 @@ function misCitasPsicologo() {
     }
   }
 
+  const calcularDiferenciaHoras = (fecha, horario) => {
+
+    const anio = fecha.substring(6, 10);
+    const mes = fecha.substring(3, 5);
+    const mesZ = parseInt(mes) - 1;
+
+    const dia = fecha.substring(0, 2);
+    const hora = horario.substring(0, 2);
+    const minuto = horario.substring(3, 5);
+    const fechaCita = new Date(anio, mesZ.toString(), dia, hora, minuto)
+
+    const hoy = new Date();
+
+    let diferencia = (fechaCita.getTime() - hoy.getTime()) / 1000 / 3600;
+    return (Math.abs(Math.round(diferencia)))
+  }
+
   //CANCELAR CITA
-  const cancelarCita = async (fecha) => {
-    console.log(user);
-    console.log(fecha);
-    const res = await cancelCitaRequest(fecha, user.email, 'Psicologo');
-    console.log(res);
-    getMisCitas();
+  const cancelarCita = async (fecha, horario) => {
+    //console.log(user);
+    console.log(fecha, horario);
+    const restan = calcularDiferenciaHoras(fecha, horario);
+    console.log(restan);
+    if (restan > 24) {
+      const res = await cancelCitaRequest(fecha, user.email, 'Psicologo');
+      console.log(res);
+      getMisCitas();
+    } else {
+      setShowError(true);
+    }
   }
   //REAGENDAR CITA
   const reagendarCita = (fecha, horario) => {
-    console.log(fecha,horario);
-    navigate(`/agendar-psicologo/${fecha}/${horario}`)
+    console.log(fecha, horario);
+    const restan = calcularDiferenciaHoras(fecha, horario);
+    console.log(restan);
+    if (restan > 24) {
+      navigate(`/agendar-psicologo/${fecha.split('/')}/${horario}`)
+    } else {
+      setShowError(true)
+    }
   }
 
   useEffect(() => {
     getMisCitas();
   }, []);
 
+  //funcion para eliminar los mensajes pasados un tiempo
+  useEffect(() => {
+    if (showError) {
+      const timer = setTimeout(() => {
+        setShowError(false)
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [showError])
+
   return (
     <div className='bg-[#800040] rounded px-2 py-4'>
       <h1 className='text-center w-100 bg-white rounded p-2 text-[#800040]'>Mis citas con el psicologo </h1>
       <div className='w-100 my-4'>
-        <h5 className='text-white'>*NOTA: No se puede cancelar ni reagendar una cita faltando 24 horas para la cita.</h5>
+        <h5 className='text-white'>
+          {
+            showError &&
+            <FontAwesomeIcon className='fs-2 mx-2 text-yellow-400' icon={faTriangleExclamation} />
+          }
+          NOTA: No se puede cancelar ni reagendar una cita faltando 24 horas para la cita.
+
+        </h5>
         {/* <button className='btn btn-outline-dark w-25 rounded-75' onClick={()=>{alert("Hola")}}>
         <FontAwesomeIcon className='fs-3 icon-link icon-link-hover' icon={faQuestion} />
       </button> */}
@@ -107,23 +154,23 @@ function misCitasPsicologo() {
               <ul className="list-group w-100">
                 <li className="list-group-item text-center fw-bold fs-4 h-[7rem]">
                   <div className='d-flex gap-4 '>
-                    <button className='btn btn-danger w-100 rounded-50 text-center fw-bold my-1' onClick={() => { cancelarCita(e.fecha) }}>
+                    <button className='btn btn-danger w-100 rounded-50 text-center fw-bold my-1' onClick={() => { cancelarCita(e.fecha, e.horario) }}>
                       <FontAwesomeIcon className='fs-5 mx-2' icon={faTrash} />
                       Cancelar
                     </button>
                   </div>
-                  <button className='btn btn-warning w-100 rounded-50 fw-bold my-1' onClick={() => { reagendarCita(e.fecha.split('/'),e.horario) }}>
-                  <FontAwesomeIcon className='fs-5 mx-2' icon={faCalendarMinus} />
-                  Reagendar
-                </button>
-              </li>
+                  <button className='btn btn-warning w-100 rounded-50 fw-bold my-1' onClick={() => { reagendarCita(e.fecha, e.horario) }}>
+                    <FontAwesomeIcon className='fs-5 mx-2' icon={faCalendarMinus} />
+                    Reagendar
+                  </button>
+                </li>
 
-            </ul>
+              </ul>
             </div>
-  ))
+          ))
           :
-  <div className='text-center text-white fw-bold fs-4'>Sin citas</div>
-}
+          <div className='text-center text-white fw-bold fs-4'>Sin citas</div>
+      }
     </div >
   )
 }

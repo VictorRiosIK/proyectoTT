@@ -235,7 +235,7 @@ function agendarOdontologo() {
                 </div>
                 <div className="mb-3 text-center w-100 ">
                   <FontAwesomeIcon className='fs-1 mx-2 text-[#800040]' icon={faCalendarDays} />
-                  <DatePicker className="p-3 fs-4 rounded  " selected={startDate} onChange={(date) => {
+                  <DatePicker className="p-3 fs-4 rounded" dateFormat="dd/MM/yyyy" minDate={new Date()} selected={startDate} onChange={(date) => {
                     setStartDate(date)
                     setTouched(true);
                   }} />
