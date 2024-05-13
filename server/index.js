@@ -38,6 +38,13 @@ app.get("/", (req, res) => {
 
 app.post('/registerProfessional', (req, res) => {
     const { name, email, password, rol } = req.body;
+  // Expresión regular para verificar la seguridad de la contraseña
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$/;
+
+    // Verificar la seguridad de la contraseña
+    if (!passwordRegex.test(password)) {
+        return res.status(400).json({ message: 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número, un carácter especial y tener una longitud mínima de 8 caracteres.' });
+    }
     RegisterStudentModel.findOne({ email: email })
         .then(existingUser => {
             if (existingUser) {
@@ -65,7 +72,13 @@ app.post('/registerProfessional', (req, res) => {
 
 app.post('/registerStudent', (req, res) => {
     const { name, email, password, boleta, rol } = req.body;
-    
+    // Expresión regular para verificar la seguridad de la contraseña
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$/;
+
+    // Verificar la seguridad de la contraseña
+    if (!passwordRegex.test(password)) {
+        return res.status(400).json({ message: 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número, un carácter especial y tener una longitud mínima de 8 caracteres.' });
+    }
 
     // Verificar si el correo electrónico ya existe en RegisterProfessionalModel
     RegisterProfessionalModel.findOne({ email: email })
