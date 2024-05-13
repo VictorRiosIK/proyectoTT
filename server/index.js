@@ -72,124 +72,136 @@ app.post('/registerProfessional', (req, res) => {
 
 app.post('/registerStudent', (req, res) => {
     const { name, email, password, boleta, rol } = req.body;
-    // Expresión regular para verificar la seguridad de la contraseña
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$/;
 
-    // Verificar la seguridad de la contraseña
-    if (!passwordRegex.test(password)) {
-        return res.status(400).json({ message: 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número, un carácter especial y tener una longitud mínima de 8 caracteres.' });
-    }
-
-    // Verificar si el correo electrónico ya existe en RegisterProfessionalModel
-    RegisterProfessionalModel.findOne({ email: email })
-        .then(professional => {
-            if (professional) {
-                // Si el correo electrónico ya existe en RegisterProfessionalModel, devolver un mensaje de error
-                return res.status(400).json({ message: 'Ya existe una cuenta registrada con este correo electrónico (profesional).' });
+    // Verificar si ya existe un documento con el mismo número de boleta
+    RegisterStudentModel.findOne({ boleta: boleta })
+        .then(existingStudent => {
+            if (existingStudent) {
+                // Si ya existe un documento con el mismo número de boleta, devuelve un mensaje de error
+                return res.status(400).json({ message: 'Ya existe un estudiante registrado con este número de boleta.' });
             } else {
-                // Si el correo electrónico no existe en RegisterProfessionalModel, verificar si existe en RegisterStudentModel
-                RegisterStudentModel.findOne({ email: email })
-                    .then(student => {
-                        if (student) {
-                            // Si el correo electrónico ya existe en RegisterStudentModel, devolver un mensaje de error
-                            return res.status(400).json({ message: 'Ya existe una cuenta registrada con este correo electrónico (estudiante).' });
+                // Si no existe un documento con el mismo número de boleta, procede con la verificación de la contraseña
+
+                // Expresión regular para verificar la seguridad de la contraseña
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$/;
+
+                // Verificar la seguridad de la contraseña
+                if (!passwordRegex.test(password)) {
+                    return res.status(400).json({ message: 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número, un carácter especial y tener una longitud mínima de 8 caracteres.' });
+                }
+
+                // Continuar con la lógica de registro si la contraseña es segura y no hay otro estudiante con el mismo número de boleta
+
+                // Verificar si el correo electrónico ya existe en RegisterProfessionalModel
+                RegisterProfessionalModel.findOne({ email: email })
+                    .then(professional => {
+                        if (professional) {
+                            // Si el correo electrónico ya existe en RegisterProfessionalModel, devolver un mensaje de error
+                            return res.status(400).json({ message: 'Ya existe una cuenta registrada con este correo electrónico (profesional).' });
                         } else {
-                            const hashedPassword = bcrypt.hashSync(password, 10);
-                             const token = jwt.sign({ email: email }, jwtSecret);
-                            // Si el correo electrónico no existe en ninguno de los dos modelos, crear el registro en RegisterStudentModel
-                            RegisterStudentModel.create({ name: name, email: email, password: hashedPassword, boleta: boleta, rol: rol, token: token})
-                                .then(result => {
-                                   
-                                    // Enviar el correo electrónico de verificación
-                                    // Configurar el transporte
-                                    let transporter = nodemailer.createTransport({
-                                        service: 'Gmail',
-                                        auth: {
-                                            user: 'vrios718@gmail.com', // Tu dirección de correo electrónico
-                                            pass: 'fqchchfldzzfafqu' // Tu contraseña de correo electrónico
-                                        }
-                                    });
+                            // Si el correo electrónico no existe en RegisterProfessionalModel, verificar si existe en RegisterStudentModel
+                            RegisterStudentModel.findOne({ email: email })
+                                .then(student => {
+                                    if (student) {
+                                        // Si el correo electrónico ya existe en RegisterStudentModel, devolver un mensaje de error
+                                        return res.status(400).json({ message: 'Ya existe una cuenta registrada con este correo electrónico (estudiante).' });
+                                    } else {
+                                        const hashedPassword = bcrypt.hashSync(password, 10);
+                                        const token = jwt.sign({ email: email }, jwtSecret);
+                                        // Si el correo electrónico no existe en ninguno de los dos modelos y no hay otro estudiante con el mismo número de boleta, crear el registro en RegisterStudentModel
+                                        RegisterStudentModel.create({ name: name, email: email, password: hashedPassword, boleta: boleta, rol: rol, token: token})
+                                            .then(result => {
+                                                // Enviar el correo electrónico de verificación
+                                                // Configurar el transporte
+                                                let transporter = nodemailer.createTransport({
+                                                    service: 'Gmail',
+                                                    auth: {
+                                                        user: 'vrios718@gmail.com', // Tu dirección de correo electrónico
+                                                        pass: 'fqchchfldzzfafqu' // Tu contraseña de correo electrónico
+                                                    }
+                                                });
 
-                                    // HTML y CSS en línea para el correo electrónico
-                                    let correoHTML = `
-                                        <html>
-                                            <head>
-                                                <style>
-                                                    /* Estilos CSS en línea */
-                                                    body {
-                                                        font-family: Arial, sans-serif;
-                                                        background-color: #f2f2f2;
-                                                        margin: 0;
-                                                        padding: 0;
-                                                    }
-                                                    .container {
-                                                        max-width: 600px;
-                                                        margin: 0 auto;
-                                                        padding: 20px;
-                                                        background-color: #ffffff;
-                                                        border-radius: 10px;
-                                                        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-                                                    }
-                                                    h1 {
-                                                        color: #333333;
-                                                        text-align: center;
-                                                    }
-                                                    p {
-                                                        color: #666666;
-                                                        text-align: center;
-                                                    }
-                                                    .boton {
-                                                        display: block;
-                                                        width: 200px;
-                                                        margin: 20px auto;
-                                                        padding: 10px;
-                                                        background-color: #007bff;
-                                                        color: #ffffff;
-                                                        text-align: center;
-                                                        text-decoration: none;
-                                                        border-radius: 5px;
-                                                    }
-                                                </style>
-                                            </head>
-                                            <body>
-                                                <div class="container">
-                                                    <h1>¡Bienvenido, ${name}!</h1>
-                                                    <p>Gracias por registrarte.</p>
-                                                    <p>Por favor, haz clic en el siguiente botón para verificar tu cuenta:</p>
-                                                    <a href="https://proyecto-tt-api.vercel.app/verificaCorreo?email=${email}&token=${token}" class="boton">Verificar cuenta</a>
-                                                </div>
-                                            </body>
-                                        </html>
-                                    `;
+                                                // HTML y CSS en línea para el correo electrónico
+                                                let correoHTML = `
+                                                    <html>
+                                                        <head>
+                                                            <style>
+                                                                /* Estilos CSS en línea */
+                                                                body {
+                                                                    font-family: Arial, sans-serif;
+                                                                    background-color: #f2f2f2;
+                                                                    margin: 0;
+                                                                    padding: 0;
+                                                                }
+                                                                .container {
+                                                                    max-width: 600px;
+                                                                    margin: 0 auto;
+                                                                    padding: 20px;
+                                                                    background-color: #ffffff;
+                                                                    border-radius: 10px;
+                                                                    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                                                                }
+                                                                h1 {
+                                                                    color: #333333;
+                                                                    text-align: center;
+                                                                }
+                                                                p {
+                                                                    color: #666666;
+                                                                    text-align: center;
+                                                                }
+                                                                .boton {
+                                                                    display: block;
+                                                                    width: 200px;
+                                                                    margin: 20px auto;
+                                                                    padding: 10px;
+                                                                    background-color: #007bff;
+                                                                    color: #ffffff;
+                                                                    text-align: center;
+                                                                    text-decoration: none;
+                                                                    border-radius: 5px;
+                                                                }
+                                                            </style>
+                                                        </head>
+                                                        <body>
+                                                            <div class="container">
+                                                                <h1>¡Bienvenido, ${name}!</h1>
+                                                                <p>Gracias por registrarte.</p>
+                                                                <p>Por favor, haz clic en el siguiente botón para verificar tu cuenta:</p>
+                                                                <a href="https://proyecto-tt-api.vercel.app/verificaCorreo?email=${email}&token=${token}" class="boton">Verificar cuenta</a>
+                                                            </div>
+                                                        </body>
+                                                    </html>
+                                                `;
 
-                                    // Configurar los detalles del correo electrónico
-                                    let mailOptions = {
-                                        from: 'vrios718@gmail.com', // Remitente
-                                        to: email, // Destinatario
-                                        subject: 'Verificación de cuenta', // Asunto
-                                        html: correoHTML // Cuerpo del correo electrónico
-                                    };
+                                                // Configurar los detalles del correo electrónico
+                                                let mailOptions = {
+                                                    from: 'vrios718@gmail.com', // Remitente
+                                                    to: email, // Destinatario
+                                                    subject: 'Verificación de cuenta', // Asunto
+                                                    html: correoHTML // Cuerpo del correo electrónico
+                                                };
 
-                                    // Enviar el correo electrónico
-                                    transporter.sendMail(mailOptions, (error, info) => {
-                                        if (error) {
-                                            console.log('Error al enviar el correo electrónico de verificación:', error);
-                                            res.status(500).json({ message: 'Error al enviar el correo electrónico de verificación', error: error });
-                                        } else {
-                                            console.log('Correo electrónico de verificación enviado:', info.response);
-                                            res.status(200).json({ user: result, token: token, message: 'Correo electrónico de verificación enviado con éxito' });
-                                        }
-                                    });
-
-                                    
+                                                // Enviar el correo electrónico
+                                                transporter.sendMail(mailOptions, (error, info) => {
+                                                    if (error) {
+                                                        console.log('Error al enviar el correo electrónico de verificación:', error);
+                                                        res.status(500).json({ message: 'Error al enviar el correo electrónico de verificación', error: error });
+                                                    } else {
+                                                        console.log('Correo electrónico de verificación enviado:', info.response);
+                                                        res.status(200).json({ user: result, token: token, message: 'Correo electrónico de verificación enviado con éxito' });
+                                                    }
+                                                });
+                                            })
+                                            .catch(err => res.status(500).json({ message: 'Error al crear la cuenta de estudiante.' }));
+                                    }
                                 })
-                                .catch(err => res.status(500).json({ message: 'Error al crear la cuenta de estudiante.' }));
+                                .catch(err => res.status(500).json({ message: 'Error al buscar la cuenta de estudiante.' }));
                         }
                     })
-                    .catch(err => res.status(500).json({ message: 'Error al buscar la cuenta de estudiante.' }));
+                    .catch(err => res.status(500).json({ message: 'Error al buscar la cuenta de profesional.' }));
             }
         })
-        .catch(err => res.status(500).json({ message: 'Error al buscar la cuenta de profesional.' }));
+        .catch(err => res.status(500).json({ message: 'Error al buscar el número de boleta.' }));
 });
 app.get('/verificaCorreo', (req, res) => {
     const { email, token } = req.query;
