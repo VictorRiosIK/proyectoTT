@@ -981,38 +981,35 @@ app.post('/getFollowStudentsByEmail', (req, res) => {
             res.status(500).json({ error: 'Error al buscar usuarios.' });
         });
 });
+// Ruta para enviar una notificación
 app.post('/enviarNotificacion', (req, res) => {
-  const { fecha, hora, minuto, mensaje } = req.body;
+  const { token, titulo, cuerpo } = req.body;
 
-  // Parsea la fecha y la hora en el formato correcto utilizando Moment.js
-  const fechaFormateada = moment(fecha, 'DD/MM/YYYY').format('YYYY-MM-DD');
-  const horaFormateada = moment(`${fechaFormateada} ${hora}:${minuto}`, 'YYYY-MM-DD HH:mm');
+  if (!token || !titulo || !cuerpo) {
+    return res.status(400).send('Faltan parámetros');
+  }
 
-  const payload = {
+  // Construir el mensaje de notificación
+  const message = {
+    token: token,
     notification: {
-      title: "Título de la notificación",
-      body: mensaje,
-    },
-    condition: "''",
-    // Otras opciones como datos adicionales...
-    // Aquí se agrega el campo 'scheduledTime' para programar el envío de la notificación
-    time_to_live: Math.floor((horaFormateada.toDate().getTime() - Date.now()) / 1000)
+      title: titulo,
+      body: cuerpo
+    }
   };
 
-  const options = {
-    timeToLive: 60 * 60, // Tiempo de vida de la notificación en segundos (opcional)
-  };
-
-  admin.messaging().send(payload)
+  // Enviar la notificación
+  admin.messaging().send(message)
     .then((response) => {
-      console.log("Notificación programada enviada:", response);
-      res.status(200).send("Notificación programada enviada");
+      console.log('Notificación enviada con éxito:', response);
+      res.status(200).send('Notificación enviada con éxito');
     })
     .catch((error) => {
-      console.error("Error al programar la notificación:", error);
-      res.status(500).send("Error al programar la notificación");
+      console.error('Error al enviar la notificación:', error);
+      res.status(500).send('Error al enviar la notificación');
     });
 });
+
 
 app.post('/searchStudentByEmail', (req, res) => {
     const { email } = req.body;
