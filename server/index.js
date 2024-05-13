@@ -19,7 +19,7 @@ const jwtSecret = config.jwtSecret;
 const mongoURI = config.mongoURI;
 const admin = require("firebase-admin");
 
-const serviceAccount = require("./tt2024-f835d-68fdaeb8d78b.json");
+const serviceAccount = require("./tt2p-b6232-firebase-adminsdk-vq7b9-7db5495e3a.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
