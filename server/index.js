@@ -78,7 +78,7 @@ app.post('/registerStudent', (req, res) => {
         .then(existingStudent => {
             if (existingStudent) {
                 // Si ya existe un documento con el mismo número de boleta, devuelve un mensaje de error
-                return res.status(400).json({ message: 'Ya existe un estudiante registrado con este número de boleta.' });
+                return res.status(400).json({ message: 'Ya existe un estudiante registrado con esta de boleta.' });
             } else {
                 // Si no existe un documento con el mismo número de boleta, procede con la verificación de la contraseña
 
