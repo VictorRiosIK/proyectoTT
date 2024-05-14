@@ -1138,14 +1138,15 @@ function procesarDocumento(documento) {
             }
         };
 
-        // Enviar la notificación
+        // Obtener la fecha y hora actual en la zona horaria de la Ciudad de México (GMT-5)
+        const fechaActual = new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' });
         // Enviar la notificación
         admin.messaging().send(message)
             .then((response) => {
                 console.log('Notificación enviada con éxito:', response);
                 // Actualizar los campos 'enviada' y 'fechaEnvio' en el documento
                 documento.enviada = 1;
-                documento.fechaEnvio = new Date().toISOString();
+                documento.fechaEnvio = fechaActual;
                 return documento.save();
             })
             .then(() => {
