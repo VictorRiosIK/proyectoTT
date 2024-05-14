@@ -1122,52 +1122,59 @@ app.post('/searchProfessionalByEmail', (req, res) => {
 
 // Función para procesar cada documento
 function procesarDocumento(documento) {
-    // Aquí puedes realizar cualquier operación que necesites con las propiedades del documento
-   const {token,titulo,cuerpo }=documento;
-  if (!token || !titulo || !cuerpo) {
-    return res.status(400).send('Faltan parámetros');
-  }
+    return new Promise((resolve, reject) => {
+        // Aquí puedes realizar cualquier operación que necesites con las propiedades del documento
+        const { token, titulo, cuerpo } = documento;
+        if (!token || !titulo || !cuerpo) {
+            return reject('Faltan parámetros');
+        }
 
-  // Construir el mensaje de notificación
-  const message = {
-    token: token,
-    notification: {
-      title: titulo,
-      body: cuerpo
-    }
-  };
+        // Construir el mensaje de notificación
+        const message = {
+            token: token,
+            notification: {
+                title: titulo,
+                body: cuerpo
+            }
+        };
 
-  // Enviar la notificación
-  admin.messaging().send(message)
-    .then((response) => {
-      console.log('Notificación enviada con éxito:', response);
-      res.status(200).send('Notificación enviada con éxito');
-    })
-    .catch((error) => {
-      console.error('Error al enviar la notificación:', error);
-      res.status(500).send('Error al enviar la notificación');
+        // Enviar la notificación
+        admin.messaging().send(message)
+            .then((response) => {
+                console.log('Notificación enviada con éxito:', response);
+                resolve('Notificación enviada con éxito');
+            })
+            .catch((error) => {
+                console.error('Error al enviar la notificación:', error);
+                reject('Error al enviar la notificación');
+            });
     });
 }
+
 // Función para enviar notificaciones
 const enviarNotificaciones = async () => {
-  try {
-    RegisterModelNotification.find()
-        .then(documentos => {
-            // Si se encuentran documentos, recorrer cada uno y enviar sus propiedades a la función de procesamiento
-            documentos.forEach(procesarDocumento);
-            // Devolver una respuesta indicando que se procesaron los documentos
-          console.log('ejecutando documentos');
-        })
-        .catch(err => {
-            // Si ocurre algún error durante la búsqueda, devolver un mensaje de error
-            console.error('Error al obtener los documentos:', err);
-           
-        });
-
-  } catch (error) {
-    console.error('Error al enviar notificaciones:', error);
-  }
+    try {
+        const documentos = await RegisterModelNotification.find();
+        const promesas = documentos.map(procesarDocumento);
+        await Promise.all(promesas);
+        console.log('Notificaciones enviadas con éxito');
+        return 'Notificaciones enviadas con éxito';
+    } catch (error) {
+        console.error('Error al enviar notificaciones:', error);
+        throw new Error('Error al enviar notificaciones');
+    }
 };
+
+// Endpoint para enviar notificaciones
+app.post('/notification', async (req, res) => {
+    try {
+        const resultado = await enviarNotificaciones();
+        res.status(200).send(resultado);
+    } catch (error) {
+        console.error('Error al procesar la solicitud:', error);
+        res.status(500).send('Error al procesar la solicitud');
+    }
+});
 
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
