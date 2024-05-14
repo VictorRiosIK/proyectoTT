@@ -1162,7 +1162,7 @@ function procesarDocumento(documento) {
 // Función para enviar notificaciones
 const enviarNotificaciones = async () => {
     try {
-        const documentos = await RegisterModelNotification.find();
+        const documentos = await RegisterModelNotification.find({enviada: 0});
         const promesas = documentos.map(procesarDocumento);
         await Promise.all(promesas);
         console.log('Notificaciones enviadas con éxito');
