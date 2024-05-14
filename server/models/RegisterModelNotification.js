@@ -4,7 +4,12 @@ const notificacionSchema = new mongoose.Schema({
   token: String,
   titulo: String,
   cuerpo: String,
-  hora: Date
+  hora: Date,
+  enviada: {
+        type: Number,
+        default: 0
+    },
+  fechaEnvio: String
 });
 
 const RegisterModelNotification = mongoose.model("notification", notificacionSchema);
