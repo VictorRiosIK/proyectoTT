@@ -1120,25 +1120,9 @@ app.post('/searchProfessionalByEmail', (req, res) => {
 });
 
 app.post('/notification', (req, res) => {
-  const { token, titulo, cuerpo, hora } = req.body;
-
-  // Crear una nueva instancia de la notificación
-  const nuevaNotificacion = new RegisterModelNotification({
-    token: token,
-    titulo: titulo,
-    cuerpo: cuerpo,
-    hora: new Date(hora)
-  });
-
-  // Guardar la notificación en la base de datos
-  nuevaNotificacion.save()
-    .then(() => {
-      res.status(201).json({ mensaje: 'Notificación guardada correctamente' });
-    })
-    .catch(error => {
-      console.error('Error al guardar la notificación:', error);
-      res.status(500).json({ error: 'Error interno del servidor' });
-    });
+   console.log('enviando notificaciones');
+  enviarNotificaciones();
+ 
 });
 // Función para procesar cada documento
 function procesarDocumento(documento) {
