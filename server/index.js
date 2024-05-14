@@ -1139,9 +1139,16 @@ function procesarDocumento(documento) {
         };
 
         // Enviar la notificación
+        // Enviar la notificación
         admin.messaging().send(message)
             .then((response) => {
                 console.log('Notificación enviada con éxito:', response);
+                // Actualizar los campos 'enviada' y 'fechaEnvio' en el documento
+                documento.enviada = 1;
+                documento.fechaEnvio = new Date().toISOString();
+                return documento.save();
+            })
+            .then(() => {
                 resolve('Notificación enviada con éxito');
             })
             .catch((error) => {
