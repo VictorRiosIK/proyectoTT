@@ -18,6 +18,7 @@ const moment = require('moment');
 const jwtSecret = config.jwtSecret;
 const mongoURI = config.mongoURI;
 const admin = require("firebase-admin");
+const cron = require('node-cron');
 
 const serviceAccount = require("./tt2p-b6232-firebase-adminsdk-vq7b9-7db5495e3a.json");
 
@@ -1139,6 +1140,61 @@ app.post('/notification', (req, res) => {
       res.status(500).json({ error: 'Error interno del servidor' });
     });
 });
+// Función para procesar cada documento
+function procesarDocumento(documento) {
+    // Aquí puedes realizar cualquier operación que necesites con las propiedades del documento
+   const {token,titulo,cuerpo }=documento;
+  if (!token || !titulo || !cuerpo) {
+    return res.status(400).send('Faltan parámetros');
+  }
+
+  // Construir el mensaje de notificación
+  const message = {
+    token: token,
+    notification: {
+      title: titulo,
+      body: cuerpo
+    }
+  };
+
+  // Enviar la notificación
+  admin.messaging().send(message)
+    .then((response) => {
+      console.log('Notificación enviada con éxito:', response);
+      res.status(200).send('Notificación enviada con éxito');
+    })
+    .catch((error) => {
+      console.error('Error al enviar la notificación:', error);
+      res.status(500).send('Error al enviar la notificación');
+    });
+}
+// Función para enviar notificaciones
+const enviarNotificaciones = async () => {
+  try {
+    RegisterModelNotification.find()
+        .then(documentos => {
+            // Si se encuentran documentos, recorrer cada uno y enviar sus propiedades a la función de procesamiento
+            documentos.forEach(procesarDocumento);
+            // Devolver una respuesta indicando que se procesaron los documentos
+            res.status(200).json({ message: 'Documentos procesados correctamente' });
+        })
+        .catch(err => {
+            // Si ocurre algún error durante la búsqueda, devolver un mensaje de error
+            console.error('Error al obtener los documentos:', err);
+            res.status(500).json({ message: 'Error al obtener los documentos' });
+        });
+
+  } catch (error) {
+    console.error('Error al enviar notificaciones:', error);
+  }
+};
+
+// Programar tarea cron para ejecutar la función cada día a medianoche (00:00)
+cron.schedule('40 21 * * *', () => {
+  console.log('Ejecutando tarea cron para enviar notificaciones...');
+  enviarNotificaciones();
+});
+
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
