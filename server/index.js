@@ -1176,12 +1176,12 @@ const enviarNotificaciones = async () => {
             // Si se encuentran documentos, recorrer cada uno y enviar sus propiedades a la función de procesamiento
             documentos.forEach(procesarDocumento);
             // Devolver una respuesta indicando que se procesaron los documentos
-            res.status(200).json({ message: 'Documentos procesados correctamente' });
+          console.log('ejecutando documentos');
         })
         .catch(err => {
             // Si ocurre algún error durante la búsqueda, devolver un mensaje de error
             console.error('Error al obtener los documentos:', err);
-            res.status(500).json({ message: 'Error al obtener los documentos' });
+           
         });
 
   } catch (error) {
@@ -1190,7 +1190,7 @@ const enviarNotificaciones = async () => {
 };
 
 // Programar tarea cron para ejecutar la función cada día a medianoche (00:00)
-cron.schedule('40 21 * * *', () => {
+cron.schedule('48 21 * * *', () => {
   console.log('Ejecutando tarea cron para enviar notificaciones...');
   enviarNotificaciones();
 });
