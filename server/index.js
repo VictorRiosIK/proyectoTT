@@ -1169,14 +1169,6 @@ const enviarNotificaciones = async () => {
   }
 };
 
-// Programar tarea cron para ejecutar la función cada día a medianoche (00:00)
-cron.schedule('58 21 * * *', () => {
-  console.log('Ejecutando tarea cron para enviar notificaciones...');
-  enviarNotificaciones();
-}, {
-  timezone: 'America/Mexico_City' // Cambia a tu zona horaria
-});
-
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
