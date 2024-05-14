@@ -1197,7 +1197,26 @@ app.post('/programarNotificacion', (req, res) => {
       res.status(500).json({ error: 'Error interno del servidor' });
     });
 });
+app.post('/buscarPorToken', (req, res) => {
+  const { token } = req.body;
 
+  // Buscar coincidencias por token en la base de datos
+  RegisterModelNotification.find({ token: token })
+    .then(notificaciones => {
+      if (notificaciones.length > 0) {
+        // Si se encuentran notificaciones con el token proporcionado, devolverlas en la respuesta
+        res.status(200).json({ notificaciones: notificaciones });
+      } else {
+        // Si no se encuentra ninguna notificación con el token proporcionado, devolver un mensaje de error
+        res.status(404).json({ message: 'No se encontraron notificaciones con el token proporcionado' });
+      }
+    })
+    .catch(error => {
+      // Si ocurre algún error durante la búsqueda, devolver un mensaje de error
+      console.error('Error al buscar notificaciones por token:', error);
+      res.status(500).json({ message: 'Error interno del servidor' });
+    });
+});
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
