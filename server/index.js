@@ -1119,7 +1119,7 @@ app.post('/searchProfessionalByEmail', (req, res) => {
         });
 });
 
-app.post('/notification', enviarNotificaciones);
+
 // Función para procesar cada documento
 function procesarDocumento(documento) {
     // Aquí puedes realizar cualquier operación que necesites con las propiedades del documento
