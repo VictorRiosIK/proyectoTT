@@ -1204,7 +1204,7 @@ app.post('/programarNotificacion', async (req, res) => {
       // Guardar la notificación en la base de datos
       await nuevaNotificacion.save();
       
-      res.status(201).json({ message: 'Notificación guardada correctamente' });
+      res.status(200).json({ message: 'Notificación guardada correctamente' });
     } else {
       res.status(404).json({ message: 'Limite de notificaciones alcanzado, 5 notificaciones activas.' });
     }
