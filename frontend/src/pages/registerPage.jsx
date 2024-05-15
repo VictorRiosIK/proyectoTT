@@ -80,7 +80,7 @@ function registerPage() {
                   <label htmlFor="boleta" className='flex'>
                     <strong className='text-white fs-5 '>Boleta</strong>
                   </label>
-                  <input required maxLength={10} pattern='^[0-9,$]*$'
+                  <input required maxLength={10} minLength={10} pattern='^[0-9,$]*$'
                     type="text"
                     placeholder="Boleta"
                     autoComplete="off"

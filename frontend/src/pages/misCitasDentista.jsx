@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getMisCitasRequest, cancelCitaRequest, reagendarCitaRequest } from '../api/citas.js'
+import { getMisCitasRequest, cancelCitaRequest, reagendarCitaRequest, getSeguimientoRequest } from '../api/citas.js'
 //Importar componente de iconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 //Importar el icono
@@ -11,6 +11,7 @@ function misCitasDentista() {
   const user = JSON.parse(window.localStorage.getItem('user'));
   const [citas, setCitas] = useState([]);
   const [showError, setShowError] = useState(false);
+  const [seguimiento, setSeguimiento] = useState([]);
   let cita = []
   const getMisCitas = async () => {
     try {
@@ -72,9 +73,9 @@ function misCitasDentista() {
   //CANCELAR CITA
   const cancelarCita = async (fecha, horario) => {
     //console.log(user);
-    console.log(fecha);
+    //console.log(fecha);
     const restan = calcularDiferenciaHoras(fecha, horario);
-    console.log(restan);
+    //console.log(restan);
     if (restan > 24) {
       const res = await cancelCitaRequest(fecha, user.email, 'Dentista');
       console.log(res);
@@ -86,20 +87,35 @@ function misCitasDentista() {
 
   //REAGENDAR CITA
   const reagendarCita = (fecha, horario) => {
-    console.log(fecha, horario);
+    //console.log(fecha, horario);
     const restan = calcularDiferenciaHoras(fecha, horario);
-    console.log(restan);
+    //console.log(restan);
     if (restan > 24) {
       navigate(`/agendar-dentista/${fecha.split('/')}/${horario}`)
     } else {
       setShowError(true);
     }
+  }
 
+  //Seguimiento
+  const getSeguimiento = async () => {
+    if (user) {
+      try {
+        const res = await getSeguimientoRequest(user.email, 'Dentista');
+        console.log(res.data);
+        setSeguimiento(res.data.users);
+        //console.log(seguimiento);
+      } catch (error) {
+        console.log(error);
+        setErrors([error.response.data.message]);
+      }
+    }
 
   }
 
   useEffect(() => {
     getMisCitas();
+    getSeguimiento();
   }, []);
 
   //funcion para eliminar los mensajes pasados un tiempo
@@ -114,7 +130,7 @@ function misCitasDentista() {
 
   return (
     <div className='bg-[#800040] rounded px-2 py-4'>
-      <h1 className='text-center w-100 bg-white rounded p-2 text-[#800040]'>Mis citas con el dentista</h1>
+      <h1 className='text-center w-100 bg-white rounded p-2 text-[#800040]'>Cita activa con el dentista</h1>
       <div className='w-100 my-4'>
         <h5 className='text-white'>
           {
@@ -170,31 +186,52 @@ function misCitasDentista() {
           <div className='text-center fw-bold fs-4 text-white'>Sin citas</div>
       }
 
-      {
-        /*
-        <div className='d-flex w-100'>
-        <div className=" card w-100" >
-        <div className="card-header">
-            Featured
-          </div>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item">An item</li>
 
-          </ul>
-        </div>
-        <div className=" card w-100" >
-          <div className="card-header">
-            Featured
+      <h1 className='text-center w-100 bg-white rounded p-2 mt-5 text-[#800040]'>Mis citas con el dentista </h1>
+      <div className=" text-center mb-2 w-100 my-4">
+        <div className="row align-items-start ">
+          <div className="col ">
+            <ul className="list-group w-100 ">
+              <li className="list-group-item text-center fw-bold fs-4 bg-white text-[#800040]">Fecha</li>
+            </ul>
           </div>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item">An item</li>
-
-          </ul>
+          <div className="col">
+            <ul className="list-group w-100">
+              <li className="list-group-item text-center fw-bold fs-4 bg-white text-[#800040]">Horario</li>
+            </ul>
+          </div>
+          <div className="col">
+            <ul className="list-group w-100">
+              <li className="list-group-item text-center fw-bold fs-4 bg-white text-[#800040]">Comentario</li>
+            </ul>
+          </div>
         </div>
       </div>
-        */
-      }
+      {
+        seguimiento.length !== 0 ?
+          seguimiento.map(e => (
+            <div key={e._id} className="row align-items-start my-2">
+              <div className="col ">
+                <ul className="list-group w-100 ">
+                  <li className="list-group-item text-center content-center fw-bold fs-4 bg-white text-[#800040] h-[6rem]">{e.fechaCita}</li>
+                </ul>
+              </div>
+              <div className="col">
+                <ul className="list-group w-100">
+                  <li className="list-group-item text-center content-center fw-bold fs-4 bg-white text-[#800040] h-[6rem]">{e.horarioCita}</li>
+                </ul>
+              </div>
+              <div className="col">
+                <ul className="list-group w-100">
+                  <li className="list-group-item text-center fw-bold  bg-white text-[#800040] h-[6rem]">{e.comentario}</li>
+                </ul>
+              </div>
 
+            </div>
+          ))
+          :
+          <div className='text-center text-white fw-bold fs-4'>Sin citas</div>
+      }
 
     </div>
   )

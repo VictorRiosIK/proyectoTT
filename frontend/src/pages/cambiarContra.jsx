@@ -31,7 +31,7 @@ function cambiarContra() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(vieja, nueva);
+        //console.log(vieja, nueva);
         await updateContrasena();
        
     }
@@ -128,12 +128,12 @@ function cambiarContra() {
                                 }
 
 
-                                <form className='' onSubmit={handleSubmit}>
+                                <form className='' onSubmit={handleSubmit} autoComplete='off'>
                                     <div className="mb-3">
-                                        <label htmlFor="email" className='flex'>
+                                        <label htmlFor="vieja" className='flex'>
                                             <strong className='text-white fs-5'>Contraseña Actual</strong>
                                         </label>
-                                        <input
+                                        <input 
                                             type="password"
                                             placeholder="Contraseña"
                                             autoComplete="off"
@@ -152,6 +152,7 @@ function cambiarContra() {
                                             name="nueva"
                                             className="form-control rounded-50"
                                             onChange={(e) => setNueva(e.target.value)}
+                                            autoComplete='off'
                                         />
                                     </div>
                                     <button type="submit" className="flex  btn btn-outline-light text-center place-content-center w-100 rounded-50 fs-5">

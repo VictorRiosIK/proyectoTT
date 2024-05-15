@@ -7,30 +7,36 @@ import Select from 'react-select';
 import img from '../assets/profesionals.png'
 
 function registerProPage() {
-  const [name, setName] = useState()
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [selection, setSelection] = useState(null);
   const { signupProfesional, isAuthenticated, errors, adds } = useAuth();
   const navigate = useNavigate();
   const opcionesS = [{ value: 'Psicologo', label: 'Psicologo' }, { value: 'Dentista', label: 'Dentista' }];
   let selectedR = null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    if (name && email && password && selectedR) {
-      signupProfesional(name, email, password, selectedR.value);
+    console.log(name , email , password , selection);
+    if (name && email && password && selection) {
+      console.log(name , email , password , selection);
+      await signupProfesional(name, email, password, selection);
     }
   }
   const handleChange = (selectedOption) => {
-    selectedR = selectedOption
-    console.log(selectedR.value);
+    // console.log('Cambio')
+    setSelection(selectedOption.value);
+    console.log(selection)
+    // selectedR = selectedOption
+    // console.log(selectedR.value);
   }
 
   return (
     <div>
       <div className=" text-center">
         <div className="row align-items-start m-5 rounded gap-4">
-          <div className="col self-center h-[32rem] w-[50%] content-center bg-slate-100 rounded m-0 ">
+          <div className="col self-center h-[34rem] w-[50%] content-center bg-slate-100 rounded m-0 ">
             <div className=" w-100 h-[95%] content-center bg-gray-200 rounded p-4">
               <h1 className='mb-4 text-sky-700 fw-bold my-2'>Registrar Profesional</h1>
               <img src={img} alt="" className='max-w-[490px] min-w-[100px] w-100 rounded ' />
@@ -41,7 +47,7 @@ function registerProPage() {
 
 
 
-          <div className="col self-center h-[32rem] w-[100%] content-center bg-sky-700 rounded m-0">
+          <div className="col self-center h-[34rem] w-[100%] content-center bg-sky-700 rounded m-0">
             <div className="d-flex justify-content-center align-items-center ">
               <div className=" h-[30rem] p-3 rounded w-100">
 
@@ -103,7 +109,7 @@ function registerProPage() {
                     <label htmlFor="rol" className='flex'>
                       <strong className='text-white fs-5 '>Profesión</strong>
                     </label>
-                    <Select className="p-2 fs-4 rounded w-100 " placeholder="Seleccionar opción" options={opcionesS} onChange={handleChange}></Select>
+                    <Select className="p-2 fs-4 rounded w-100 " placeholder="Seleccionar opción" required options={opcionesS} onChange={handleChange}></Select>
                   </div>
                   <button type="submit" className="btn btn-outline-light w-100 rounded-50 fs-5">
                     Registrar

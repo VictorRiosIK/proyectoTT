@@ -42,7 +42,7 @@ function agendarOrientacion() {
       }
       fechaR = fechaa;
       horarioR = params.horario;
-      console.log(fechaR, horarioR);
+      //console.log(fechaR, horarioR);
       setTitulo('Reagendar cita con psicologo');
     }
   }
@@ -61,7 +61,7 @@ function agendarOrientacion() {
       console.log(res);
       navigate('/citas-psicologo');
     } catch (error) {
-      console.log(error.response.data.message);
+      console.log(error.response);
       setErrors([error.response.data.message])
     }
   }
@@ -79,8 +79,8 @@ function agendarOrientacion() {
         await reagendarCita(fecha, horario, correo);
 
       } else {
-        console.log(startDate.toLocaleString('en-GB').substring(0, 10), selectedH.value)
-        console.log(user.email)
+        //console.log(startDate.toLocaleString('en-GB').substring(0, 10), selectedH.value)
+        //console.log(user.email)
         const fecha = startDate.toLocaleString('en-GB').substring(0, 10);
 
         const horario = selectedH.value;
@@ -98,7 +98,7 @@ function agendarOrientacion() {
     try {
       getCita();
       if (fechaR) {
-        console.log(fecha, horario, correo, 'Psicologo', fechaR);
+        //console.log(fecha, horario, correo, 'Psicologo', fechaR);
         const res = await reagendarCitaRequest(fecha, horario, correo, 'Psicologo', fechaR);
         console.log(res);
         navigate('/citas-psicologo')
