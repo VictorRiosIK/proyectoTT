@@ -1162,12 +1162,19 @@ function procesarDocumento(documento) {
 // Función para enviar notificaciones
 const enviarNotificaciones = async () => {
     try {
-      // Obtener la fecha actual en formato ISO8601 sin la hora (yyyy-mm-dd)
-        const fechaActual = new Date().toISOString().split('T')[0];
-        const documentos = await RegisterModelNotification.find(
-          {enviada: 0,
-           hora: { $regex: new RegExp(fechaActual) }
-          });
+      // Obtener la fecha actual
+        const fechaActual = new Date();
+        // Establecer la fecha de inicio del día actual
+        fechaActual.setHours(0, 0, 0, 0);
+        // Establecer la fecha de fin del día actual
+        const fechaFin = new Date(fechaActual);
+        fechaFin.setHours(23, 59, 59, 999);
+
+        // Buscar las notificaciones no enviadas y cuya hora esté dentro del rango del día actual
+        const documentos = await RegisterModelNotification.find({
+            enviada: 0,
+            hora: { $gte: fechaActual, $lte: fechaFin } // Filtrar por el rango del día actual
+        });
         const promesas = documentos.map(procesarDocumento);
         await Promise.all(promesas);
         console.log('Notificaciones enviadas con éxito');
