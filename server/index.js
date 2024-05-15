@@ -1235,11 +1235,11 @@ app.post('/buscarPorToken', (req, res) => {
 });
 app.post('/cancelarNotificacion', async (req, res) => {
   try {
-    const { token, titulo } = req.body;
+    const { id, titulo } = req.body;
 
     // Actualizar la propiedad 'enviada' a 2 para la notificación correspondiente
     const notificacion = await RegisterModelNotification.findOneAndUpdate(
-      { token: token, titulo: titulo },
+      { _id: id },
       { $set: { enviada: 2 } },
       { new: true }
     );
