@@ -1184,26 +1184,34 @@ app.post('/notification', async (req, res) => {
     }
 });
 
-app.post('/programarNotificacion', (req, res) => {
-  const { token, titulo, cuerpo, hora } = req.body;
+app.post('/programarNotificacion', async (req, res) => {
+  try {
+    const { token, titulo, cuerpo, hora } = req.body;
 
-  // Crear una nueva instancia de la notificación
-  const nuevaNotificacion = new RegisterModelNotification({
-    token: token,
-    titulo: titulo,
-    cuerpo: cuerpo,
-    hora: new Date(hora)
-  });
+    // Consultar cuántos documentos existen con el mismo token y enviada=0
+    const count = await RegisterModelNotification.countDocuments({ token: token, enviada: 0 });
 
-  // Guardar la notificación en la base de datos
-  nuevaNotificacion.save()
-    .then(() => {
-      res.status(201).json({ mensaje: 'Notificación guardada correctamente' });
-    })
-    .catch(error => {
-      console.error('Error al guardar la notificación:', error);
-      res.status(500).json({ error: 'Error interno del servidor' });
-    });
+    // Verificar si se puede permitir la inserción del nuevo documento
+    if (count < 5) {
+      // Crear una nueva instancia de la notificación
+      const nuevaNotificacion = new RegisterModelNotification({
+        token: token,
+        titulo: titulo,
+        cuerpo: cuerpo,
+        hora: new Date(hora)
+      });
+
+      // Guardar la notificación en la base de datos
+      await nuevaNotificacion.save();
+      
+      res.status(200).json({ message: 'Notificación guardada correctamente' });
+    } else {
+      res.status(404).json({ message: 'Limite de notificaciones alcanzado, 5 notificaciones activas.' });
+    }
+  } catch (error) {
+    console.error('Error al guardar la notificación:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
 });
 app.post('/buscarPorToken', (req, res) => {
   const { token } = req.body;
