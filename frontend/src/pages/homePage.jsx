@@ -173,8 +173,8 @@ function homePage() {
             </div>
             <div className='text-white my-2 flex-col'>
               <FontAwesomeIcon className='text-4xl' icon={faPhone} />
-              <div>Tel: xx-xx-xx-xx-xx Ext. xxxxx</div>
-              <div>xxx@xxx</div>
+              <div>Tel: 57296000 Ext. 52079</div>
+              {/* <div>xxx@xxx</div> */}
             </div>
           </div>
 
