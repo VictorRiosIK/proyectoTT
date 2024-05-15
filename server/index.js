@@ -1233,6 +1233,27 @@ app.post('/buscarPorToken', (req, res) => {
       res.status(500).json({ message: 'Error interno del servidor' });
     });
 });
+app.post('/cancelarNotificacion', async (req, res) => {
+  try {
+    const { token, titulo } = req.body;
+
+    // Actualizar la propiedad 'enviada' a 2 para la notificación correspondiente
+    const notificacion = await RegisterModelNotification.findOneAndUpdate(
+      { token: token, titulo: titulo },
+      { $set: { enviada: 2 } },
+      { new: true }
+    );
+
+    if (notificacion) {
+      res.status(200).json({ message: 'Notificación cancelada correctamente' });
+    } else {
+      res.status(404).json({ message: 'No se encontró ninguna notificación con el token y título especificados' });
+    }
+  } catch (error) {
+    console.error('Error al cancelar la notificación:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
 app.listen(3001, () => {
     console.log("Server is Running PORT 3001")
 })
