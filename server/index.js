@@ -1162,7 +1162,12 @@ function procesarDocumento(documento) {
 // Función para enviar notificaciones
 const enviarNotificaciones = async () => {
     try {
-        const documentos = await RegisterModelNotification.find({enviada: 0});
+      // Obtener la fecha actual en formato ISO8601 sin la hora (yyyy-mm-dd)
+        const fechaActual = new Date().toISOString().split('T')[0];
+        const documentos = await RegisterModelNotification.find(
+          {enviada: 0,
+           hora: { $regex: new RegExp(fechaActual) }
+          });
         const promesas = documentos.map(procesarDocumento);
         await Promise.all(promesas);
         console.log('Notificaciones enviadas con éxito');
@@ -1187,7 +1192,7 @@ app.post('/notification', async (req, res) => {
 app.post('/programarNotificacion', async (req, res) => {
   try {
     const { token, titulo, cuerpo, hora } = req.body;
-
+    
     // Consultar cuántos documentos existen con el mismo token y enviada=0
     const count = await RegisterModelNotification.countDocuments({ token: token, enviada: 0 });
 
