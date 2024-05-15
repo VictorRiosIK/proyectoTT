@@ -1162,19 +1162,21 @@ function procesarDocumento(documento) {
 // Función para enviar notificaciones
 const enviarNotificaciones = async () => {
     try {
-      // Obtener la fecha actual
-        const fechaActual = new Date();
-        // Establecer la fecha de inicio del día actual
-        fechaActual.setHours(0, 0, 0, 0);
-        // Establecer la fecha de fin del día actual
-        const fechaFin = new Date(fechaActual);
-        fechaFin.setHours(23, 59, 59, 999);
+      // Obtener la fecha actual en la zona horaria de Ciudad de México
+const fechaActual = new Date();
+fechaActual.setHours(fechaActual.getHours() - 5); // Ajuste para GMT-5 (horario estándar) o GMT-6 (horario de verano)
 
-        // Buscar las notificaciones no enviadas y cuya hora esté dentro del rango del día actual
+// Establecer la fecha de inicio del día actual
+fechaActual.setHours(0, 0, 0, 0);
+
+// Establecer la fecha de fin del día actual
+const fechaFin = new Date(fechaActual);
+fechaFin.setHours(23, 59, 59, 999);
+
         const documentos = await RegisterModelNotification.find({
-            enviada: 0,
-            hora: { $gte: fechaActual, $lte: fechaFin } // Filtrar por el rango del día actual
-        });
+    enviada: 0,
+    hora: { $gte: fechaActual, $lte: fechaFin } // Filtrar por el rango del día actual
+});
         const promesas = documentos.map(procesarDocumento);
         await Promise.all(promesas);
         console.log('Notificaciones enviadas con éxito');
