@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useEffect } from 'react';
-import logo from '../assets/EscudoESCOM.png'
+import logo from '../assets/logo.png'
 
 function loginPage() {
   const [email, setEmail] = useState()
@@ -35,7 +35,7 @@ function loginPage() {
         <div className="row align-items-start">
           <div className="col self-center h-[32rem] w-[50%] content-center bg-slate-100 rounded m-0 ">
             <h1 className='mb-4 text-sky-700'>¡Bienvenido!</h1>
-            <img src={logo} alt="" className='max-w-[490px] min-w-[100px] w-100' />
+            <img src={logo} alt="" className='max-w-[290px] min-w-[100px] w-100' />
             <p className='mt-4 mb-0 fs-4 text-sky-700'>¿No tienes cuenta?</p>
             <div className="">
               <Link className='btn btn-outline-dark w-100 rounded-50 text-decoration-none fs-5' to={'/register'}>Registrarse</Link>

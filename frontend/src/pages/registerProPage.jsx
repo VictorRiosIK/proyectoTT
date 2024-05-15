@@ -91,7 +91,7 @@ function registerProPage() {
                     <label htmlFor="password" className='flex'>
                       <strong className='text-white fs-5 '>Contraseña</strong>
                     </label>
-                    <input required
+                    <input required 
                       type="password"
                       placeholder="Contraseña"
                       name="password"

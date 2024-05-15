@@ -63,7 +63,7 @@ export const AuthProvider = ({children}) =>{
              //console.log(cookies);
         }catch(error){
             console.log(error)
-            //setErrors(error);
+            setErrors([error.response.data.message]);
         }
     }
 
@@ -88,7 +88,7 @@ export const AuthProvider = ({children}) =>{
              //console.log(cookies);
         }catch(error){
             console.log(error)
-            //setErrors(error);
+            setErrors([error.response.data.message]);
         }
     }
 

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useEffect } from 'react';
-import logo from '../assets/EscudoESCOM.png'
+import logo from '../assets/logo.png'
 
 function registerPage() {
   const [name, setName] = useState()
@@ -38,7 +38,7 @@ function registerPage() {
         <div className="row align-items-start">
           <div className="col self-center h-[32rem] w-[50%] content-center bg-slate-100 rounded m-0">
             <h1 className='mb-4 text-sky-700'>¡Bienvenido!</h1>
-            <img src={logo} alt="" className='max-w-[490px] min-w-[100px] w-100' />
+            <img src={logo} alt="" className='max-w-[290px] min-w-[100px] w-100 rounded-3xl' />
             <p className='mt-4 mb-0 fs-4 text-sky-700'>¿Ya tienes cuenta?</p>
             <div className='m-0'>
               <Link className='btn btn-outline-dark w-100 rounded-50 text-decoration-none fs-5' to={'/login'}>Ingresar</Link>
@@ -80,7 +80,7 @@ function registerPage() {
                   <label htmlFor="boleta" className='flex'>
                     <strong className='text-white fs-5 '>Boleta</strong>
                   </label>
-                  <input required minLength={10}
+                  <input required maxLength={10} pattern='^[0-9,$]*$'
                     type="text"
                     placeholder="Boleta"
                     autoComplete="off"
