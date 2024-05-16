@@ -18,6 +18,7 @@ import LoginPage from './pages/loginPage'
 import Navbar from './components/Navbar.jsx'
 import Footer from "./components/Footer.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
+import Verificacion from "./pages/verificacion.jsx";
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
               <Route path='/' element={<HomePage />}></Route>
               <Route path='/login' element={<LoginPage />}></Route>
               <Route path='/register' element={<RegisterPage />}></Route>
+              <Route path='/verificacion' element={<Verificacion />}></Route>
 
               {/* Rutas privadas */}
               <Route element={<ProtectedRoute />}>

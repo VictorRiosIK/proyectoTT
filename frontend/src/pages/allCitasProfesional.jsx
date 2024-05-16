@@ -111,60 +111,81 @@ function allCitasProfesional() {
                                 </div>
                                 <div className="col">
                                     <ul className=" list-group w-100">
-                                        <li className="list-group-item text-center content-center h-[4rem] mb-1 fw-bold fs-6 bg-sky-700 text-white">
+                                        {/* <li className="list-group-item text-center content-center h-[4rem] mb-1 fw-bold fs-6 bg-sky-700 text-white"> */}
                                             {
                                                 e.primerHorario &&
-                                                <Link to={`/detalles-cita/${e.primerHorario}/09:00 - 10:30/${e.fecha.split('/')}`}>
-                                                    <button className='btn btn-outline-light w-100 rounded-50 fw-bold fs-5'>
-                                                        <FontAwesomeIcon className='fs-5 mx-2' icon={faCircleInfo} />
-                                                        Detalles
-                                                    </button>
-                                                </Link>
+                                                <li className="list-group-item text-center content-center h-[4rem] mb-1 fw-bold fs-6 bg-sky-700 text-white">
+                                                    <Link to={`/detalles-cita/${e.primerHorario}/09:00 - 10:30/${e.fecha.split('/')}`}>
+                                                        <button className='btn btn-outline-light w-100 rounded-50 fw-bold fs-5'>
+                                                            <FontAwesomeIcon className='fs-5 mx-2' icon={faCircleInfo} />
+                                                            Detalles
+                                                        </button>
+                                                    </Link>
+                                                </li>
+
                                             }
                                             {
                                                 e.segundoHorario &&
-                                                <Link to={`/detalles-cita/${e.segundoHorario}/10:30 - 12:00/${e.fecha.split('/')}`}>
-                                                    <button className='btn btn-outline-light w-100 rounded-50 fw-bold fs-5'>
-                                                        <FontAwesomeIcon className='fs-5 mx-2' icon={faCircleInfo} />
-                                                        Detalles</button>
-                                                </Link>
+                                                <li className="list-group-item text-center content-center h-[4rem] mb-1 fw-bold fs-6 bg-sky-700 text-white">
+                                                    <Link to={`/detalles-cita/${e.segundoHorario}/10:30 - 12:00/${e.fecha.split('/')}`}>
+                                                        <button className='btn btn-outline-light w-100 rounded-50 fw-bold fs-5'>
+                                                            <FontAwesomeIcon className='fs-5 mx-2' icon={faCircleInfo} />
+                                                            Detalles</button>
+                                                    </Link>
+                                                </li>
+
                                             }{
                                                 e.tercerHorario &&
-                                                <Link to={`/detalles-cita/${e.tercerHorario}/12:00 - 13:30/${e.fecha.split('/')}`}>
-                                                    <button className='btn btn-outline-light w-100 rounded-50 fw-bold fs-5'>
-                                                        <FontAwesomeIcon className='fs-5 mx-2' icon={faCircleInfo} />
-                                                        Detalles</button>
-                                                </Link>
+                                                <li className="list-group-item text-center content-center h-[4rem] mb-1 fw-bold fs-6 bg-sky-700 text-white">
+                                                    <Link to={`/detalles-cita/${e.tercerHorario}/12:00 - 13:30/${e.fecha.split('/')}`}>
+                                                        <button className='btn btn-outline-light w-100 rounded-50 fw-bold fs-5'>
+                                                            <FontAwesomeIcon className='fs-5 mx-2' icon={faCircleInfo} />
+                                                            Detalles</button>
+                                                    </Link>
+                                                </li>
+
                                             }{
                                                 e.cuartoHorario &&
-                                                <Link to={`/detalles-cita/${e.curatoHorario}/13:30 - 15:00/${e.fecha.split('/')}`}>
-                                                    <button className='btn btn-outline-light w-100 rounded-50 fw-bold fs-5'>
-                                                        <FontAwesomeIcon className='fs-5 mx-2' icon={faCircleInfo} />
-                                                        Detalles</button>
-                                                </Link>
+                                                <li className="list-group-item text-center content-center h-[4rem] mb-1 fw-bold fs-6 bg-sky-700 text-white">
+                                                    <Link to={`/detalles-cita/${e.curatoHorario}/13:30 - 15:00/${e.fecha.split('/')}`}>
+                                                        <button className='btn btn-outline-light w-100 rounded-50 fw-bold fs-5'>
+                                                            <FontAwesomeIcon className='fs-5 mx-2' icon={faCircleInfo} />
+                                                            Detalles</button>
+                                                    </Link>
+                                                </li>
+
                                             }{
                                                 e.quintoHorario &&
-                                                <Link to={`/detalles-cita/${e.quintoHorario}/15:00 - 16:30/${e.fecha.split('/')}`}>
-                                                    <button className='btn btn-outline-light w-100 rounded-50 fw-bold fs-5'>
-                                                        <FontAwesomeIcon className='fs-5 mx-2' icon={faCircleInfo} />
-                                                        Detalles</button>
-                                                </Link>
+                                                <li className="list-group-item text-center content-center h-[4rem] mb-1 fw-bold fs-6 bg-sky-700 text-white">
+                                                    <Link to={`/detalles-cita/${e.quintoHorario}/15:00 - 16:30/${e.fecha.split('/')}`}>
+                                                        <button className='btn btn-outline-light w-100 rounded-50 fw-bold fs-5'>
+                                                            <FontAwesomeIcon className='fs-5 mx-2' icon={faCircleInfo} />
+                                                            Detalles</button>
+                                                    </Link>
+                                                </li>
+
                                             }{
                                                 e.sextoHorario &&
-                                                <Link to={`/detalles-cita/${e.sextoHorario}/16:30 - 18:00/${e.fecha.split('/')}`}>
-                                                    <button className='btn btn-outline-light w-100 rounded-50 fw-bold fs-5'>
-                                                        <FontAwesomeIcon className='fs-5 mx-2' icon={faCircleInfo} />
-                                                        Detalles</button>
-                                                </Link>
+                                                <li className="list-group-item text-center content-center h-[4rem] mb-1 fw-bold fs-6 bg-sky-700 text-white">
+                                                    <Link to={`/detalles-cita/${e.sextoHorario}/16:30 - 18:00/${e.fecha.split('/')}`}>
+                                                        <button className='btn btn-outline-light w-100 rounded-50 fw-bold fs-5'>
+                                                            <FontAwesomeIcon className='fs-5 mx-2' icon={faCircleInfo} />
+                                                            Detalles</button>
+                                                    </Link>
+                                                </li>
+
                                             }
 
                                             {
                                                 (!e.primerHorario && !e.segundoHorario && !e.tercerHorario &&
                                                     !e.cuartoHorario && !e.quintoHorario && !e.sextoHorario) &&
-                                                <p className='m-0 p-0'>Sin acciones</p>
+                                                <li className="list-group-item text-center content-center h-[4rem] mb-1 fw-bold fs-6 bg-sky-700 text-white">
+                                                    <p className='m-0 p-0'>Sin acciones</p>
+                                                </li>
+
 
                                             }
-                                        </li>
+                                        {/* </li> */}
                                     </ul>
                                 </div>
                             </div>
