@@ -23,6 +23,14 @@ function agendarOdontologo() {
   const [errors, setErrors] = useState([]);
   let fechaR = '';
   let horarioR = '';
+
+  const isWeekday = (date) => {
+    //console.log(date)
+    const dates = new Date(date);
+    const day = dates.getDay()
+    //const day = getDay(date);
+    return day !== 0 && day !== 6;
+  };
   //console.log(user.email); getHorariosCitas,
 
   //console.log(user);
@@ -235,7 +243,7 @@ function agendarOdontologo() {
                 </div>
                 <div className="mb-3 text-center w-100 ">
                   <FontAwesomeIcon className='fs-1 mx-2 text-[#800040]' icon={faCalendarDays} />
-                  <DatePicker className="p-3 fs-4 rounded" dateFormat="dd/MM/yyyy" minDate={new Date()} selected={startDate} onChange={(date) => {
+                  <DatePicker className="p-3 fs-4 rounded" dateFormat="dd/MM/yyyy" filterDate={isWeekday} minDate={new Date()} selected={startDate} onChange={(date) => {
                     setStartDate(date)
                     setTouched(true);
                   }} />
