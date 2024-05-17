@@ -1177,7 +1177,9 @@ fechaFin.setHours(23, 59, 59, 999);
     enviada: 0,
     hora: { $gte: fechaActual, $lte: fechaFin } // Filtrar por el rango del día actual
 });
+        console.log(documentos);
         const promesas = documentos.map(procesarDocumento);
+      
         await Promise.all(promesas);
         console.log('Notificaciones enviadas con éxito');
         return 'Notificaciones enviadas con éxito';
