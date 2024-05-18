@@ -1124,12 +1124,20 @@ app.post('/searchProfessionalByEmail', (req, res) => {
 function procesarDocumento(documento) {
     return new Promise((resolve, reject) => {
         // Aquí puedes realizar cualquier operación que necesites con las propiedades del documento
-        const { token, titulo, cuerpo } = documento;
-        if (!token || !titulo || !cuerpo) {
+        const {email, token, titulo, cuerpo } = documento;
+        if (!email || !token || !titulo || !cuerpo) {
             return reject('Faltan parámetros');
         }
+        const student = await RegisterStudentModel.findOne({ email: email });
 
-        // Construir el mensaje de notificación
+        if (student) {
+          // Comparar el tokenFirebase del documento encontrado con el token recibido
+            if (student.tokenFirebase !== token) {
+              // Actualizar el tokenFirebase si es diferente
+              student.tokenFirebase = token;
+              await student.save();
+            }  
+            // Construir el mensaje de notificación
         const message = {
             token: token,
             notification: {
@@ -1156,6 +1164,10 @@ function procesarDocumento(documento) {
                 console.error('Error al enviar la notificación:', error);
                 reject('Error al enviar la notificación');
             });
+        }else {
+          res.status(404).json({ message: 'No se encontró el estudiante con el correo proporcionado' });
+        }
+        
     });
 }
 
@@ -1163,20 +1175,20 @@ function procesarDocumento(documento) {
 const enviarNotificaciones = async () => {
     try {
       // Obtener la fecha actual en la zona horaria de Ciudad de México
-const fechaActual = new Date();
-fechaActual.setHours(fechaActual.getHours() - 5); // Ajuste para GMT-5 (horario estándar) o GMT-6 (horario de verano)
-
-// Establecer la fecha de inicio del día actual
-fechaActual.setHours(0, 0, 0, 0);
-
-// Establecer la fecha de fin del día actual
-const fechaFin = new Date(fechaActual);
-fechaFin.setHours(23, 59, 59, 999);
+      const fechaActual = new Date();
+      fechaActual.setHours(fechaActual.getHours() - 5); // Ajuste para GMT-5 (horario estándar) o GMT-6 (horario de verano)
+      
+      // Establecer la fecha de inicio del día actual
+      fechaActual.setHours(0, 0, 0, 0);
+      
+      // Establecer la fecha de fin del día actual
+      const fechaFin = new Date(fechaActual);
+      fechaFin.setHours(23, 59, 59, 999);
 
         const documentos = await RegisterModelNotification.find({
-    enviada: 0,
-    hora: { $gte: fechaActual, $lte: fechaFin } // Filtrar por el rango del día actual
-});
+          enviada: 0,
+          hora: { $gte: fechaActual, $lte: fechaFin } // Filtrar por el rango del día actual
+        });
         console.log(documentos);
         const promesas = documentos.map(procesarDocumento);
       
