@@ -143,40 +143,40 @@ function misCitasDentista() {
         <FontAwesomeIcon className='fs-3 icon-link icon-link-hover' icon={faQuestion} />
       </button> */}
       </div>
-      <div className='flex w-100 gap-3'>
+      <div className='flex w-100 md:gap-3'>
         <ul className="list-group w-100">
-          <li className="list-group-item text-center fw-bold fs-4">Fecha</li>
+          <li className="list-group-item text-center md:font-bold md:text-xl">Fecha</li>
         </ul>
         <ul className="list-group w-100">
-          <li className="list-group-item text-center fw-bold fs-4">Horario</li>
+          <li className="list-group-item text-center md:font-bold md:text-xl">Horario</li>
         </ul>
         <ul className="list-group w-100">
-          <li className="list-group-item text-center fw-bold fs-4">Acciones</li>
+          <li className="list-group-item text-center md:font-bold md:text-xl">Acciones</li>
         </ul>
       </div>
       {
         citas.length !== 0 ?
           citas.map(e => (
-            <div key={e.fecha} className='flex w-100 gap-3 my-2'>
+            <div key={e.fecha} className='flex w-100 md:gap-3 my-2'>
               <ul className="list-group w-100">
-                <li className="list-group-item text-center fw-bold fs-4 h-[7rem]">
+                <li className="list-group-item text-center md:font-bold md:text-xl h-[7rem]">
                   <p className='my-4 w-100'>{e.fecha}</p>
                 </li>
               </ul>
               <ul className="list-group w-100">
-                <li className="list-group-item text-center fw-bold fs-4 h-[7rem]">
+                <li className="list-group-item text-center md:font-bold md:text-xl h-[7rem]">
                   <p className='my-4 w-100'>{e.horario}</p>
                 </li>
               </ul>
               <ul className="list-group w-100">
-                <li className="list-group-item text-center fw-bold fs-4 h-[7rem]">
+                <li className="list-group-item text-center md:font-bold md:text-xl h-[7rem]">
                   <button className='btn btn-danger w-100 rounded-50 text-center fw-bold my-1' onClick={() => { cancelarCita(e.fecha, e.horario) }}>
                     <FontAwesomeIcon className='fs-5 mx-2' icon={faTrash} />
-                    Cancelar
+                    <any className='max-md:hidden'>Cancelar</any>
                   </button>
                   <button className='btn btn-warning w-100 rounded-50 fw-bold my-1' onClick={() => { reagendarCita(e.fecha, e.horario) }}>
                     <FontAwesomeIcon className='fs-5 mx-2' icon={faCalendarMinus} />
-                    Reagendar
+                    <any className='max-md:hidden'>Reagendar</any>
                   </button>
                 </li>
               </ul>
@@ -186,52 +186,54 @@ function misCitasDentista() {
           <div className='text-center fw-bold fs-4 text-white'>Sin citas</div>
       }
 
-
-      <h1 className='text-center w-100 bg-white rounded p-2 mt-5 text-[#800040]'>Mis citas con el dentista </h1>
-      <div className=" text-center mb-2 w-100 my-4">
-        <div className="row align-items-start ">
-          <div className="col ">
-            <ul className="list-group w-100 ">
-              <li className="list-group-item text-center fw-bold fs-4 bg-white text-[#800040]">Fecha</li>
-            </ul>
-          </div>
-          <div className="col">
-            <ul className="list-group w-100">
-              <li className="list-group-item text-center fw-bold fs-4 bg-white text-[#800040]">Horario</li>
-            </ul>
-          </div>
-          <div className="col">
-            <ul className="list-group w-100">
-              <li className="list-group-item text-center fw-bold fs-4 bg-white text-[#800040]">Comentario</li>
-            </ul>
+      <div className='w-100 rounded px-2 py-2 text-xs'>
+        <h1 className='text-center w-100 bg-white rounded p-2 mt-5 text-[#800040]'>Mis citas con el dentista </h1>
+        <div className=" text-center mb-2 w-100 my-4">
+          <div className="row align-items-start ">
+            <div className="col max-md:p-0 ">
+              <ul className="list-group w-100 ">
+                <li className="list-group-item text-center md:font-bold md:text-xl bg-white text-[#800040]">Fecha</li>
+              </ul>
+            </div>
+            <div className="col max-md:p-0">
+              <ul className="list-group w-100">
+                <li className="list-group-item text-center md:font-bold md:text-xl bg-white text-[#800040]">Horario</li>
+              </ul>
+            </div>
+            <div className="col max-md:p-0">
+              <ul className="list-group w-100">
+                <li className="list-group-item text-center md:font-bold md:text-xl bg-white text-[#800040]">Comentario</li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
-      {
-        seguimiento.length !== 0 ?
-          seguimiento.map(e => (
-            <div key={e._id} className="row align-items-start my-2">
-              <div className="col ">
-                <ul className="list-group w-100 ">
-                  <li className="list-group-item text-center content-center fw-bold fs-4 bg-white text-[#800040] h-[6rem]">{e.fechaCita}</li>
-                </ul>
-              </div>
-              <div className="col">
-                <ul className="list-group w-100">
-                  <li className="list-group-item text-center content-center fw-bold fs-4 bg-white text-[#800040] h-[6rem]">{e.horarioCita}</li>
-                </ul>
-              </div>
-              <div className="col">
-                <ul className="list-group w-100">
-                  <li className="list-group-item text-center fw-bold  bg-white text-[#800040] h-[6rem]">{e.comentario}</li>
-                </ul>
-              </div>
+        {
+          seguimiento.length !== 0 ?
+            seguimiento.map(e => (
+              <div key={e._id} className="row align-items-start my-2">
+                <div className="col max-md:p-0">
+                  <ul className="list-group w-100 ">
+                    <li className="list-group-item text-center content-center md:font-bold md:text-xl bg-white text-[#800040] h-[6rem]">{e.fechaCita}</li>
+                  </ul>
+                </div>
+                <div className="col max-md:p-0">
+                  <ul className="list-group w-100">
+                    <li className="list-group-item text-center content-center md:font-bold md:text-xl bg-white text-[#800040] h-[6rem]">{e.horarioCita}</li>
+                  </ul>
+                </div>
+                <div className="col max-md:p-0">
+                  <ul className="list-group w-100">
+                    <li className="list-group-item text-center md:font-bold   bg-white text-[#800040] h-[6rem]">{e.comentario}</li>
+                  </ul>
+                </div>
 
-            </div>
-          ))
-          :
-          <div className='text-center text-white fw-bold fs-4'>Sin citas</div>
-      }
+              </div>
+            ))
+            :
+            <div className='text-center text-white fw-bold fs-4'>Sin citas</div>
+        }
+      </div>
+
 
     </div>
   )

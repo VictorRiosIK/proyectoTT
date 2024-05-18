@@ -216,8 +216,8 @@ function agendarOdontologo() {
   return (
     <div>
       <div className=" text-center">
-        <div className="row align-items-start m-5 bg-[#800040] rounded">
-          <div className="col self-center h-[30rem] w-[50%] content-center  rounded m-0 ">
+        <div className="row align-items-start m-1 bg-[#800040] rounded">
+          <div className="col self-center h-[30rem] w-[100%] content-center  rounded m-0 ">
             <div className="bg-white rounded w-100 h-[90%] content-center">
               <h1 className='mb-4 mx-2 text-[#800040] '>{Titulo}</h1>
               <img src={image} alt="" className='max-w-[300px] min-w-[100px] w-100' />

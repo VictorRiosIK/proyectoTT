@@ -121,7 +121,7 @@ function detallesCitaPro() {
     }, []);
 
     return (
-        <div className='bg-white rounded p-4 my-4'>
+        <div className='bg-white rounded p-4 my-4 '>
             <h1 className='text-center fw-bold bg-sky-700 rounded py-1 text-white'>Detalles de la cita</h1>
             {
                 errors.map((error, i) => (
@@ -135,9 +135,9 @@ function detallesCitaPro() {
                 <div className="row align-items-start">
                     <div className="col ">
                         <ul className="list-group w-100 bg-sky-700 p-2">
-                            <li className="list-group-item text-start fw-bold fs-5 bg-transparent">
+                            <li className="list-group-item text-start  bg-transparent">
                                 <div className="container text-center">
-                                    <div className="row align-items-start fs-3">
+                                    <div className="row align-items-start md:font-bold md:text-2xl">
                                         <div className="col text-end text-white">
                                             Nombre:
                                         </div>
@@ -148,22 +148,22 @@ function detallesCitaPro() {
                                 </div>
                             </li>
 
-                            <li className="list-group-item text-start fw-bold fs-5 bg-transparent">
-                                <div className="container text-center">
-                                    <div className="row align-items-start fs-3">
-                                        <div className="col text-end text-white">
+                            <li className="list-group-item text-start  bg-transparent">
+                                <div className="container text-center ">
+                                    <div className="row align-items-start md:font-bold md:text-2xl">
+                                        <div className="col max-md:text-start md:text-end text-white">
                                             Email:
                                         </div>
-                                        <div className="col text-start text-white">
+                                        <div className="col text-start text-white ">
                                             {datosAlumno.email}
                                         </div>
                                     </div>
                                 </div>
                             </li>
 
-                            <li className="list-group-item text-start fw-bold fs-5 bg-transparent">
+                            <li className="list-group-item text-start  bg-transparent">
                                 <div className="container text-center">
-                                    <div className="row align-items-start fs-3">
+                                    <div className="row align-items-start md:font-bold md:text-2xl">
                                         <div className="col text-end text-white">
                                             Fecha de la cita:
                                         </div>
@@ -174,9 +174,9 @@ function detallesCitaPro() {
                                 </div>
                             </li>
 
-                            <li className="list-group-item text-start fw-bold fs-5 bg-transparent">
+                            <li className="list-group-item text-start  bg-transparent">
                                 <div className="container text-center">
-                                    <div className="row align-items-start fs-3">
+                                    <div className="row align-items-start md:font-bold md:text-2xl">
                                         <div className="col text-end text-white">
                                             Horario de la cita:
                                         </div>
@@ -187,9 +187,9 @@ function detallesCitaPro() {
                                 </div>
                             </li>
 
-                            <li className="list-group-item text-start fw-bold fs-5 bg-transparent">
+                            <li className="list-group-item text-start  bg-transparent">
                                 <div className="container text-center">
-                                    <div className="row align-items-start fs-3">
+                                    <div className="row align-items-start md:font-bold md:text-2xl">
                                         <div className="col text-end text-white">
                                             Boleta:
                                         </div>
@@ -205,12 +205,12 @@ function detallesCitaPro() {
                             <div className="row align-items-start">
                                 <div className="col ">
                                     <div className='bg-sky-700 p-3 rounded'>
-                                        <label className="form-label fw-bold fs-4 text-white">Comentario de seguimiento</label>
+                                        <label className="form-label md:font-bold md:text-xl text-white">Comentario de seguimiento</label>
                                         <textarea className="form-control" required rows="4" maxLength={115} onChange={(e) => setComent(e.target.value)}></textarea>
 
                                     </div>
                                 </div>
-                                <div className="col gap-2 w-100">
+                                <div className="col-sm gap-2 w-100">
                                     <button className='btn btn-outline-success w-100 rounded-50 fw-bold my-2 fs-5' onClick={getSeguimiento}>
                                         <FontAwesomeIcon className='fs-5 mx-2' icon={faEye} />
                                         Seguimiento
@@ -275,23 +275,23 @@ function detallesCitaPro() {
                     }
                     {
                         showSeguimiento &&
-                        <div>
-                            <h3 className='flex fw-bold fs-3 bg-emerald-700 rounded p-2 text-white'>Seguimiento</h3>
+                        <div className='max-md:p-1'>
+                            <h3 className='flex fw-bold fs-3 bg-emerald-700 rounded  p-2 text-white'>Seguimiento</h3>
                             <div className=" text-center mb-2 w-100 my-4">
                                 <div className="row align-items-start ">
-                                    <div className="col ">
+                                    <div className="col max-md:p-0">
                                         <ul className="list-group w-100 ">
-                                            <li className="list-group-item text-center fw-bold fs-4 bg-emerald-700 text-white">Fecha</li>
+                                            <li className="list-group-item text-center fw-bold md:text-2xl bg-emerald-700 text-white">Fecha</li>
                                         </ul>
                                     </div>
-                                    <div className="col">
+                                    <div className="col max-md:p-0">
                                         <ul className="list-group w-100">
-                                            <li className="list-group-item text-center fw-bold fs-4 bg-emerald-700 text-white">Horario</li>
+                                            <li className="list-group-item text-center fw-bold md:text-2xl bg-emerald-700 text-white">Horario</li>
                                         </ul>
                                     </div>
-                                    <div className="col">
+                                    <div className="col max-md:p-0">
                                         <ul className="list-group w-100">
-                                            <li className="list-group-item text-center fw-bold fs-4 bg-emerald-700 text-white">Comentario</li>
+                                            <li className="list-group-item text-center fw-bold md:text-2xl bg-emerald-700 text-white">Comentario</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -299,19 +299,19 @@ function detallesCitaPro() {
                                     seguimiento.length !== 0 &&
                                     seguimiento.map(e => (
                                         <div key={e._id} className="row align-items-start my-1">
-                                            <div className="col ">
+                                            <div className="col max-md:p-0">
                                                 <ul className="list-group w-100 ">
-                                                    <li className="list-group-item text-center content-center fw-bold fs-4 bg-emerald-700 text-white h-[6rem]">{e.fechaCita}</li>
+                                                    <li className="list-group-item text-center content-center md:font-bold md:text-2xl bg-emerald-700 text-white h-[6rem]">{e.fechaCita}</li>
                                                 </ul>
                                             </div>
-                                            <div className="col">
+                                            <div className="col max-md:p-0">
                                                 <ul className="list-group w-100">
-                                                    <li className="list-group-item text-center content-center fw-bold fs-4 bg-emerald-700 text-white h-[6rem]">{e.horarioCita}</li>
+                                                    <li className="list-group-item text-center content-center md:font-bold md:text-2xl bg-emerald-700 text-white h-[6rem]">{e.horarioCita}</li>
                                                 </ul>
                                             </div>
-                                            <div className="col">
+                                            <div className="col max-md:p-0">
                                                 <ul className="list-group w-100">
-                                                    <li className="list-group-item text-center fw-bold  bg-emerald-700 text-white h-[6rem]">{e.comentario}</li>
+                                                    <li className="list-group-item text-center md:font-bold  bg-emerald-700 text-white h-[6rem]">{e.comentario}</li>
                                                 </ul>
                                             </div>
 

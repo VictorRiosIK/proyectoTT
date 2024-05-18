@@ -217,19 +217,17 @@ function agendarOrientacion() {
   }, [startDate])
 
   return (
-    <div>
+    <div >
       <div className=" text-center">
-        <div className="row align-items-start m-5 bg-[#800040] rounded">
-          <div className="col self-center h-[30rem] w-[50%] content-center  rounded m-0 ">
+        <div className="row align-items-start m-1 bg-[#800040] rounded">
+          <div className="col self-center h-[30rem] w-[100%] content-center  rounded m-0 ">
             <div className="bg-white rounded w-100 h-[90%] content-center">
               <h1 className='mb-4 mx-2 text-[#800040] '>{Titulo}</h1>
               <img src={image} alt="" className='max-w-[490px] min-w-[100px] w-100' />
               {/* <p className='mt-4 mb-0 fs-4 text-sky-700'>¿No tienes cuenta?</p> */}
             </div>
           </div>
-
-
-          <div className="col self-center h-[30rem] w-[50%] content-center  rounded m-0 ">
+          <div className="col self-center h-[30rem] w-[100%] content-center  rounded m-0 ">
             <div className="d-flex bg-white rounded justify-content-center align-items-center w-100">
               <div className=" p-3 w-100 ">
                 {/* <h2 className="text-center fw-bold mb-4 text-white">Agendar cita con psicologo</h2> */}

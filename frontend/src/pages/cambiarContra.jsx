@@ -68,7 +68,7 @@ function cambiarContra() {
     }, [])
 
     return (
-        <div className='d-flex justify-content-center align-items-center  py-5 font-serif'>
+        <div className='d-flex justify-content-center align-items-center  py-5 font-serif max-lg:px-5'>
             <div className="container text-center">
                 <div className="row align-items-start">
                     <div className="col self-center h-[30rem] w-[50%] content-center bg-slate-100 rounded m-0 ">

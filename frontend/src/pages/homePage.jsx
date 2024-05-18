@@ -45,7 +45,7 @@ function homePage() {
       <h2 className='bg-white rounded p-2 fs-1 fw-bold text-sky-700'>Información</h2>
       <div className="text-center w-100 bg-white p-4 rounded ">
         <div className="row gap-4">
-          <div className="col bg-sky-700 rounded-top pt-4" >
+          <div className="col-sm bg-sky-700 rounded-top pt-4" >
             <h2 className="text-white fw-bold text-4xl">Orientación Educativa</h2>
             <div className='text-white mb-4 '>
               <FontAwesomeIcon className='text-4xl' icon={faComments} />
@@ -54,12 +54,31 @@ function homePage() {
               <p className='text-white text-2xl'>Fomenta en el estudiante una cultura de salud mental y asi proyecten en una mejor calidad de vida, apoyando en su desempeño académico, desarrollo humano e integración social.
                 El Servicio se da de manera GRATUITA y totalmente CONFIDENCIAL.</p>
             </div>
-
+            <div className='md:hidden bg-sky-700  rounded-bottom pb-4'>
+              {
+                (user.rol === 'Alumno' || user.rol === 'Undefined') &&
+                <button onClick={() => {
+                  if (isAuthenticated) {
+                    if (user.evaluacionP === 0) {
+                      navigate('/cuestionario')
+                    } else {
+                      navigate('/agendar-psicologo')
+                    }
+                  } else {
+                    navigate('/login')
+                  }
+                }}
+                  className='btn btn-outline-light px-4 fs-5'>
+                  <FontAwesomeIcon className='mx-2' icon={faCalendarCheck} />
+                  Agendar cita
+                </button>
+              }
+            </div>
           </div>
 
 
 
-          <div className="col bg-[#800040] rounded-top pt-4">
+          <div className="col-sm bg-[#800040] rounded-top pt-4">
             <h2 className="text-white fw-bold text-4xl">Odontología</h2>
             <div className='text-white mb-4'>
               <FontAwesomeIcon className='fs-1' icon={faTooth} />
@@ -67,10 +86,26 @@ function homePage() {
             <div className='text-white text-2xl '>
               <p>El Servicio Odontológico trabaja con el compromiso de fomentar y preservar tu salud bucal, a través de servicios con cuotas de recuperación asequibles. Se ubica en la planta baja del Edificio de Gobierno, a un costado de Gestión Escolar.</p>
             </div>
+            <div className='md:hidden bg-[#800040] rounded-bottom pb-4'>
+              {
+                (user.rol === 'Alumno' || user.rol === 'Undefined') &&
+                <button onClick={() => {
+                  if (isAuthenticated) {
+                    navigate('/agendar-dentista')
+                  } else {
+                    navigate('/login')
+                  }
 
+                }}
+                  className='btn btn-outline-light px-4 fs-5'>
+                  <FontAwesomeIcon className='mx-2' icon={faCalendarCheck} />
+                  Agendar cita
+                </button>
+              }
+            </div>
           </div>
 
-          <div className="col bg-slate-300 rounded-top pt-4">
+          <div className="col-sm bg-slate-300 rounded-top pt-4">
             <h2 className="text-[#800040] fw-bold text-4xl">Área de Servicio Médico</h2>
             <div className='text-[#800040] mb-4'>
               <FontAwesomeIcon className='fs-1' icon={faStaffSnake} />
@@ -83,7 +118,7 @@ function homePage() {
 
           </div>
         </div>
-        <div className='row gap-4'>
+        <div className='row gap-4 max-md:hidden'>
           <div className='col bg-sky-700  rounded-bottom pb-4'>
             {
               (user.rol === 'Alumno' || user.rol === 'Undefined') &&
@@ -121,12 +156,21 @@ function homePage() {
               </button>
             }
           </div>
-          <div className='col bg-slate-300 rounded-bottom pb-4'></div>
+          <div className='col-sm bg-slate-300 rounded-bottom pb-4'></div>
         </div>
 
-        <div className="row gap-4 my-2">
-          <div className="col bg-sky-700 rounded pt-4 fs-5" >
-            <div className='grid grid-cols-2  gap-2'>
+
+
+
+      </div>
+
+
+
+      <div className='text-center w-100 bg-white p-4 rounded '>
+        <div className="row gap-4 ">
+          <div className="col-sm bg-sky-700 rounded pt-4  " >
+
+          <div className='grid md:grid-cols-2  gap-2'>
               <div className='text-center text-white border  px-2 rounded'>
                 <p className=''>- Lic. Paola Celeste Montes de Oca Gómez</p>
               </div>
@@ -144,17 +188,16 @@ function homePage() {
               </div>
             </div>
             <div className='text-white my-2 flex-col'>
-              
               <FontAwesomeIcon className='text-4xl' icon={faPhone} />
-              <div>Tel: 55-57-29-60-00 Ext. 52080</div>
-              <div>orientacion_educativa_escom@ipn.mx</div>
-            </div>
+                <p>Tel: 55-57-29-60-00 Ext. 52080</p>
+                <p style={{overflowWrap:'anywhere'}}>orientacion_educativa_escom@ipn.mx</p>
+            </div> 
           </div>
 
 
-          <div className="col bg-[#800040] rounded pt-4 fs-5" >
+          <div className="col-sm bg-[#800040] rounded pt-4 fs-5" >
 
-            <div className='grid grid-cols-2 gap-2'>
+            <div className='grid md:grid-cols-2 gap-2'>
               <div className='text-white border px-2 rounded'>
                 <p className='text-center'>- C. D. Rocío Gómez Ruíz</p>
               </div>
@@ -163,7 +206,7 @@ function homePage() {
               </div>
             </div>
             <div className='mt-2 text-white'>De Lunes a Viernes</div>
-            <div className='grid grid-cols-2 gap-2'>
+            <div className='grid md:grid-cols-2 gap-2'>
               <div className='text-white'>
                 <div className='text-center my-2'>Mat. 8:00 - 15:00 hrs</div>
               </div>
@@ -179,8 +222,8 @@ function homePage() {
           </div>
 
 
-          <div className="col bg-slate-300 rounded pt-4 text-[#800040] fs-5" >
-            <div className='grid grid-cols-2 gap-2'>
+          <div className="col-sm bg-slate-300 rounded pt-4 text-[#800040] fs-5" >
+            <div className='grid md:grid-cols-2 gap-2'>
               <div className='text-[#800040] border px-2 rounded'>
                 <p className=' text-center'>- Dra. Aideé Lizbeth Galván Zermeño</p>
                 <p className=' text-center'>- Dr. Daniel Mauricio Temozihui Trejo</p>
@@ -191,7 +234,7 @@ function homePage() {
               </div>
             </div>
             <div className='mt-2 text-[#800040]'>De Lunes a Viernes</div>
-            <div className='grid grid-cols-2 gap-2'>
+            <div className='grid md:grid-cols-2 gap-2'>
               <div className=''>
                 <div className='my-2 text-center'>Mat. 8:00 - 15:00 hrs</div>
               </div>

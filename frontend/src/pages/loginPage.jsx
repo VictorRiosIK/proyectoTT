@@ -30,9 +30,9 @@ function loginPage() {
 
 
   return (
-    <div className='d-flex justify-content-center align-items-center  py-5 font-serif'>
-      <div className="container text-center">
-        <div className="row align-items-start">
+    <div className='d-flex justify-content-center align-items-center py-5 font-serif max-lg:px-11'>
+      <div className="container text-center ">
+        <div className="row align-items-start ">
           <div className="col self-center h-[32rem] w-[50%] content-center bg-slate-100 rounded m-0 ">
             <h1 className='mb-4 text-sky-700'>¡Bienvenido!</h1>
             <img src={logo} alt="" className='max-w-[290px] min-w-[100px] w-100' />
