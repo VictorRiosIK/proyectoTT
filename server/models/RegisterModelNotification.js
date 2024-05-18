@@ -10,7 +10,7 @@ const notificacionSchema = new mongoose.Schema({
         default: 0
     },
   fechaEnvio: String,
-  correo:String
+  email:String
 });
 
 const RegisterModelNotification = mongoose.model("notification", notificacionSchema);
