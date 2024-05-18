@@ -1225,7 +1225,8 @@ app.post('/programarNotificacion', async (req, res) => {
           token: token,
           titulo: titulo,
           cuerpo: cuerpo,
-          hora: new Date(hora)
+          hora: new Date(hora),
+          email:email
         });
 
         // Guardar la notificación en la base de datos
