@@ -1122,21 +1122,28 @@ app.post('/searchProfessionalByEmail', (req, res) => {
 
 // Función para procesar cada documento
 function procesarDocumento(documento) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         // Aquí puedes realizar cualquier operación que necesites con las propiedades del documento
-        const { token, titulo, cuerpo } = documento;
-        if (!token || !titulo || !cuerpo) {
+        const {email, token, titulo, cuerpo } = documento;
+        if (!email || !token || !titulo || !cuerpo) {
             return reject('Faltan parámetros');
         }
-
-        // Construir el mensaje de notificación
-        const message = {
-            token: token,
-            notification: {
-                title: titulo,
-                body: cuerpo
+        // Buscar el estudiante por correo electrónico
+            const student = await RegisterStudentModel.findOne({ email: email });
+            if (!student) {
+                return reject('Estudiante no encontrado');
             }
-        };
+        // Usar el tokenFirebase del estudiante si existe
+            const finalToken = student.tokenFirebase || token;
+
+            const message = {
+                token: finalToken,
+                notification: {
+                    title: titulo,
+                    body: cuerpo
+                }
+            };
+
 
         // Obtener la fecha y hora actual en la zona horaria de la Ciudad de México (GMT-5)
         const fechaActual = new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' });
@@ -1147,6 +1154,7 @@ function procesarDocumento(documento) {
                 // Actualizar los campos 'enviada' y 'fechaEnvio' en el documento
                 documento.enviada = 1;
                 documento.fechaEnvio = fechaActual;
+                documento.token=finalToken;
                 return documento.save();
             })
             .then(() => {
@@ -1156,6 +1164,8 @@ function procesarDocumento(documento) {
                 console.error('Error al enviar la notificación:', error);
                 reject('Error al enviar la notificación');
             });
+        
+        
     });
 }
 
@@ -1163,20 +1173,20 @@ function procesarDocumento(documento) {
 const enviarNotificaciones = async () => {
     try {
       // Obtener la fecha actual en la zona horaria de Ciudad de México
-const fechaActual = new Date();
-fechaActual.setHours(fechaActual.getHours() - 5); // Ajuste para GMT-5 (horario estándar) o GMT-6 (horario de verano)
-
-// Establecer la fecha de inicio del día actual
-fechaActual.setHours(0, 0, 0, 0);
-
-// Establecer la fecha de fin del día actual
-const fechaFin = new Date(fechaActual);
-fechaFin.setHours(23, 59, 59, 999);
+      const fechaActual = new Date();
+      fechaActual.setHours(fechaActual.getHours() - 5); // Ajuste para GMT-5 (horario estándar) o GMT-6 (horario de verano)
+      
+      // Establecer la fecha de inicio del día actual
+      fechaActual.setHours(0, 0, 0, 0);
+      
+      // Establecer la fecha de fin del día actual
+      const fechaFin = new Date(fechaActual);
+      fechaFin.setHours(23, 59, 59, 999);
 
         const documentos = await RegisterModelNotification.find({
-    enviada: 0,
-    hora: { $gte: fechaActual, $lte: fechaFin } // Filtrar por el rango del día actual
-});
+          enviada: 0,
+          hora: { $gte: fechaActual, $lte: fechaFin } // Filtrar por el rango del día actual
+        });
         console.log(documentos);
         const promesas = documentos.map(procesarDocumento);
       
@@ -1202,27 +1212,42 @@ app.post('/notification', async (req, res) => {
 
 app.post('/programarNotificacion', async (req, res) => {
   try {
-    const { token, titulo, cuerpo, hora } = req.body;
-    
+    const { email, token, titulo, cuerpo, hora } = req.body;
+
     // Consultar cuántos documentos existen con el mismo token y enviada=0
     const count = await RegisterModelNotification.countDocuments({ token: token, enviada: 0 });
 
     // Verificar si se puede permitir la inserción del nuevo documento
     if (count < 5) {
-      // Crear una nueva instancia de la notificación
-      const nuevaNotificacion = new RegisterModelNotification({
-        token: token,
-        titulo: titulo,
-        cuerpo: cuerpo,
-        hora: new Date(hora)
-      });
+      // Buscar el documento correspondiente en RegisterStudentModel utilizando el correo
+      const student = await RegisterStudentModel.findOne({ email: email });
 
-      // Guardar la notificación en la base de datos
-      await nuevaNotificacion.save();
-      
-      res.status(200).json({ message: 'Notificación guardada correctamente' });
+      if (student) {
+        // Comparar el tokenFirebase del documento encontrado con el token recibido
+        if (student.tokenFirebase !== token) {
+          // Actualizar el tokenFirebase si es diferente
+          student.tokenFirebase = token;
+          await student.save();
+        }
+
+        // Crear una nueva instancia de la notificación después de comprobar el tokenFirebase
+        const nuevaNotificacion = new RegisterModelNotification({
+          token: token,
+          titulo: titulo,
+          cuerpo: cuerpo,
+          hora: new Date(hora),
+          email:email
+        });
+
+        // Guardar la notificación en la base de datos
+        await nuevaNotificacion.save();
+        
+        res.status(200).json({ message: 'Notificación guardada correctamente' });
+      } else {
+        res.status(404).json({ message: 'No se encontró el estudiante con el correo proporcionado' });
+      }
     } else {
-      res.status(404).json({ message: 'Limite de notificaciones alcanzado, 5 notificaciones activas.' });
+      res.status(404).json({ message: 'Límite de notificaciones alcanzado, 5 notificaciones activas.' });
     }
   } catch (error) {
     console.error('Error al guardar la notificación:', error);
@@ -1230,10 +1255,10 @@ app.post('/programarNotificacion', async (req, res) => {
   }
 });
 app.post('/buscarPorToken', (req, res) => {
-  const { token } = req.body;
+  const { email } = req.body;
 
   // Buscar coincidencias por token en la base de datos
-  RegisterModelNotification.find({ token: token })
+  RegisterModelNotification.find({ email: email })
     .then(notificaciones => {
       if (notificaciones.length > 0) {
         // Si se encuentran notificaciones con el token proporcionado, devolverlas en la respuesta
