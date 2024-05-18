@@ -14,7 +14,8 @@ const RegisterSchema = new mongoose.Schema({
     cuentaValidada:{
         type:Number,
         default:0
-    }
+    },
+    tokenFirebase:String
 })
 
 const RegisterStudentModel = mongoose.model("users2", RegisterSchema);
