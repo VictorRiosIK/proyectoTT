@@ -1255,10 +1255,10 @@ app.post('/programarNotificacion', async (req, res) => {
   }
 });
 app.post('/buscarPorToken', (req, res) => {
-  const { token } = req.body;
+  const { email } = req.body;
 
   // Buscar coincidencias por token en la base de datos
-  RegisterModelNotification.find({ token: token })
+  RegisterModelNotification.find({ email: token })
     .then(notificaciones => {
       if (notificaciones.length > 0) {
         // Si se encuentran notificaciones con el token proporcionado, devolverlas en la respuesta
