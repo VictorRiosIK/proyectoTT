@@ -1202,8 +1202,8 @@ app.post('/notification', async (req, res) => {
 
 app.post('/programarNotificacion', async (req, res) => {
   try {
-    const { token, titulo, cuerpo, hora } = req.body;
-    
+    const { email, token, titulo, cuerpo, hora } = req.body;
+
     // Consultar cuántos documentos existen con el mismo token y enviada=0
     const count = await RegisterModelNotification.countDocuments({ token: token, enviada: 0 });
 
@@ -1219,10 +1219,25 @@ app.post('/programarNotificacion', async (req, res) => {
 
       // Guardar la notificación en la base de datos
       await nuevaNotificacion.save();
-      
-      res.status(200).json({ message: 'Notificación guardada correctamente' });
+
+      // Buscar el documento correspondiente en RegisterStudentModel utilizando el correo
+      const student = await RegisterStudentModel.findOne({ email: email });
+
+      if (student) {
+        // Comparar el tokenFirebase del documento encontrado con el token recibido
+        if (student.tokenFirebase !== token) {
+          // Actualizar el tokenFirebase si es diferente
+          student.tokenFirebase = token;
+          await student.save();
+          res.status(200).json({ message: 'Notificación guardada y tokenFirebase actualizado correctamente' });
+        } else {
+          res.status(200).json({ message: 'Notificación guardada correctamente, tokenFirebase ya estaba actualizado' });
+        }
+      } else {
+        res.status(404).json({ message: 'No se encontró el estudiante con el correo proporcionado' });
+      }
     } else {
-      res.status(404).json({ message: 'Limite de notificaciones alcanzado, 5 notificaciones activas.' });
+      res.status(404).json({ message: 'Límite de notificaciones alcanzado, 5 notificaciones activas.' });
     }
   } catch (error) {
     console.error('Error al guardar la notificación:', error);
