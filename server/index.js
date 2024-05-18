@@ -1122,7 +1122,7 @@ app.post('/searchProfessionalByEmail', (req, res) => {
 
 // Función para procesar cada documento
 function procesarDocumento(documento) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         // Aquí puedes realizar cualquier operación que necesites con las propiedades del documento
         const {email, token, titulo, cuerpo } = documento;
         if (!email || !token || !titulo || !cuerpo) {
