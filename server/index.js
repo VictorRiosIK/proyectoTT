@@ -1128,23 +1128,22 @@ function procesarDocumento(documento) {
         if (!email || !token || !titulo || !cuerpo) {
             return reject('Faltan parámetros');
         }
-        const student = await RegisterStudentModel.findOne({ email: email });
-
-        if (student) {
-          // Comparar el tokenFirebase del documento encontrado con el token recibido
-            if (student.tokenFirebase !== token) {
-              // Actualizar el tokenFirebase si es diferente
-              student.tokenFirebase = token;
-              await student.save();
-            }  
-            // Construir el mensaje de notificación
-        const message = {
-            token: token,
-            notification: {
-                title: titulo,
-                body: cuerpo
+        // Buscar el estudiante por correo electrónico
+            const student = await RegisterStudentModel.findOne({ email: email });
+            if (!student) {
+                return reject('Estudiante no encontrado');
             }
-        };
+        // Usar el tokenFirebase del estudiante si existe
+            const finalToken = student.tokenFirebase || token;
+
+            const message = {
+                token: finalToken,
+                notification: {
+                    title: titulo,
+                    body: cuerpo
+                }
+            };
+
 
         // Obtener la fecha y hora actual en la zona horaria de la Ciudad de México (GMT-5)
         const fechaActual = new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' });
@@ -1155,6 +1154,7 @@ function procesarDocumento(documento) {
                 // Actualizar los campos 'enviada' y 'fechaEnvio' en el documento
                 documento.enviada = 1;
                 documento.fechaEnvio = fechaActual;
+                documento.token=finalToken;
                 return documento.save();
             })
             .then(() => {
@@ -1164,9 +1164,7 @@ function procesarDocumento(documento) {
                 console.error('Error al enviar la notificación:', error);
                 reject('Error al enviar la notificación');
             });
-        }else {
-          res.status(404).json({ message: 'No se encontró el estudiante con el correo proporcionado' });
-        }
+        
         
     });
 }
