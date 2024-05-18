@@ -1209,17 +1209,6 @@ app.post('/programarNotificacion', async (req, res) => {
 
     // Verificar si se puede permitir la inserción del nuevo documento
     if (count < 5) {
-      // Crear una nueva instancia de la notificación
-      const nuevaNotificacion = new RegisterModelNotification({
-        token: token,
-        titulo: titulo,
-        cuerpo: cuerpo,
-        hora: new Date(hora)
-      });
-
-      // Guardar la notificación en la base de datos
-      await nuevaNotificacion.save();
-
       // Buscar el documento correspondiente en RegisterStudentModel utilizando el correo
       const student = await RegisterStudentModel.findOne({ email: email });
 
@@ -1229,10 +1218,20 @@ app.post('/programarNotificacion', async (req, res) => {
           // Actualizar el tokenFirebase si es diferente
           student.tokenFirebase = token;
           await student.save();
-          res.status(200).json({ message: 'Notificación guardada y tokenFirebase actualizado correctamente' });
-        } else {
-          res.status(200).json({ message: 'Notificación guardada correctamente, tokenFirebase ya estaba actualizado' });
         }
+
+        // Crear una nueva instancia de la notificación después de comprobar el tokenFirebase
+        const nuevaNotificacion = new RegisterModelNotification({
+          token: token,
+          titulo: titulo,
+          cuerpo: cuerpo,
+          hora: new Date(hora)
+        });
+
+        // Guardar la notificación en la base de datos
+        await nuevaNotificacion.save();
+        
+        res.status(200).json({ message: 'Notificación guardada correctamente' });
       } else {
         res.status(404).json({ message: 'No se encontró el estudiante con el correo proporcionado' });
       }
