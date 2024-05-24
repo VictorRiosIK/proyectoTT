@@ -231,7 +231,7 @@ app.get('/verificaCorreo', (req, res) => {
                         // Guardar el cambio en la base de datos
                         student.save()
                             .then(() => {
-                                return res.status(200).json({ message: 'La cuenta ha sido verificada exitosamente.' });
+                                return res.redirect('https://proyecto-tt-front.vercel.app/verificacion');
                             })
                             .catch(error => {
                                 return res.status(500).json({ message: 'Error al actualizar el estado de verificación de la cuenta.', error: error });
