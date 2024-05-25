@@ -206,7 +206,7 @@ app.post('/registerStudent', (req, res) => {
         .catch(err => res.status(500).json({ message: 'Error al buscar el número de boleta.' }));
 });
 // Endpoint para restablecer la contraseña
-app.post('/reset/', async (req, res) => {
+app.post('/reset', async (req, res) => {
   const { password , token} = req.body;
 
   try {
