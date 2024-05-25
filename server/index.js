@@ -210,7 +210,7 @@ app.post('/reset', async (req, res) => {
   const { password , token} = req.body;
 
   try {
-    const user = await UserModel.findOne({
+    const user = await RegisterStudentModel.findOne({
       resetPasswordToken: token,
       resetPasswordExpires: { $gt: Date.now() } // Asegurarse de que el token no haya expirado
     });
