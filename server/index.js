@@ -283,7 +283,7 @@ app.get('/enviaCorreoRecuperacion', (req, res) =>{
                                                         res.status(200).json({ user: result, token: token, message: 'Correo electrónico de cambio de contraseña con éxito' });
                                                     }
                                                 });
-}
+});
 app.get('/verificaCorreo', (req, res) => {
     const { email, token } = req.query;
 
