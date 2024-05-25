@@ -205,6 +205,33 @@ app.post('/registerStudent', (req, res) => {
         })
         .catch(err => res.status(500).json({ message: 'Error al buscar el número de boleta.' }));
 });
+// Endpoint para restablecer la contraseña
+app.post('/reset/', async (req, res) => {
+  const { password , token} = req.body;
+
+  try {
+    const user = await UserModel.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() } // Asegurarse de que el token no haya expirado
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Token de recuperación inválido o ha expirado' });
+    }
+
+    // Actualizar la contraseña del usuario
+    user.password = password; // Asegúrate de hashear la contraseña antes de guardarla
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Contraseña restablecida correctamente' });
+  } catch (error) {
+    console.error('Error al restablecer la contraseña:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
 app.post('/enviaCorreoRecuperacion', async (req, res) =>{
   const { email } = req.body;
   // Generar un token de recuperación
