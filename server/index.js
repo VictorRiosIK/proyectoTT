@@ -204,7 +204,7 @@ app.post('/registerStudent', (req, res) => {
         })
         .catch(err => res.status(500).json({ message: 'Error al buscar el número de boleta.' }));
 });
-app.post('/enviaCorreoRecuperacion', (req, res) =>{
+app.post('/enviaCorreoRecuperacion', async (req, res) =>{
   const { email } = req.body;
   // Generar un token de recuperación
   const token = crypto.randomBytes(20).toString('hex');
