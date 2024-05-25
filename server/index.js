@@ -321,7 +321,7 @@ app.post('/enviaCorreoRecuperacion', async (req, res) => {
         return res.status(500).json({ message: 'Error al enviar el correo electrónico de cambio de contraseña', error: error });
       } else {
         console.log('Correo electrónico de verificación enviado:', info.response);
-        return res.status(200).json({ user: result, token: token, message: 'Correo electrónico de cambio de contraseña enviado con éxito' });
+        return res.status(200).json({ message: 'Correo electrónico de cambio de contraseña enviado con éxito' });
       }
     });
   } catch (error) {
