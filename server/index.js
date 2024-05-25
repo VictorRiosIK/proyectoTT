@@ -224,7 +224,7 @@ app.get('/verificaCorreo', (req, res) => {
                 } else {
                     // Si el correo y el token son válidos, actualizar el estado de verificación de la cuenta si es necesario
                     if (student.cuentaValidada === 1) {
-                        return res.status(200).json({ message: 'La cuenta ya ha sido verificada anteriormente.' });
+                         return res.redirect('https://proyecto-tt-front.vercel.app/verificacion');
                     } else {
                         // Actualizar el estado de verificación de la cuenta a 1
                         student.cuentaValidada = 1;
