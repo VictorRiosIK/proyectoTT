@@ -15,7 +15,9 @@ const RegisterSchema = new mongoose.Schema({
         type:Number,
         default:0
     },
-    tokenFirebase:String
+    tokenFirebase:String,
+    resetPasswordToken:String,
+    resetPasswordExpires: { type: Date }
 })
 
 const RegisterStudentModel = mongoose.model("users2", RegisterSchema);
