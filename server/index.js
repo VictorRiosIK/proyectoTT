@@ -257,10 +257,10 @@ app.post('/enviaCorreoRecuperacion', async (req, res) => {
       result = await RegisterProfessionalModel.findOneAndUpdate(
         { email },
         { resetPasswordToken: token, resetPasswordExpires: Date.now() + 3600000 }, // 1 hora de validez
-        { new: true }
+        { new: true, upsert: true }
       );
     }
-
+    console.log(result);
     // Si no se encuentra en ningún modelo, devolver un error
     if (!result) {
       return res.status(404).json({ message: 'Correo electrónico no encontrado' });
