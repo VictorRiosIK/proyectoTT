@@ -210,7 +210,7 @@ app.post('/reset', async (req, res) => {
   const { password , token} = req.body;
 
   try {
-    const user = await RegisterStudentModel.findOne({
+    let user = await RegisterStudentModel.findOne({
       resetPasswordToken: token,
       resetPasswordExpires: { $gt: Date.now() } // Asegurarse de que el token no haya expirado
     });
@@ -246,7 +246,7 @@ app.post('/enviaCorreoRecuperacion', async (req, res) => {
     const token = crypto.randomBytes(20).toString('hex');
 
     // Guardar el token en la base de datos junto con el email
-    const result = await RegisterStudentModel.findOneAndUpdate(
+    let result = await RegisterStudentModel.findOneAndUpdate(
       { email },
       { resetPasswordToken: token, resetPasswordExpires: Date.now() + 3600000 }, // 1 hora de validez
       { new: true }
