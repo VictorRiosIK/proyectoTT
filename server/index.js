@@ -232,95 +232,102 @@ app.post('/reset', async (req, res) => {
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 });
-app.post('/enviaCorreoRecuperacion', async (req, res) =>{
-  const { email } = req.body;
-  // Generar un token de recuperación
-  const token = crypto.randomBytes(20).toString('hex');
+app.post('/enviaCorreoRecuperacion', async (req, res) => {
+  try {
+    const { email } = req.body;
 
-  // Guardar el token en la base de datos junto con el email, por ejemplo
-  // Aquí se supone que tienes un modelo de Usuario para almacenar este token temporalmente
-  await RegisterStudentModel.findOneAndUpdate(
-    { email },
-    { resetPasswordToken: token, resetPasswordExpires: Date.now() + 3600000 }, // 1 hora de validez
-    { new: true, upsert: true }
-  );
-  let transporter = nodemailer.createTransport({
-                                                    service: 'Gmail',
-                                                    auth: {
-                                                        user: 'vrios718@gmail.com', // Tu dirección de correo electrónico
-                                                        pass: 'fqchchfldzzfafqu' // Tu contraseña de correo electrónico
-                                                    }
-                                                });
+    // Generar un token de recuperación
+    const token = crypto.randomBytes(20).toString('hex');
 
-                                                // HTML y CSS en línea para el correo electrónico
-                                                let correoHTML = `
-                                                    <html>
-                                                        <head>
-                                                            <style>
-                                                                /* Estilos CSS en línea */
-                                                                body {
-                                                                    font-family: Arial, sans-serif;
-                                                                    background-color: #f2f2f2;
-                                                                    margin: 0;
-                                                                    padding: 0;
-                                                                }
-                                                                .container {
-                                                                    max-width: 600px;
-                                                                    margin: 0 auto;
-                                                                    padding: 20px;
-                                                                    background-color: #ffffff;
-                                                                    border-radius: 10px;
-                                                                    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-                                                                }
-                                                                h1 {
-                                                                    color: #333333;
-                                                                    text-align: center;
-                                                                }
-                                                                p {
-                                                                    color: #666666;
-                                                                    text-align: center;
-                                                                }
-                                                                .boton {
-                                                                    display: block;
-                                                                    width: 200px;
-                                                                    margin: 20px auto;
-                                                                    padding: 10px;
-                                                                    background-color: #007bff;
-                                                                    color: #ffffff;
-                                                                    text-align: center;
-                                                                    text-decoration: none;
-                                                                    border-radius: 5px;
-                                                                }
-                                                            </style>
-                                                        </head>
-                                                        <body>
-                                                            <div class="container">
-                                                                <h1>¡Correo de recuperación de cuenta!</h1>
-                                                                <p>Por favor, haz clic en el siguiente botón para cambiar tu contraseña:</p>
-                                                                <a href="https://proyecto-tt-api.vercel.app/recuperacion?email=${email}&token=${token}" class="boton">Cambiar contraseña</a>
-                                                            </div>
-                                                        </body>
-                                                    </html>
-                                                `;
+    // Guardar el token en la base de datos junto con el email
+    const result = await RegisterStudentModel.findOneAndUpdate(
+      { email },
+      { resetPasswordToken: token, resetPasswordExpires: Date.now() + 3600000 }, // 1 hora de validez
+      { new: true, upsert: true }
+    );
 
-                                                // Configurar los detalles del correo electrónico
-                                                let mailOptions = {
-                                                    from: 'vrios718@gmail.com', // Remitente
-                                                    to: email, // Destinatario
-                                                    subject: 'Recuperación de contraseña', // Asunto
-                                                    html: correoHTML // Cuerpo del correo electrónico
-                                                };
+    // Configurar el transportador de nodemailer
+    let transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: 'vrios718@gmail.com', // Tu dirección de correo electrónico
+        pass: 'fqchchfldzzfafqu' // Tu contraseña de correo electrónico
+      }
+    });
 
-                                                // Enviar el correo electrónico
-                                                transporter.sendMail(mailOptions, (error, info) => {
-                                                    if (error) {
-                                                        console.log('Error al enviar el correo electrónico de cambio de contraseña:', error);
-                                                        res.status(500).json({ message: 'Error al enviar el correo electrónico de cambio de contraseña', error: error });
-                                                    } else {
-                                                        console.log('Correo electrónico de verificación enviado:', info.response);
-                                                        res.status(200).json({ user: result, token: token, message: 'Correo electrónico de cambio de contraseña con éxito' });
-                                                    }
-                                                });
+    // HTML y CSS en línea para el correo electrónico
+    let correoHTML = `
+      <html>
+        <head>
+          <style>
+            /* Estilos CSS en línea */
+            body {
+              font-family: Arial, sans-serif;
+              background-color: #f2f2f2;
+              margin: 0;
+              padding: 0;
+            }
+            .container {
+              max-width: 600px;
+              margin: 0 auto;
+              padding: 20px;
+              background-color: #ffffff;
+              border-radius: 10px;
+              box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            }
+            h1 {
+              color: #333333;
+              text-align: center;
+            }
+            p {
+              color: #666666;
+              text-align: center;
+            }
+            .boton {
+              display: block;
+              width: 200px;
+              margin: 20px auto;
+              padding: 10px;
+              background-color: #007bff;
+              color: #ffffff;
+              text-align: center;
+              text-decoration: none;
+              border-radius: 5px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h1>¡Correo de recuperación de cuenta!</h1>
+            <p>Por favor, haz clic en el siguiente botón para cambiar tu contraseña:</p>
+            <a href="https://proyecto-tt-api.vercel.app/recuperacion?email=${email}&token=${token}" class="boton">Cambiar contraseña</a>
+          </div>
+        </body>
+      </html>
+    `;
+
+    // Configurar los detalles del correo electrónico
+    let mailOptions = {
+      from: 'vrios718@gmail.com', // Remitente
+      to: email, // Destinatario
+      subject: 'Recuperación de contraseña', // Asunto
+      html: correoHTML // Cuerpo del correo electrónico
+    };
+
+    // Enviar el correo electrónico
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('Error al enviar el correo electrónico de cambio de contraseña:', error);
+        return res.status(500).json({ message: 'Error al enviar el correo electrónico de cambio de contraseña', error: error });
+      } else {
+        console.log('Correo electrónico de verificación enviado:', info.response);
+        return res.status(200).json({ user: result, token: token, message: 'Correo electrónico de cambio de contraseña enviado con éxito' });
+      }
+    });
+  } catch (error) {
+    console.error('Error en la operación:', error);
+    res.status(500).json({ message: 'Error en la operación', error: error });
+  }
 });
 app.get('/verificaCorreo', (req, res) => {
     const { email, token } = req.query;
