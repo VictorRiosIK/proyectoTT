@@ -249,7 +249,7 @@ app.post('/enviaCorreoRecuperacion', async (req, res) => {
     const result = await RegisterStudentModel.findOneAndUpdate(
       { email },
       { resetPasswordToken: token, resetPasswordExpires: Date.now() + 3600000 }, // 1 hora de validez
-      { new: true, upsert: true }
+      { new: true }
     );
 
     // Si no se encuentra en RegisterStudentModel, buscar en RegisterProfessionalModel
@@ -257,7 +257,7 @@ app.post('/enviaCorreoRecuperacion', async (req, res) => {
       result = await RegisterProfessionalModel.findOneAndUpdate(
         { email },
         { resetPasswordToken: token, resetPasswordExpires: Date.now() + 3600000 }, // 1 hora de validez
-        { new: true, upsert: true }
+        { new: true }
       );
     }
     console.log(result);
