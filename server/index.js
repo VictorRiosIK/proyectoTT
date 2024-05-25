@@ -206,6 +206,16 @@ app.post('/registerStudent', (req, res) => {
 });
 app.post('/enviaCorreoRecuperacion', (req, res) =>{
   const { email } = req.body;
+  // Generar un token de recuperación
+  const token = crypto.randomBytes(20).toString('hex');
+
+  // Guardar el token en la base de datos junto con el email, por ejemplo
+  // Aquí se supone que tienes un modelo de Usuario para almacenar este token temporalmente
+  await RegisterStudentModel.findOneAndUpdate(
+    { email },
+    { resetPasswordToken: token, resetPasswordExpires: Date.now() + 3600000 }, // 1 hora de validez
+    { new: true, upsert: true }
+  );
   let transporter = nodemailer.createTransport({
                                                     service: 'Gmail',
                                                     auth: {
@@ -259,7 +269,7 @@ app.post('/enviaCorreoRecuperacion', (req, res) =>{
                                                             <div class="container">
                                                                 <h1>¡Correo de recuperación de cuenta!</h1>
                                                                 <p>Por favor, haz clic en el siguiente botón para cambiar tu contraseña:</p>
-                                                                <a href="https://proyecto-tt-api.vercel.app/recuperacion?email=${email}&token=" class="boton">Cambiar contraseña</a>
+                                                                <a href="https://proyecto-tt-api.vercel.app/recuperacion?email=${email}&token=${token}" class="boton">Cambiar contraseña</a>
                                                             </div>
                                                         </body>
                                                     </html>
