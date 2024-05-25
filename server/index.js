@@ -218,9 +218,9 @@ app.post('/reset', async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: 'Token de recuperación inválido o ha expirado' });
     }
-
+     const hashedPassword = bcrypt.hashSync(password, 10);
     // Actualizar la contraseña del usuario
-    user.password = password; // Asegúrate de hashear la contraseña antes de guardarla
+    user.password = hashedPassword; // Asegúrate de hashear la contraseña antes de guardarla
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
 
