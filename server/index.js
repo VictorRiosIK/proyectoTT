@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 const cors = require('cors')
 const RegisterModel = require('./models/Register')
 const RegisterStudentModel=require('./models/RegisterStudentModel');
