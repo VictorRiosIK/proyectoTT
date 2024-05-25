@@ -214,7 +214,13 @@ app.post('/reset', async (req, res) => {
       resetPasswordToken: token,
       resetPasswordExpires: { $gt: Date.now() } // Asegurarse de que el token no haya expirado
     });
-
+    // Si no se encuentra el usuario, buscar en RegisterProfessionalModel
+    if (!user) {
+      user = await RegisterProfessionalModel.findOne({
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: Date.now() } // Asegurarse de que el token no haya expirado
+      });
+    }
     if (!user) {
       return res.status(400).json({ message: 'Token de recuperación inválido o ha expirado' });
     }
