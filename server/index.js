@@ -204,8 +204,8 @@ app.post('/registerStudent', (req, res) => {
         })
         .catch(err => res.status(500).json({ message: 'Error al buscar el número de boleta.' }));
 });
-app.get('/enviaCorreoRecuperacion', (req, res) =>{
-  const { email } = req.query;
+app.post('/enviaCorreoRecuperacion', (req, res) =>{
+  const { email } = req.body;
   let transporter = nodemailer.createTransport({
                                                     service: 'Gmail',
                                                     auth: {
