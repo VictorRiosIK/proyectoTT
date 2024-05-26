@@ -7,10 +7,12 @@ import img from '../assets/contra.png'
 import { cambiarContraseñaRequest } from '../api/citas.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 //Importar el icono
-import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons'
+import { faArrowsRotate, faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
 import { buscarPorEmailRequest } from '../api/citas.js';
 import { useParams } from 'react-router-dom';
 import { resetRequest } from '../api/auth.js';
+import { Tooltip } from 'react-tooltip'
+
 
 function recuperarCon() {
     const [confirm, setConfirm] = useState();
@@ -19,24 +21,26 @@ function recuperarCon() {
     const [errors, setErrors] = useState([]);
     const [adds, setAdd] = useState([]);
     const params = useParams();
-    const {token, correo} = params;
+    const { token, correo } = params;
     const updateContrasena = async () => {
         try {
-            if (token,correo, nueva, confirm) {
-                if(nueva === confirm){
-                    console.log(token,correo, nueva, confirm);
+            if (token, correo, nueva, confirm) {
+                if (nueva === confirm) {
+                    console.log(token, correo, nueva, confirm);
                     const res = await resetRequest(nueva, token);
-                }else{
+                    console.log(res);
+                    setAdd(['Cambio de contraseña exitoso'])
+                } else {
                     setErrors(['Contraseñas no coinciden'])
                 }
-                
-            }else{
+
+            } else {
                 setErrors(['Ingresar campos necesarios']);
             }
 
         } catch (error) {
             console.log(error);
-            setErrors([error.response.data])
+            setErrors([error.response.data.message])
         }
     }
 
@@ -46,8 +50,8 @@ function recuperarCon() {
         await updateContrasena();
 
     }
-     //funcion para eliminar los mensajes pasados un tiempo
-     useEffect(() => {
+    //funcion para eliminar los mensajes pasados un tiempo
+    useEffect(() => {
         if (errors.length > 0) {
             const timer = setTimeout(() => {
                 setErrors([])
@@ -92,18 +96,28 @@ function recuperarCon() {
 
                                     ))
                                 }
-
+                                <div className='text-start w-100'>
+                                    <button className=" btn text-white m-0 p-0 place-content-start my-anchor-element"><FontAwesomeIcon className='' icon={faCircleQuestion} /></button>
+                                    <Tooltip anchorSelect=" .my-anchor-element" place="top">
+                                        <p>La contraseña debe contener al menos una letra mayúscula, 
+                                        <br />una  letra minúscula, un número, un carácter especial 
+                                         <br /> y tener una longitud mínima de 8 caracteres.</p>
+                                    </Tooltip>
+                                </div>
                                 <form className='' onSubmit={handleSubmit} autoComplete='off'>
                                     <div className="mb-3">
-                                        <label htmlFor="vieja" className='flex'>
+                                        <label htmlFor="vieja" className='flex gap-1'>
                                             <strong className='text-white fs-5'>Nueva Contraseña</strong>
+
                                         </label>
+
                                         <input
                                             type="password"
                                             placeholder="Contraseña"
                                             autoComplete="off"
                                             name="vieja"
                                             className="form-control rounded-50"
+                                            pattern='^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$'
                                             onChange={(e) => setNueva(e.target.value)}
                                         />
                                     </div>
@@ -116,6 +130,7 @@ function recuperarCon() {
                                             placeholder="Confirmar contraseña"
                                             name="nueva"
                                             className="form-control rounded-50"
+                                            pattern='^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$'
                                             onChange={(e) => setConfirm(e.target.value)}
                                             autoComplete='off'
                                         />
@@ -124,6 +139,7 @@ function recuperarCon() {
                                         <FontAwesomeIcon className='flex p-1' icon={faArrowsRotate} />
                                         Cambiar
                                     </button>
+
                                 </form>
                             </div>
                         </div>

@@ -4,6 +4,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useEffect } from 'react';
 import logo from '../assets/logo.png'
+import { Tooltip } from 'react-tooltip'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+//Importar el icono
+import { faArrowsRotate, faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
 
 function registerPage() {
   const [name, setName] = useState()
@@ -102,19 +106,29 @@ function registerPage() {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
+
                 <div className="mb-3">
                   <label htmlFor="password" className='flex'>
-                    <strong className='text-white fs-5 '>Contraseña</strong>
+                    <div className='text-start p-0 mx-1 '>
+                      <button className=" btn text-white m-0 p-0 place-content-start my-anchor-element"><FontAwesomeIcon className='' icon={faCircleQuestion} /></button>
+                      <Tooltip anchorSelect=" .my-anchor-element" place="top">
+                        <p>La contraseña debe contener al menos una letra mayúscula,
+                          <br />una  letra minúscula, un número, un carácter especial
+                          <br /> y tener una longitud mínima de 8 caracteres.</p>
+                      </Tooltip>
+                    </div>
+                    <strong className='text-white fs-5 w-100 text-start'>Contraseña</strong>
                   </label>
-                  <input required 
+                  <input required
                     type="password"
                     placeholder="Contraseña"
                     name="password"
                     className="form-control rounded-50"
+                    pattern='^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$'
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                <button type="submit" className="btn btn-outline-light w-100 rounded-50 my-4 fs-5">
+                <button type="submit" className="btn btn-outline-light w-100 rounded-50 my-2 fs-5">
                   Registrar
                 </button>
 

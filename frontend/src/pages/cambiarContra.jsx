@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useEffect } from 'react';
-import img from '../assets/contra.png'
+import img from '../assets/user.png'
 import { cambiarContraseñaRequest } from '../api/citas.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 //Importar el icono
@@ -11,13 +11,14 @@ import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons'
 import { buscarPorEmailRequest } from '../api/citas.js';
 
 function cambiarContra() {
+    const user = JSON.parse(window.localStorage.getItem('user'));
     const [vieja, setVieja] = useState();
     const [nueva, setNueva] = useState();
     const navigate = useNavigate();
     const [errors, setErrors] = useState([]);
     const [adds, setAdd] = useState([]);
     const [boleta, setBoleta] = useState([]);
-    const user = JSON.parse(window.localStorage.getItem('user'));
+    
     const updateContrasena = async () => {
         try {
             const res = await cambiarContraseñaRequest(user.email, vieja, nueva, user.rol);
@@ -72,9 +73,9 @@ function cambiarContra() {
             <div className="container text-center">
                 <div className="row align-items-start">
                     <div className="col self-center h-[30rem] w-[50%] content-center bg-slate-100 rounded m-0 ">
-                        <h1 className='mb-4 text-sky-700'>¡No olvides tu contraseña!</h1>
+                        <h1 className='mb-4 text-sky-700'>¡Bienvenido {user.rol}!</h1>
                         <img src={img} alt="" className='max-w-[300px] min-w-[100px] w-100' />
-                        <p className='mt-4 mb-0 fs-4 text-sky-700'>Guardala en un lugar seguro</p>
+                        <p className='mt-4 mb-0 fs-4 text-sky-700'>Puede cambiar su contraseña</p>
                     </div>
                     <div className="col h-[30rem] m-0 p-0">
                         <div className="bg-sky-700 h-[30rem] p-3 rounded w-100 content-center">
