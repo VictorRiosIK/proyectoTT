@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext.jsx'
 import { useEffect } from 'react';
 import logo from '../assets/logo.png'
 
+
 function loginPage() {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
@@ -17,6 +18,10 @@ function loginPage() {
     // axios.post('https://proyecto-tt-api.vercel.app/login', {email, password})
     // .then(result => console.log(result))
     // .catch(err => console.log(err))
+  }
+
+  const recuperar = () => {
+    navigate('/enviar');
   }
 
   //Si esta autenticado cambia de pagina
@@ -82,7 +87,19 @@ function loginPage() {
                   <button type="submit" className="btn btn-outline-light w-100 rounded-50 fs-5">
                     Ingresar
                   </button>
+                  <br />
                 </form>
+              </div>
+              <div className='mt-16 flex-col'>
+                <div>
+                  <label htmlFor="" className=' mx-2 text-white'>Olvide mi contraseña</label>
+                </div>
+                <div>
+                  <button className="btn btn-outline-light w-[60%] rounded-50 fs-5" onClick={() => { recuperar() }}>
+                    Recuperar
+                  </button>
+                </div>
+
               </div>
             </div>
           </div>

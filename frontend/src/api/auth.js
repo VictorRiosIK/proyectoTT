@@ -16,6 +16,10 @@ export const registerProfessionalRequest = (name, email, password, rol) =>
 export const loginRequest = (email,password) => axios.post('/login', {email, password})
 //export const loginRequest = user => axios.post(`/login`,user)
 
-
-
 export const verifyTokenRequest = ()=> axios.get('/verify')
+
+//Enviar correo de recuperacion de contraseña
+export const recuperarRequest = (email) => axios.post('/enviaCorreoRecuperacion', {email})
+
+//reset de contraseña
+export const resetRequest = ( password , token) => axios.post('/reset', { password , token})

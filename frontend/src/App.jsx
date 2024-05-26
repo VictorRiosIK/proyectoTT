@@ -20,6 +20,7 @@ import Footer from "./components/Footer.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import Verificacion from "./pages/verificacion.jsx";
 import RecuperarCon from "./pages/recuperarCon.jsx";
+import EnviarRecuperacion from "./pages/enviarRecuperacion.jsx";
 
 
 function App() {
@@ -36,7 +37,8 @@ function App() {
               <Route path='/login' element={<LoginPage />}></Route>
               <Route path='/register' element={<RegisterPage />}></Route>
               <Route path='/verificacion' element={<Verificacion />}></Route>
-              <Route path='/recuperar' element={<RecuperarCon/>}></Route>
+              <Route path='/recuperar/:token/:correo' element={<RecuperarCon/>}></Route>
+              <Route path='/enviar' element={<EnviarRecuperacion/>}></Route>
 
               {/* Rutas privadas */}
               <Route element={<ProtectedRoute />}>
