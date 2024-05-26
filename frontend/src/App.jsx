@@ -37,7 +37,7 @@ function App() {
               <Route path='/login' element={<LoginPage />}></Route>
               <Route path='/register' element={<RegisterPage />}></Route>
               <Route path='/verificacion' element={<Verificacion />}></Route>
-              <Route path='/recuperar/:token/:correo' element={<RecuperarCon/>}></Route>
+              <Route path='/recuperar/:token' element={<RecuperarCon/>}></Route>
               <Route path='/enviar' element={<EnviarRecuperacion/>}></Route>
 
               {/* Rutas privadas */}

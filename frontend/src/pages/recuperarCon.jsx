@@ -21,12 +21,12 @@ function recuperarCon() {
     const [errors, setErrors] = useState([]);
     const [adds, setAdd] = useState([]);
     const params = useParams();
-    const { token, correo } = params;
+    const { token} = params;
     const updateContrasena = async () => {
         try {
-            if (token, correo, nueva, confirm) {
+            if (token, nueva, confirm) {
                 if (nueva === confirm) {
-                    console.log(token, correo, nueva, confirm);
+                    console.log(token, nueva, confirm);
                     const res = await resetRequest(nueva, token);
                     console.log(res);
                     setAdd(['Cambio de contraseña exitoso'])
