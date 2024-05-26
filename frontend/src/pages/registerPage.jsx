@@ -110,7 +110,7 @@ function registerPage() {
                 <div className="mb-3">
                   <label htmlFor="password" className='flex'>
                     <div className='text-start p-0 mx-1 '>
-                      <button className=" btn text-white m-0 p-0 place-content-start my-anchor-element"><FontAwesomeIcon className='' icon={faCircleQuestion} /></button>
+                      <a className=" btn text-white m-0 p-0 place-content-start my-anchor-element"><FontAwesomeIcon className='' icon={faCircleQuestion} /></a>
                       <Tooltip anchorSelect=" .my-anchor-element" place="top">
                         <p>La contraseña debe contener al menos una letra mayúscula,
                           <br />una  letra minúscula, un número, un carácter especial
