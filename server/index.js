@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 const cors = require('cors')
 const RegisterModel = require('./models/Register')
 const RegisterStudentModel=require('./models/RegisterStudentModel');
@@ -204,6 +205,149 @@ app.post('/registerStudent', (req, res) => {
         })
         .catch(err => res.status(500).json({ message: 'Error al buscar el número de boleta.' }));
 });
+// Endpoint para restablecer la contraseña
+app.post('/reset', async (req, res) => {
+  const { password , token} = req.body;
+
+  try {
+    let user = await RegisterStudentModel.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() } // Asegurarse de que el token no haya expirado
+    });
+    // Si no se encuentra el usuario, buscar en RegisterProfessionalModel
+    if (!user) {
+      user = await RegisterProfessionalModel.findOne({
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: Date.now() } // Asegurarse de que el token no haya expirado
+      });
+    }
+    if (!user) {
+      return res.status(400).json({ message: 'Token de recuperación inválido o ha expirado' });
+    }
+     const hashedPassword = bcrypt.hashSync(password, 10);
+    // Actualizar la contraseña del usuario
+    user.password = hashedPassword; // Asegúrate de hashear la contraseña antes de guardarla
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Contraseña restablecida correctamente' });
+  } catch (error) {
+    console.error('Error al restablecer la contraseña:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+app.post('/enviaCorreoRecuperacion', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Generar un token de recuperación
+    const token = crypto.randomBytes(20).toString('hex');
+
+    // Guardar el token en la base de datos junto con el email
+    let result = await RegisterStudentModel.findOneAndUpdate(
+      { email },
+      { resetPasswordToken: token, resetPasswordExpires: Date.now() + 3600000 }, // 1 hora de validez
+      { new: true }
+    );
+
+    // Si no se encuentra en RegisterStudentModel, buscar en RegisterProfessionalModel
+    if (!result) {
+      result = await RegisterProfessionalModel.findOneAndUpdate(
+        { email },
+        { resetPasswordToken: token, resetPasswordExpires: Date.now() + 3600000 }, // 1 hora de validez
+        { new: true }
+      );
+    }
+    console.log(result);
+    // Si no se encuentra en ningún modelo, devolver un error
+    if (!result) {
+      return res.status(404).json({ message: 'Correo electrónico no encontrado' });
+    }
+    // Configurar el transportador de nodemailer
+    let transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: 'vrios718@gmail.com', // Tu dirección de correo electrónico
+        pass: 'fqchchfldzzfafqu' // Tu contraseña de correo electrónico
+      }
+    });
+
+    // HTML y CSS en línea para el correo electrónico
+    let correoHTML = `
+      <html>
+        <head>
+          <style>
+            /* Estilos CSS en línea */
+            body {
+              font-family: Arial, sans-serif;
+              background-color: #f2f2f2;
+              margin: 0;
+              padding: 0;
+            }
+            .container {
+              max-width: 600px;
+              margin: 0 auto;
+              padding: 20px;
+              background-color: #ffffff;
+              border-radius: 10px;
+              box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            }
+            h1 {
+              color: #333333;
+              text-align: center;
+            }
+            p {
+              color: #666666;
+              text-align: center;
+            }
+            .boton {
+              display: block;
+              width: 200px;
+              margin: 20px auto;
+              padding: 10px;
+              background-color: #007bff;
+              color: #ffffff;
+              text-align: center;
+              text-decoration: none;
+              border-radius: 5px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h1>¡Correo de recuperación de cuenta!</h1>
+            <p>Por favor, haz clic en el siguiente botón para cambiar tu contraseña:</p>
+            <a href="https://proyecto-tt-api.vercel.app/recuperacion?email=${email}&token=${token}" class="boton">Cambiar contraseña</a>
+          </div>
+        </body>
+      </html>
+    `;
+
+    // Configurar los detalles del correo electrónico
+    let mailOptions = {
+      from: 'vrios718@gmail.com', // Remitente
+      to: email, // Destinatario
+      subject: 'Recuperación de contraseña', // Asunto
+      html: correoHTML // Cuerpo del correo electrónico
+    };
+
+    // Enviar el correo electrónico
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('Error al enviar el correo electrónico de cambio de contraseña:', error);
+        return res.status(500).json({ message: 'Error al enviar el correo electrónico de cambio de contraseña', error: error });
+      } else {
+        console.log('Correo electrónico de verificación enviado:', info.response);
+        return res.status(200).json({ message: 'Correo electrónico de cambio de contraseña enviado con éxito' });
+      }
+    });
+  } catch (error) {
+    console.error('Error en la operación:', error);
+    res.status(500).json({ message: 'Error en la operación', error: error });
+  }
+});
 app.get('/verificaCorreo', (req, res) => {
     const { email, token } = req.query;
 
@@ -224,14 +368,14 @@ app.get('/verificaCorreo', (req, res) => {
                 } else {
                     // Si el correo y el token son válidos, actualizar el estado de verificación de la cuenta si es necesario
                     if (student.cuentaValidada === 1) {
-                        return res.status(200).json({ message: 'La cuenta ya ha sido verificada anteriormente.' });
+                         return res.redirect('https://proyecto-tt-front.vercel.app/verificacion');
                     } else {
                         // Actualizar el estado de verificación de la cuenta a 1
                         student.cuentaValidada = 1;
                         // Guardar el cambio en la base de datos
                         student.save()
                             .then(() => {
-                                return res.status(200).json({ message: 'La cuenta ha sido verificada exitosamente.' });
+                                return res.redirect('https://proyecto-tt-front.vercel.app/verificacion');
                             })
                             .catch(error => {
                                 return res.status(500).json({ message: 'Error al actualizar el estado de verificación de la cuenta.', error: error });

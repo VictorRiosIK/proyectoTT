@@ -4,7 +4,9 @@ const RegisterSchema = new mongoose.Schema({
     name: String,
     email: String,
     password: String,
-    rol:String
+    rol:String,
+    resetPasswordToken:String,
+    resetPasswordExpires: { type: Date }
 })
 
 const RegisterProfessionalModel = mongoose.model("professional", RegisterSchema);
