@@ -151,13 +151,13 @@ function cuestionarioPPage() {
 
 
     return (
-        <div className='bg-white p-4 m-4 rounded'>
-            <h2 className='text-center fs-1 bg-sky-700 rounded p-4 text-white fw-bold'>Cuestionario Psicología</h2>
-            <div className="container text-center">
-                <div className="row align-items-start">
+        <div className=' md:p-2 md:m-16' >
+            <h2 className='text-center fs-1  rounded p-4 text-white fw-bold' style={{border: '2px solid white'}}>Cuestionario Psicología</h2>
+            <div className=" text-center bg-white rounded my-2">
+                <div className="row align-items-start m-2 my-2">
                     <h3 className='flex fw-bold  text-sky-700 my-4'>*NOTA: Es importante realizar este cuestionario antes de agendar una cita con el psicologo.</h3>
-                    <div className="col self-center  w-[50%] content-center bg-slate-100 rounded m-0">
-                        <div className="flex justify-content-center align-items-center">
+                    <div className="col self-center  w-[100%] content-center  rounded m-0">
+                        <div className="d-flex justify-content-center align-items-center my-2">
                             <div className="bg-sky-700 p-3 rounded w-100 ">
 
                                 {

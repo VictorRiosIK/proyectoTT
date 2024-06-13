@@ -7,8 +7,9 @@ import img from '../assets/user.png'
 import { cambiarContraseñaRequest } from '../api/citas.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 //Importar el icono
-import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons'
+import { faArrowsRotate, faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
 import { buscarPorEmailRequest } from '../api/citas.js';
+import { Tooltip } from 'react-tooltip'
 
 function cambiarContra() {
     const user = JSON.parse(window.localStorage.getItem('user'));
@@ -128,7 +129,14 @@ function cambiarContra() {
                                 </div>
                                 }
 
-
+<div className='text-start w-100'>
+                                    <button className=" btn text-white m-0 p-0 place-content-start my-anchor-element"><FontAwesomeIcon className='' icon={faCircleQuestion} /></button>
+                                    <Tooltip anchorSelect=" .my-anchor-element" place="top">
+                                        <p>La contraseña debe contener al menos una letra mayúscula, 
+                                        <br />una  letra minúscula, un número, un carácter especial 
+                                         <br /> y tener una longitud mínima de 8 caracteres.</p>
+                                    </Tooltip>
+                                </div>
                                 <form className='' onSubmit={handleSubmit} autoComplete='off'>
                                     <div className="mb-3">
                                         <label htmlFor="vieja" className='flex'>
@@ -140,6 +148,7 @@ function cambiarContra() {
                                             autoComplete="off"
                                             name="vieja"
                                             className="form-control rounded-50"
+                                            pattern='^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$'
                                             onChange={(e) => setVieja(e.target.value)}
                                         />
                                     </div>
@@ -154,6 +163,7 @@ function cambiarContra() {
                                             className="form-control rounded-50"
                                             onChange={(e) => setNueva(e.target.value)}
                                             autoComplete='off'
+                                            pattern='^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$'
                                         />
                                     </div>
                                     <button type="submit" className="flex  btn btn-outline-light text-center place-content-center w-100 rounded-50 fs-5">
