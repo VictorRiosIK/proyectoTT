@@ -115,7 +115,8 @@ function Navbar() {
                     </div>
                 </div>
             </nav>
-            <hr className=' border-1 m-0 p-0  mb-3 opacity-100' style={{border: '10px solid #005F7A'}}></hr>
+            <br />
+            {/* <hr className=' border-1 m-0 p-0  mb-3 opacity-100' style={{border: '10px solid #005F7A'}}></hr> */}
         </div>
         
 
