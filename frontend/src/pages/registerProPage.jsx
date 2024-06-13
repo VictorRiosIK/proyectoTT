@@ -16,11 +16,11 @@ function registerProPage() {
   const opcionesS = [{ value: 'Psicologo', label: 'Psicologo' }, { value: 'Dentista', label: 'Dentista' }];
   let selectedR = null;
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(name , email , password , selection);
+    console.log(name, email, password, selection);
     if (name && email && password && selection) {
-      console.log(name , email , password , selection);
+      console.log(name, email, password, selection);
       await signupProfesional(name, email, password, selection);
     }
   }
@@ -35,15 +35,15 @@ function registerProPage() {
   return (
     <div>
       <div className=" text-center">
-        <div className="row align-items-start max-md:m-5 rounded gap-4">
-          <div className="col self-center h-[34rem] w-[50%] content-center bg-slate-100 rounded m-0 ">
+        <div className="row align-items-start md:m-5 m-2 rounded gap-0 ">
+          <div className="col-sm self-center h-[34rem] w-[100%] content-center bg-slate-100 rounded m-0 ">
             <div className=" w-100 h-[95%] content-center bg-gray-200 rounded p-4">
               <h1 className='mb-4 text-sky-700 fw-bold my-2'>Registrar Profesional</h1>
               <img src={img} alt="" className='max-w-[490px] min-w-[100px] w-100 rounded ' />
             </div>
           </div>
 
-          <div className="col self-center h-[34rem] w-[100%] content-center bg-sky-700 rounded m-0">
+          <div className="col-sm self-center h-[34rem] w-[100%] content-center bg-sky-700 rounded m-0">
             <div className="d-flex justify-content-center align-items-center ">
               <div className=" h-[30rem] p-3 rounded w-100">
 
@@ -93,7 +93,7 @@ function registerProPage() {
                     <label htmlFor="password" className='flex'>
                       <strong className='text-white fs-5 '>Contraseña</strong>
                     </label>
-                    <input required 
+                    <input required
                       type="password"
                       placeholder="Contraseña"
                       name="password"
