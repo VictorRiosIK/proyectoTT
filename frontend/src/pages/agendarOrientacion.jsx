@@ -219,10 +219,10 @@ function agendarOrientacion() {
   return (
     <div >
       <div className=" text-center">
-        <div className="row align-items-start m-1 bg-[#800040] rounded">
+        <div className="row align-items-start m-1 bg-sky-700 [#800040] rounded">
           <div className="col self-center h-[30rem] w-[100%] content-center  rounded m-0 ">
             <div className="bg-white rounded w-100 h-[90%] content-center">
-              <h1 className='mb-4 mx-2 text-[#800040] '>{Titulo}</h1>
+              <h1 className='mb-4 mx-2 text-sky-700 [#800040] '>{Titulo}</h1>
               <img src={image} alt="" className='max-w-[490px] min-w-[100px] w-100' />
               {/* <p className='mt-4 mb-0 fs-4 text-sky-700'>¿No tienes cuenta?</p> */}
             </div>
@@ -240,24 +240,24 @@ function agendarOrientacion() {
                   ))
                 }
                 <div className="mb-3 text-center w-100">
-                  <label className="text-center w-100 fw-bold fs-4 text-[#800040]" htmlFor="day">
+                  <label className="text-center w-100 fw-bold fs-4 text-sky-700 [#800040]" htmlFor="day">
                     Selecciona el día:
                   </label>
                 </div>
                 <div className="mb-3 text-center w-100 ">
-                  <FontAwesomeIcon className='fs-1 mx-2 text-[#800040]' icon={faCalendarDays} />
+                  <FontAwesomeIcon className='fs-1 mx-2 text-sky-700 -[#800040]' icon={faCalendarDays} />
                   <DatePicker className="p-3 fs-4 rounded  " selected={startDate} dateFormat="dd/MM/yyyy" filterDate={isWeekday}  minDate={new Date()} onChange={(date) => {
                     setStartDate(date)
                     setTouched(true);
                   }} />
                 </div>
                 <div className="mb-3 text-center w-100 ">
-                  <label className="text-center w-100 fw-bold fs-4 text-[#800040]" htmlFor="day">
+                  <label className="text-center w-100 fw-bold fs-4 text-sky-700 -[#800040]" htmlFor="day">
                     Selecciona el horario:
                   </label>
                 </div>
                 <div className="d-flex justify-content-center align-items-center mb-3 text-center w-100 ">
-                  <FontAwesomeIcon className='fs-1 mx-2 text-[#800040]' icon={faClock} />
+                  <FontAwesomeIcon className='fs-1 mx-2 text-sky-700 [#800040]' icon={faClock} />
                   <Select className="p-2  fs-4 rounded w-75 " placeholder="HH:MM - HH:MM" options={opcionesS} onChange={handleChange}></Select>
 
                   {/* <select className="p-3 fs-4 rounded w-50 " defaultValue={null} > 

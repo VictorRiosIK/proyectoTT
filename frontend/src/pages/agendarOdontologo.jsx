@@ -265,7 +265,7 @@ function agendarOdontologo() {
             </select> */}
                 </div>
                 <div className="mt-4 mb-2 text-center w-100 ">
-                  <button onClick={AgendarCita} className="btn btn-outline-dark w-100 rounded-50">
+                  <button onClick={AgendarCita} className="btn btn-outline-dark w-100 rounded-50 fw-bold fs-5">
                     Agendar
                   </button>
                 </div>
