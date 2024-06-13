@@ -319,7 +319,7 @@ app.post('/enviaCorreoRecuperacion', async (req, res) => {
           <div class="container">
             <h1>¡Correo de recuperación de cuenta!</h1>
             <p>Por favor, haz clic en el siguiente botón para cambiar tu contraseña:</p>
-            <a href="https://proyecto-tt-api.vercel.app/recuperacion?email=${email}&token=${token}" class="boton">Cambiar contraseña</a>
+            <a href="https://proyecto-tt-front.vercel.app/recuperar/${token}" class="boton">Cambiar contraseña</a>
           </div>
         </body>
       </html>
