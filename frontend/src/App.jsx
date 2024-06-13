@@ -30,7 +30,7 @@ function App() {
       <AuthProvider>
         <BrowserRouter>
           <Navbar></Navbar>
-          <div className="px-4">
+          <div className="px-2">
             <Routes>
               {/* Rutas publicas */}
               <Route path='/' element={<HomePage />}></Route>

@@ -16,7 +16,7 @@ function Navbar() {
             <nav className="navbar navbar-expand-lg bg-primary ">
                 <div className="container-fluid">
                     <Link className='btn btn-outline-dark text-decoration-none  text-center' to={'/'}>
-                        <FontAwesomeIcon className='d-flex  p-1 text-center fs-1' icon={faHouse} />
+                        <FontAwesomeIcon className='d-flex  p-1 text-center fs-2' icon={faHouse} />
                     </Link>
                     <div className="d-flex" >
                         {
@@ -115,7 +115,9 @@ function Navbar() {
                     </div>
                 </div>
             </nav>
+            <hr className=' border-1 m-0 p-0  mb-3 opacity-100' style={{border: '10px solid #005F7A'}}></hr>
         </div>
+        
 
     )
 }

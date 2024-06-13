@@ -130,7 +130,11 @@ function misCitasDentista() {
 
   return (
     <div className='bg-[#800040] rounded px-2 py-4'>
-      <h1 className='text-center w-100 bg-white rounded p-2 text-[#800040]'>Cita activa con el dentista</h1>
+
+<div className='w-100 rounded px-2 py-2 text-xs'>
+
+
+<h1 className='text-center w-100 bg-white rounded p-2 text-[#800040]'>Cita activa con el dentista</h1>
       <div className='w-100 my-4'>
         <h5 className='text-white'>
           {
@@ -143,7 +147,7 @@ function misCitasDentista() {
         <FontAwesomeIcon className='fs-3 icon-link icon-link-hover' icon={faQuestion} />
       </button> */}
       </div>
-      <div className='flex w-100 md:gap-3'>
+      <div className='flex w-100 md:gap-5'>
         <ul className="list-group w-100">
           <li className="list-group-item text-center md:font-bold md:text-xl">Fecha</li>
         </ul>
@@ -183,8 +187,13 @@ function misCitasDentista() {
             </div>
           ))
           :
-          <div className='text-center fw-bold fs-4 text-white'>Sin citas</div>
+          <div className='text-center fw-bold fs-4 text-white'> <br /> Sin citas</div>
       }
+
+
+</div>
+
+
 
       <div className='w-100 rounded px-2 py-2 text-xs'>
         <h1 className='text-center w-100 bg-white rounded p-2 mt-5 text-[#800040]'>Mis citas con el dentista </h1>

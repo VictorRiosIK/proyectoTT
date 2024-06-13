@@ -129,8 +129,10 @@ function misCitasPsicologo() {
   }, [showError])
 
   return (
-    <div className='bg-[#800040] rounded px-2 py-4'>
-      <h1 className='text-center w-100 bg-white rounded p-2 text-[#800040]'>Cita activa con el psicologo </h1>
+    <div className=' bg-[#800040] rounded px-2 py-4'>
+<div className='w-100 rounded px-2 py-2 text-xs'>
+
+<h1 className='text-center w-100 bg-white rounded p-2 text-[#800040]'>Cita activa con el psicologo </h1>
       <div className='w-100 my-4'>
         <h5 className='text-white'>
           {
@@ -144,7 +146,7 @@ function misCitasPsicologo() {
         <FontAwesomeIcon className='fs-3 icon-link icon-link-hover' icon={faQuestion} />
       </button> */}
       </div>
-      <div className='flex w-[100%] md:gap-3 '>
+      <div className='flex w-[100%] md:gap-5 '>
         <ul className="list-group w-100 ">
           <li className="list-group-item text-center md:font-bold md:text-xl ">Fecha</li>
         </ul>
@@ -158,7 +160,7 @@ function misCitasPsicologo() {
       {
         citas.length !== 0 ?
           citas.map(e => (
-            <div key={e.fecha} className='flex w-100 md:gap-3 my-2'>
+            <div key={e.fecha} className='flex w-100 md:gap-2 my-2'>
               <ul className="list-group w-100">
                 <li className="list-group-item text-center md:font-bold md:text-xl h-[7rem]">
                   <p className='my-4 w-100'>{e.fecha}</p>
@@ -187,8 +189,13 @@ function misCitasPsicologo() {
             </div>
           ))
           :
-          <div className='text-center text-white fw-bold fs-4'>Sin citas</div>
+          <div className='text-center text-white fw-bold fs-4'> <br /> Sin citas</div>
       }
+
+</div>
+
+
+      
 
 
 
@@ -196,50 +203,50 @@ function misCitasPsicologo() {
 
 
       <div className='w-100 rounded px-2 py-2 text-xs'>
-      <h1 className='text-center w-100 bg-white rounded p-2 mt-5 text-[#800040]'>Mis citas con el psicologo </h1>
-      <div className=" text-center mb-2 w-100 my-4">
-        <div className="row align-items-start ">
-          <div className="col max-md:p-0">
-            <ul className="list-group w-100 ">
-              <li className="list-group-item text-center md:font-bold md:text-xl bg-white text-[#800040]">Fecha</li>
-            </ul>
-          </div>
-          <div className="col max-md:p-0">
-            <ul className="list-group w-100">
-              <li className="list-group-item text-center md:font-bold md:text-xl bg-white text-[#800040]">Horario</li>
-            </ul>
-          </div>
-          <div className="col max-md:p-0">
-            <ul className="list-group w-100">
-              <li className="list-group-item text-center md:font-bold md:text-xl bg-white text-[#800040]">Comentario</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      {
-        seguimiento.length !== 0 &&
-        seguimiento.map(e => (
-          <div key={e._id} className="row align-items-start my-2">
+        <h1 className='text-center w-100 bg-white rounded p-2 mt-5 text-[#800040]'>Mis citas con el psicologo </h1>
+        <div className=" text-center mb-2 w-100 my-4">
+          <div className="row align-items-start ">
             <div className="col max-md:p-0">
               <ul className="list-group w-100 ">
-                <li className="list-group-item text-center content-center md:font-bold md:text-lg bg-white text-[#800040] h-[6rem]">{e.fechaCita}</li>
+                <li className="list-group-item text-center md:font-bold md:text-xl bg-white text-[#800040]">Fecha</li>
               </ul>
             </div>
             <div className="col max-md:p-0">
               <ul className="list-group w-100">
-                <li className="list-group-item text-center content-center md:font-bold md:text-lg bg-white text-[#800040] h-[6rem]">{e.horarioCita}</li>
+                <li className="list-group-item text-center md:font-bold md:text-xl bg-white text-[#800040]">Horario</li>
               </ul>
             </div>
             <div className="col max-md:p-0">
               <ul className="list-group w-100">
-                <li className="list-group-item text-center md:font-bold   bg-white text-[#800040] h-[6rem]">{e.comentario}</li>
+                <li className="list-group-item text-center md:font-bold md:text-xl bg-white text-[#800040]">Comentario</li>
               </ul>
             </div>
-
           </div>
-        ))
+        </div>
+        {
+          seguimiento.length !== 0 &&
+          seguimiento.map(e => (
+            <div key={e._id} className="row align-items-start my-2">
+              <div className="col max-md:p-0">
+                <ul className="list-group w-100 ">
+                  <li className="list-group-item text-center content-center md:font-bold md:text-lg bg-white text-[#800040] h-[6rem]">{e.fechaCita}</li>
+                </ul>
+              </div>
+              <div className="col max-md:p-0">
+                <ul className="list-group w-100">
+                  <li className="list-group-item text-center content-center md:font-bold md:text-lg bg-white text-[#800040] h-[6rem]">{e.horarioCita}</li>
+                </ul>
+              </div>
+              <div className="col max-md:p-0">
+                <ul className="list-group w-100">
+                  <li className="list-group-item text-center md:font-bold   bg-white text-[#800040] h-[6rem]">{e.comentario}</li>
+                </ul>
+              </div>
 
-      }
+            </div>
+          ))
+
+        }
       </div>
 
 
