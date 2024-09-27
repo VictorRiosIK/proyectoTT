@@ -1,4 +1,5 @@
 {
   "jwtSecret": "q66eSaeLDeYHOdZBW5LeWi2yejcdirPxliq3Lf+mLdo",
   "mongoURI": "mongodb+srv://vrios718:s1FPobKWDOAjPH6c@cluster0.696magv.mongodb.net/test?retryWrites=true&w=majority"
+  
 }
